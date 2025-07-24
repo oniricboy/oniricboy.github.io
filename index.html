@@ -2,139 +2,128 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>oniricboy – Portfolio</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
       font-family: 'DM Sans', sans-serif;
-      background: #f9f9f9;
-      color: #222;
-    }
-
-    .hero img {
-      width: 100%;
-      max-height: 90vh;
-      object-fit: cover;
-      display: block;
+      background-color: #fff;
+      color: #000;
     }
 
     header {
-      background: #fff;
-      padding: 2rem 1rem;
-      text-align: center;
-      border-bottom: 1px solid #e5e5e5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid #eee;
     }
 
-    header h1 {
-      margin: 0;
-      font-size: 2.5rem;
+    .logo img {
+      height: 40px;
     }
 
     nav ul {
       list-style: none;
+      display: flex;
+      gap: 2rem;
+      margin: 0;
       padding: 0;
-      margin: 1rem 0 0;
+      position: relative;
     }
 
-    nav ul > li {
-      display: inline-block;
-      margin: 0 1rem;
+    nav li {
       position: relative;
     }
 
     nav a {
       text-decoration: none;
-      color: #555;
-      font-weight: 500;
+      color: #000;
+      font-weight: 600;
+      font-size: 0.9rem;
     }
 
-    nav a:hover {
-      color: #000;
+    nav ul li:hover .dropdown {
+      display: block;
     }
 
     .dropdown {
       display: none;
       position: absolute;
-      top: 1.8rem;
+      top: 100%;
       left: 0;
       background: #fff;
-      padding: 0.5rem 0;
       border: 1px solid #ddd;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      padding: 0.5rem 0;
       z-index: 10;
     }
 
-    li:hover .dropdown {
-      display: block;
-    }
-
     .dropdown li {
+      padding: 0;
+    }
+
+    .dropdown a {
       display: block;
-      padding: 0.25rem 1rem;
+      padding: 0.5rem 1rem;
+      white-space: nowrap;
     }
 
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      padding: 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
+    .dropdown a:hover {
+      background-color: #f3f3f3;
     }
 
-    .gallery img {
-      width: 100%;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      transition: transform 0.3s ease;
+    .socials a {
+      color: #000;
+      font-size: 1.1rem;
+      margin-left: 1.2rem;
+      transition: opacity 0.3s ease;
     }
 
-    .gallery img:hover {
-      transform: scale(1.03);
+    .socials a:hover {
+      opacity: 0.6;
     }
 
-    section h2 {
+    .hero {
       text-align: center;
-      margin-top: 3rem;
-      font-size: 1.8rem;
-      color: #444;
+      padding: 4rem 1rem;
     }
 
-    footer {
-      background: #fff;
-      text-align: center;
-      padding: 2rem 1rem;
-      font-size: 0.9rem;
-      color: #aaa;
-      border-top: 1px solid #eee;
+    .hero img {
+      max-width: 100%;
+      height: auto;
+      max-height: 85vh;
+      object-fit: contain;
     }
 
-    @media screen and (max-width: 600px) {
-      nav ul > li {
-        display: block;
-        margin: 0.5rem 0;
+    @media screen and (max-width: 768px) {
+      nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
       }
 
-      .dropdown {
-        position: static;
-        box-shadow: none;
-        border: none;
+      header {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .socials {
+        margin-top: 1rem;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- Portada -->
-  <section class="hero">
-    <img src="img/cover.png" alt="Portada oniricboy">
-  </section>
-
-  <!-- Encabezado y navegación -->
   <header>
-    <h1>oniricboy</h1>
+    <div class="logo">
+      <img src="img/logo.png" alt="oniricboy logo">
+    </div>
+
     <nav>
       <ul>
         <li><a href="#">Home</a></li>
@@ -158,23 +147,16 @@
         <li><a href="#">Shop</a></li>
       </ul>
     </nav>
+
+    <div class="socials">
+      <a href="https://instagram.com/tuusuario" target="_blank"><i class="fab fa-instagram"></i></a>
+      <a href="https://twitter.com/tuusuario" target="_blank"><i class="fab fa-twitter"></i></a>
+    </div>
   </header>
 
-  <!-- Galería de ejemplo -->
-  <main>
-    <section id="year-2023">
-      <h2>2023</h2>
-      <div class="gallery">
-        <img src="img/2023/sample1.jpg" alt="Obra 1">
-        <img src="img/2023/sample2.jpg" alt="Obra 2">
-      </div>
-    </section>
+  <main class="hero">
+    <img src="img/cover.png" alt="oniricboy hero image">
   </main>
-
-  <!-- Footer -->
-  <footer>
-    <p>© 2025 oniricboy — contact@oniricboy.com</p>
-  </footer>
 
 </body>
 </html>
