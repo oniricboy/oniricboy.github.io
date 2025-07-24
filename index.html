@@ -13,6 +13,13 @@
       color: #222;
     }
 
+    .hero img {
+      width: 100%;
+      max-height: 90vh;
+      object-fit: cover;
+      display: block;
+    }
+
     header {
       background: #fff;
       padding: 2rem 1rem;
@@ -118,16 +125,14 @@
     }
   </style>
 </head>
-  .hero img {
-  width: 100%;
-  max-height: 90vh;
-  object-fit: cover;
-  display: block;
-}
 <body>
+
+  <!-- Portada -->
   <section class="hero">
-  <img src="img/cover.png" alt="oniricboy cover image">
-</section>
+    <img src="img/cover.png" alt="Portada oniricboy">
+  </section>
+
+  <!-- Encabezado y navegación -->
   <header>
     <h1>oniricboy</h1>
     <nav>
@@ -155,18 +160,21 @@
     </nav>
   </header>
 
+  <!-- Galería de ejemplo -->
   <main>
     <section id="year-2023">
       <h2>2023</h2>
       <div class="gallery">
-        <img src="img/2023/sample1.jpg" alt="Sample Artwork 1">
-        <img src="img/2023/sample2.jpg" alt="Sample Artwork 2">
+        <img src="img/2023/sample1.jpg" alt="Obra 1">
+        <img src="img/2023/sample2.jpg" alt="Obra 2">
       </div>
     </section>
   </main>
 
+  <!-- Footer -->
   <footer>
     <p>© 2025 oniricboy — contact@oniricboy.com</p>
   </footer>
+
 </body>
 </html>
