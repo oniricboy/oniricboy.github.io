@@ -1,13 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>oniricboy – Portfolio</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'DM Sans', sans-serif;
+      background: #f9f9f9;
+      color: #222;
+    }
+
+    .hero img {
+      width: 100%;
+      max-height: 90vh;
+      object-fit: cover;
+      display: block;
+    }
+
+    header {
+      background: #fff;
+      padding: 2rem 1rem;
+      text-align: center;
+      border-bottom: 1px solid #e5e5e5;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+    }
+
+    nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 1rem 0 0;
+    }
+
+    nav ul > li {
+      display: inline-block;
+      margin: 0 1rem;
+      position: relative;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #555;
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      color: #000;
+    }
+
+    .dropdown {
+      display: none;
+      position: absolute;
+      top: 1.8rem;
+      left: 0;
+      background: #fff;
+      padding: 0.5rem 0;
+      border: 1px solid #ddd;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      z-index: 10;
+    }
+
+    li:hover .dropdown {
+      display: block;
+    }
+
+    .dropdown li {
+      display: block;
+      padding: 0.25rem 1rem;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .gallery img {
+      width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.03);
+    }
+
+    section h2 {
+      text-align: center;
+      margin-top: 3rem;
+      font-size: 1.8rem;
+      color: #444;
+    }
+
+    footer {
+      background: #fff;
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.9rem;
+      color: #aaa;
+      border-top: 1px solid #eee;
+    }
+
+    @media screen and (max-width: 600px) {
+      nav ul > li {
+        display: block;
+        margin: 0.5rem 0;
+      }
+
+      .dropdown {
+        position: static;
+        box-shadow: none;
+        border: none;
+      }
+    }
+  </style>
 </head>
 <body>
+
+  <!-- Portada -->
+  <section class="hero">
+    <img src="img/cover.png" alt="Portada oniricboy">
+  </section>
+
+  <!-- Encabezado y navegación -->
   <header>
     <h1>oniricboy</h1>
     <nav>
@@ -16,7 +141,16 @@
         <li>
           <a href="#">Work ▾</a>
           <ul class="dropdown">
-            <li><a href="#year-2016">2016</a></li><li><a href="#year-2017">2017</a></li><li><a href="#year-2018">2018</a></li><li><a href="#year-2019">2019</a></li><li><a href="#year-2020">2020</a></li><li><a href="#year-2021">2021</a></li><li><a href="#year-2022">2022</a></li><li><a href="#year-2023">2023</a></li><li><a href="#year-2024">2024</a></li><li><a href="#year-2025">2025</a></li>
+            <li><a href="#year-2016">2016</a></li>
+            <li><a href="#year-2017">2017</a></li>
+            <li><a href="#year-2018">2018</a></li>
+            <li><a href="#year-2019">2019</a></li>
+            <li><a href="#year-2020">2020</a></li>
+            <li><a href="#year-2021">2021</a></li>
+            <li><a href="#year-2022">2022</a></li>
+            <li><a href="#year-2023">2023</a></li>
+            <li><a href="#year-2024">2024</a></li>
+            <li><a href="#year-2025">2025</a></li>
           </ul>
         </li>
         <li><a href="#">Projects</a></li>
@@ -26,18 +160,21 @@
     </nav>
   </header>
 
+  <!-- Galería de ejemplo -->
   <main>
     <section id="year-2023">
       <h2>2023</h2>
       <div class="gallery">
-        <img src="img/2023/sample1.jpg" alt="Sample Artwork 1">
-        <img src="img/2023/sample2.jpg" alt="Sample Artwork 2">
+        <img src="img/2023/sample1.jpg" alt="Obra 1">
+        <img src="img/2023/sample2.jpg" alt="Obra 2">
       </div>
     </section>
   </main>
 
+  <!-- Footer -->
   <footer>
-    <p>© 2025 oniricboy — contact@yourdomain.com</p>
+    <p>© 2025 oniricboy — contact@oniricboy.com</p>
   </footer>
+
 </body>
 </html>
