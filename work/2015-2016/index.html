@@ -122,7 +122,7 @@
       width: auto;
       object-fit: contain;
       flex-shrink: 0;
-      margin-right: 10px;
+      margin: 0; /* sin espacio entre imágenes */
     }
 
     .arrow {
@@ -152,7 +152,7 @@
     }
 
     .carousel-track {
-      scrollbar-width: none; /* Firefox */
+      scrollbar-width: none;
     }
   </style>
 </head>
@@ -202,19 +202,20 @@
 
   <script>
     const carousel = document.getElementById("carousel");
-    const step = 300; // cuánto se mueve en px cada vez
-    function moveCarousel(direction) {
-      const maxScroll = carousel.scrollWidth;
-      const current = carousel.scrollLeft;
-      const next = current + direction * step;
+    const scrollStep = 300; // en píxeles
 
-      if (next >= maxScroll - carousel.clientWidth) {
-        carousel.scrollTo({ left: 0, behavior: 'smooth' }); // al final, vuelve al inicio
-      } else if (next < 0) {
-        carousel.scrollTo({ left: maxScroll, behavior: 'smooth' }); // al inicio, va al final
-      } else {
-        carousel.scrollBy({ left: direction * step, behavior: 'smooth' });
+    function moveCarousel(direction) {
+      const maxScrollLeft = carousel.scrollWidth - carousel.clientWidth;
+      const currentScroll = carousel.scrollLeft;
+      let newScroll = currentScroll + direction * scrollStep;
+
+      if (newScroll >= maxScrollLeft) {
+        newScroll = 0;
+      } else if (newScroll <= 0 && direction === -1) {
+        newScroll = maxScrollLeft;
       }
+
+      carousel.scrollTo({ left: newScroll, behavior: 'smooth' });
     }
   </script>
 
