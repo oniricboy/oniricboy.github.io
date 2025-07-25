@@ -11,6 +11,7 @@
       font-family: 'DM Sans', sans-serif;
       background-color: #fff;
       color: #000;
+      overflow-x: clip;
     }
 
     header {
@@ -19,6 +20,9 @@
       align-items: center;
       padding: 1.5rem 2rem;
       border-bottom: 1px solid #eee;
+      position: relative;
+      z-index: 100;
+      background: #fff;
     }
 
     .logo img {
@@ -50,6 +54,7 @@
       width: 100%;
       background: #fff;
       padding: 2rem 0;
+      z-index: 1;
     }
 
     .carousel-track {
@@ -59,8 +64,7 @@
 
     .carousel-slide {
       flex: 0 0 auto;
-      width: 10%; /* 3 imágenes por vista */
-      padding: 0 0.5rem;
+      width: 33.3333%; /* 3 imágenes visibles por vista */
       box-sizing: border-box;
     }
 
@@ -92,7 +96,11 @@
 
     @media (max-width: 768px) {
       .carousel-slide {
-        width: 100%; /* Solo 1 por vista en móvil */
+        width: 100%; /* 1 imagen visible en móviles */
+      }
+
+      .carousel-slide img {
+        height: 45vh;
       }
     }
   </style>
@@ -133,7 +141,6 @@
   let slideWidth = slides[0].offsetWidth;
   let isTransitioning = false;
 
-  // Clonar al inicio y final para simular loop
   function cloneSlides() {
     const total = slides.length;
     for (let i = 0; i < total; i++) {
