@@ -111,21 +111,23 @@
     }
 
     .carousel-track {
-      display: flex;
-      transition: transform 0.5s ease;
+     display: flex;
+     transition: transform 0.5s ease;
+     align-items: center; /* centra verticalmente si las imágenes no son del mismo alto */
+     gap: 0px; /* sin espacio entre slides */
     }
 
     .carousel-slide {
       flex: 0 0 auto;
-      width: 33.333%;
+      width: 400px;
       box-sizing: border-box;
     }
 
     .carousel-slide img {
       width: 100%;
-      height: 65vh;
-      object-fit: contain;
+      height: auto;
       display: block;
+      object-fit: contain;
     }
 
     .carousel-buttons {
