@@ -118,17 +118,21 @@
     }
 
     .carousel-slide {
-      flex: 0 0 auto;
-      width: 400px;
-      box-sizing: border-box;
+     flex: 0 0 auto;
+     width: 400px;
+     height: 60vh;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     box-sizing: border-box;
     }
 
     .carousel-slide img {
-      width: 100%;
-      height: auto;
-      display: block;
+      max-height: 100%;
+      max-width: 100%;
       object-fit: contain;
-    }
+      display: block;
+    } 
 
     .carousel-buttons {
       position: absolute;
