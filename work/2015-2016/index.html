@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>oniricboy – Portfolio</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>oniricboy – Gallery Reel</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
@@ -77,27 +77,29 @@
       opacity: 0.6;
     }
 
-    .carousel-container {
+    .gallery-reel-wrapper {
+      overflow-x: hidden;
       position: relative;
-      overflow: hidden;
       width: 100%;
-      background: #fff;
     }
 
-    .carousel-track {
+    .gallery-reel-list {
       display: flex;
       transition: transform 0.5s ease;
-      will-change: transform;
     }
 
-    .carousel-track img {
+    .gallery-reel-item {
+      flex: 0 0 100vw;
       height: 65vh;
-      object-fit: contain;
-      flex-shrink: 0;
-      width: 100vw;
     }
 
-    .carousel-buttons {
+    .gallery-reel-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .gallery-reel-controls {
       position: absolute;
       top: 50%;
       width: 100%;
@@ -107,19 +109,13 @@
       pointer-events: none;
     }
 
-    .carousel-buttons button {
-      background: rgba(255,255,255,0.9);
+    .gallery-reel-controls button {
+      background: rgba(255, 255, 255, 0.9);
       border: none;
       font-size: 2rem;
       padding: 0.5rem 1rem;
       cursor: pointer;
       pointer-events: all;
-    }
-
-    @media screen and (max-width: 768px) {
-      .carousel-track img {
-        height: 45vh;
-      }
     }
   </style>
 </head>
@@ -154,40 +150,31 @@
   </div>
 </header>
 
-<!-- Carrusel estilo OMOCAT -->
-<section class="carousel-container">
-  <div class="carousel-track" id="carousel">
-    <img src="/work/2015-2016/art_01.jpg" alt="Art 1">
-    <img src="/work/2015-2016/art_02.png" alt="Art 2">
-    <img src="/work/2015-2016/art_03.jpg" alt="Art 3">
-    <img src="/work/2015-2016/art_04.png" alt="Art 4">
-    <img src="/work/2015-2016/art_05.png" alt="Art 5">
+<section class="gallery-reel-wrapper">
+  <div class="gallery-reel-list" id="galleryReel">
+    <div class="gallery-reel-item"><img src="/work/2015-2016/art_01.jpg" alt="Art 1"></div>
+    <div class="gallery-reel-item"><img src="/work/2015-2016/art_02.png" alt="Art 2"></div>
+    <div class="gallery-reel-item"><img src="/work/2015-2016/art_03.jpg" alt="Art 3"></div>
+    <div class="gallery-reel-item"><img src="/work/2015-2016/art_04.png" alt="Art 4"></div>
+    <div class="gallery-reel-item"><img src="/work/2015-2016/art_05.png" alt="Art 5"></div>
   </div>
-
-  <div class="carousel-buttons">
-    <button onclick="slide(-1)">‹</button>
-    <button onclick="slide(1)">›</button>
+  <div class="gallery-reel-controls">
+    <button onclick="moveSlide(-1)">‹</button>
+    <button onclick="moveSlide(1)">›</button>
   </div>
 </section>
 
 <script>
-  const carousel = document.getElementById('carousel');
+  const reel = document.getElementById('galleryReel');
   let index = 0;
-  const images = carousel.children;
-  const total = images.length;
 
-  function slide(dir) {
-    index += dir;
+  function moveSlide(direction) {
+    const total = reel.children.length;
+    index += direction;
     if (index < 0) index = total - 1;
     if (index >= total) index = 0;
-    const offset = index * window.innerWidth;
-    carousel.style.transform = `translateX(-${offset}px)`;
+    reel.style.transform = `translateX(-${index * 100}vw)`;
   }
-
-  window.addEventListener('resize', () => {
-    const offset = index * window.innerWidth;
-    carousel.style.transform = `translateX(-${offset}px)`;
-  });
 </script>
 
 </body>
