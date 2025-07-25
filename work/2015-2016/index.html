@@ -104,32 +104,22 @@
       }
     }
 
-    /* Carrusel infinito */
     .carousel-wrapper {
       position: relative;
       width: 100%;
       overflow: hidden;
     }
 
-    .carousel-track {
+    .carousel {
       display: flex;
-      animation: scroll 30s linear infinite;
+      transition: transform 0.5s ease;
     }
 
     .carousel img {
-      height: 66vh;
+      height: 33vh;
       width: 100vw;
       object-fit: contain;
       flex-shrink: 0;
-    }
-
-    @keyframes scroll {
-      0% {
-        transform: translateX(0);
-      }
-      100% {
-        transform: translateX(-100%);
-      }
     }
 
     .arrow {
@@ -185,46 +175,27 @@
   </header>
 
   <div class="carousel-wrapper">
-    <button class="arrow left" onclick="manualScroll(-1)">‹</button>
-    <div class="carousel-track" id="carousel-track">
-      <img src="/work/2015-2016/art_01.jpg" alt="Art 1">
-      <img src="/work/2015-2016/art_02.png" alt="Art 2">
-      <img src="/work/2015-2016/art_03.jpg" alt="Art 3">
-      <img src="/work/2015-2016/art_04.png" alt="Art 4">
-      <img src="/work/2015-2016/art_05.png" alt="Art 5">
-
-      <!-- duplicadas para loop infinito -->
+    <button class="arrow left" onclick="scrollCarousel(-1)">‹</button>
+    <div class="carousel" id="carousel">
       <img src="/work/2015-2016/art_01.jpg" alt="Art 1">
       <img src="/work/2015-2016/art_02.png" alt="Art 2">
       <img src="/work/2015-2016/art_03.jpg" alt="Art 3">
       <img src="/work/2015-2016/art_04.png" alt="Art 4">
       <img src="/work/2015-2016/art_05.png" alt="Art 5">
     </div>
-    <button class="arrow right" onclick="manualScroll(1)">›</button>
+    <button class="arrow right" onclick="scrollCarousel(1)">›</button>
   </div>
 
   <script>
-    const track = document.getElementById("carousel-track");
-    let isPaused = false;
+    const carousel = document.getElementById('carousel');
+    const images = carousel.querySelectorAll('img');
+    let index = 0;
 
-    // pausa animación al pasar el mouse
-    track.addEventListener("mouseenter", () => {
-      track.style.animationPlayState = "paused";
-      isPaused = true;
-    });
-
-    track.addEventListener("mouseleave", () => {
-      track.style.animationPlayState = "running";
-      isPaused = false;
-    });
-
-    // scroll manual con flechas (opcional)
-    function manualScroll(direction) {
-      if (!isPaused) {
-        track.style.animationPlayState = "paused";
-      }
-      const scrollAmount = window.innerWidth * direction;
-      track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    function scrollCarousel(direction) {
+      const total = images.length;
+      index = (index + direction + total) % total;
+      const offset = index * window.innerWidth;
+      carousel.style.transform = `translateX(-${offset}px)`;
     }
   </script>
 </body>
