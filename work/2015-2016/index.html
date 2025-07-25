@@ -104,49 +104,59 @@
       }
     }
 
-    /* CARRUSEL OMOCAT STYLE */
+    /* === OMOCAT REEL STYLE === */
     .carousel-section {
-      padding: 2rem;
       position: relative;
-      overflow: hidden;
+      padding: 0;
+      margin: 0;
     }
 
-    .gallery-reel-wrapper {
+    .reel-wrapper {
       overflow: hidden;
+      position: relative;
       width: 100%;
     }
 
-    .gallery-reel-list {
+    .reel-track {
       display: flex;
       transition: transform 0.4s ease;
       will-change: transform;
     }
 
-    .gallery-reel-list img {
+    .reel-track img {
       height: 65vh;
       width: auto;
-      flex-shrink: 0;
       object-fit: contain;
+      flex-shrink: 0;
+      margin: 0;
       pointer-events: none;
     }
 
-    .gallery-reel-controls {
+    .reel-controls {
       position: absolute;
       top: 50%;
-      width: 100%;
+      left: 0;
+      right: 0;
       display: flex;
       justify-content: space-between;
       transform: translateY(-50%);
+      z-index: 2;
       pointer-events: none;
     }
 
-    .gallery-reel-controls button {
-      background: rgba(255,255,255,0.9);
+    .reel-controls button {
+      background: rgba(255, 255, 255, 0.9);
       border: none;
       font-size: 2rem;
       padding: 0.4rem 1rem;
       cursor: pointer;
       pointer-events: all;
+    }
+
+    @media (max-width: 768px) {
+      .reel-track img {
+        height: 40vh;
+      }
     }
   </style>
 </head>
@@ -182,36 +192,41 @@
     </div>
   </header>
 
-  <!-- CARRUSEL -->
+  <!-- REEL CARRUSEL -->
   <section class="carousel-section">
-    <div class="gallery-reel-wrapper">
-      <div class="gallery-reel-list" id="galleryReel">
+    <div class="reel-wrapper">
+      <div class="reel-track" id="reelTrack">
         <img src="/work/2015-2016/art_01.jpg" alt="Art 1">
         <img src="/work/2015-2016/art_02.png" alt="Art 2">
         <img src="/work/2015-2016/art_03.jpg" alt="Art 3">
         <img src="/work/2015-2016/art_04.png" alt="Art 4">
         <img src="/work/2015-2016/art_05.png" alt="Art 5">
+        <!-- Duplicados para loop -->
+        <img src="/work/2015-2016/art_01.jpg" alt="Art 1 Copy">
+        <img src="/work/2015-2016/art_02.png" alt="Art 2 Copy">
+        <img src="/work/2015-2016/art_03.jpg" alt="Art 3 Copy">
+        <img src="/work/2015-2016/art_04.png" alt="Art 4 Copy">
+        <img src="/work/2015-2016/art_05.png" alt="Art 5 Copy">
       </div>
-    </div>
-
-    <div class="gallery-reel-controls">
-      <button onclick="moveCarousel(-1)">‹</button>
-      <button onclick="moveCarousel(1)">›</button>
+      <div class="reel-controls">
+        <button onclick="scrollReel(-1)">‹</button>
+        <button onclick="scrollReel(1)">›</button>
+      </div>
     </div>
   </section>
 
   <script>
-    const reel = document.getElementById('galleryReel');
+    const reel = document.getElementById('reelTrack');
+    const image = reel.querySelector('img');
     let position = 0;
 
-    function moveCarousel(direction) {
-      const item = reel.querySelector('img');
-      const itemWidth = item.offsetWidth;
+    function scrollReel(direction) {
+      const imageWidth = image.offsetWidth;
       const totalWidth = reel.scrollWidth;
       const visibleWidth = reel.parentElement.offsetWidth;
       const maxOffset = totalWidth - visibleWidth;
 
-      position += direction * itemWidth;
+      position += direction * imageWidth;
 
       if (position < 0) {
         position = maxOffset;
@@ -225,3 +240,4 @@
 
 </body>
 </html>
+
