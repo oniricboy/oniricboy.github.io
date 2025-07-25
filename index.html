@@ -2,66 +2,156 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>oniricboy</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>oniricboy – Portfolio</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
-      font-family: 'Inter', sans-serif;
-      background: #fff;
-      color: #111;
-      padding: 40px;
-    }
-    header {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-    nav a {
-      margin: 0 15px;
-      text-decoration: none;
-      color: #555;
-    }
-    nav a:hover {
+      font-family: 'DM Sans', sans-serif;
+      background-color: #fff;
       color: #000;
     }
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid #eee;
     }
-    .gallery img {
-      width: 100%;
+
+    .logo img {
+      height: 40px;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+      margin: 0;
+      padding: 0;
+      position: relative;
+    }
+
+    nav li {
+      position: relative;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #000;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    nav ul li:hover .dropdown {
+      display: block;
+    }
+
+    .dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: #fff;
       border: 1px solid #ddd;
-      border-radius: 8px;
+      padding: 0.5rem 0;
+      z-index: 10;
     }
-    footer {
-      margin-top: 60px;
+
+    .dropdown li {
+      padding: 0;
+    }
+
+    .dropdown a {
+      display: block;
+      padding: 0.5rem 1rem;
+      white-space: nowrap;
+    }
+
+    .dropdown a:hover {
+      background-color: #f3f3f3;
+    }
+
+    .socials a {
+      color: #000;
+      font-size: 1.1rem;
+      margin-left: 1.2rem;
+      transition: opacity 0.3s ease;
+    }
+
+    .socials a:hover {
+      opacity: 0.6;
+    }
+
+    .hero {
       text-align: center;
-      font-size: 14px;
-      color: #888;
+      padding: 0;
+      margin: 0;
+    }
+
+    .hero img {
+      width: 100vw;
+      height: auto;
+      display: block;
+      object-fit: cover;
+      margin: 0;
+      padding: 0;
+    }
+
+    @media screen and (max-width: 768px) {
+      nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+      }
+
+      header {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .socials {
+        margin-top: 1rem;
+      }
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>oniricboy</h1>
-    <nav>
-      <a href="#">Home</a>
-      <a href="#">Work</a>
-      <a href="#">Projects</a>
-      <a href="#">About</a>
-      <a href="#">Shop</a>
-    </nav>
-  </header>
-  
-  <section class="gallery">
-    <img src="https://via.placeholder.com/400x400.png?text=Artwork+1" alt="Artwork 1"/>
-    <img src="https://via.placeholder.com/400x400.png?text=Artwork+2" alt="Artwork 2"/>
-  </section>
+    <div class="logo">
+      <img src="img/logo.jpg" alt="oniricboy logo">
+    </div>
 
-  <footer>
-    &copy; 2025 oniricboy — contact@yourdomain.com
-  </footer>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li>
+          <a href="#">Work ▾</a>
+          <ul class="dropdown">
+            <li><a href="2015-2016.html">2015–2016</a></li>
+            <li><a href="2017-2018.html">2017–2018</a></li>
+            <li><a href="2019-2021.html">2019–2021</a></li>
+            <li><a href="2023-2024.html">2023–2024</a></li>
+          </ul>
+        </li>
+        <li><a href="#">Projects</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Shop</a></li>
+      </ul>
+    </nav>
+
+    <div class="socials">
+      <a href="https://instagram.com/_oniricboy" target="_blank"><i class="fab fa-instagram"></i></a>
+      <a href="https://twitter.com/_oniricboy" target="_blank"><i class="fab fa-twitter"></i></a>
+    </div>
+  </header>
+
+  <main class="hero">
+    <img src="img/cover.png" alt="oniricboy hero image">
+  </main>
 </body>
 </html>
