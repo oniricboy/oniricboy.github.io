@@ -88,9 +88,10 @@
     .carousel-track {
       display: flex;
       gap: 1rem;
-      overflow-x: auto;
+      overflow-x: scroll;
       scroll-behavior: smooth;
       padding: 0 2rem;
+      scrollbar-width: none;
     }
 
     .carousel-track::-webkit-scrollbar {
@@ -165,7 +166,7 @@
   </div>
 </header>
 
-<!-- Gallery Reel tipo OMOCAT -->
+<!-- REEL HORIZONTAL INFINITO -->
 <section class="carousel-container">
   <div class="carousel-track" id="carousel">
     <img src="/work/2015-2016/art_01.jpg" alt="Art 1">
@@ -182,14 +183,36 @@
 </section>
 
 <script>
-  function scrollCarousel(direction) {
-    const track = document.getElementById('carousel');
-    const scrollAmount = window.innerWidth * 0.7;
-    track.scrollBy({
-      left: direction * scrollAmount,
-      behavior: 'smooth'
+  const carousel = document.getElementById('carousel');
+  let isDuplicated = false;
+
+  // Duplicar contenido una sola vez para loop infinito
+  function duplicateContent() {
+    if (isDuplicated) return;
+    const children = Array.from(carousel.children);
+    children.forEach(el => {
+      carousel.appendChild(el.cloneNode(true));
     });
+    isDuplicated = true;
+    carousel.scrollLeft = carousel.scrollWidth / 2;
   }
+
+  function scrollCarousel(direction) {
+    const scrollAmount = window.innerWidth * 0.7;
+    carousel.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+  }
+
+  function checkLoop() {
+    const maxScroll = carousel.scrollWidth;
+    if (carousel.scrollLeft <= 0) {
+      carousel.scrollLeft = maxScroll / 2;
+    } else if (carousel.scrollLeft >= maxScroll - window.innerWidth) {
+      carousel.scrollLeft = maxScroll / 2 - window.innerWidth;
+    }
+  }
+
+  carousel.addEventListener('scroll', checkLoop);
+  window.addEventListener('load', duplicateContent);
 </script>
 
 </body>
