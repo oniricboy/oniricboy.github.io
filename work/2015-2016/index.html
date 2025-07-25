@@ -116,7 +116,22 @@
 
       .socials {
         margin-top: 1rem;
-      }
+        }
+    .carousel {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-padding: 0;
+      gap: 0;
+      height: 100vh;
+    }
+    .carousel img {
+      height: 100vh;
+      object-fit: cover;
+      scroll-snap-align: center;
+      flex-shrink: 0;
+      margin: 0;
+      border: none;
     }
   </style>
 </head>
@@ -151,9 +166,9 @@
   </header>
 
   <div class="carousel">
-    <img src="/img/2015-2016/art_01.png" alt="Art 1">
+    <img src="/img/2015-2016/art_01.jpg" alt="Art 1">
     <img src="/img/2015-2016/art_02.png" alt="Art 2">
-    <img src="/img/2015-2016/art_03.png" alt="Art 3">
+    <img src="/img/2015-2016/art_03.jpg" alt="Art 3">
     <img src="/img/2015-2016/art_04.png" alt="Art 4">
     <img src="/img/2015-2016/art_05.png" alt="Art 5">
   </div>
