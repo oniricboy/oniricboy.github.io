@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>oniricboy – Portfolio</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -10,7 +10,7 @@
     body {
       margin: 0;
       font-family: 'DM Sans', sans-serif;
-      background: #fff;
+      background-color: #fff;
       color: #000;
       overflow-x: hidden;
     }
@@ -33,7 +33,6 @@
       gap: 2rem;
       margin: 0;
       padding: 0;
-      position: relative;
     }
 
     nav li {
@@ -62,18 +61,9 @@
       z-index: 10;
     }
 
-    .dropdown li {
-      padding: 0;
-    }
-
     .dropdown a {
       display: block;
       padding: 0.5rem 1rem;
-      white-space: nowrap;
-    }
-
-    .dropdown a:hover {
-      background-color: #f3f3f3;
     }
 
     .socials a {
@@ -87,159 +77,118 @@
       opacity: 0.6;
     }
 
-    @media screen and (max-width: 768px) {
-      nav ul {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 1rem;
-      }
-
-      header {
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-      }
-
-      .socials {
-        margin-top: 1rem;
-      }
-    }
-
-    /* Carrusel estilo OMOCAT */
-    .carousel-section {
+    .carousel-container {
       position: relative;
       overflow: hidden;
-      margin: 0;
-      padding: 0;
-    }
-
-    .reel-wrapper {
-      overflow: hidden;
-      position: relative;
       width: 100%;
+      background: #fff;
     }
 
-    .reel-track {
+    .carousel-track {
       display: flex;
       transition: transform 0.5s ease;
       will-change: transform;
     }
 
-    .reel-track img {
+    .carousel-track img {
       height: 65vh;
-      width: auto;
       object-fit: contain;
       flex-shrink: 0;
-      margin: 0;
-      pointer-events: none;
-      border: none;
+      width: 100vw;
     }
 
-    .reel-controls {
+    .carousel-buttons {
       position: absolute;
       top: 50%;
-      left: 0;
-      right: 0;
+      width: 100%;
       display: flex;
       justify-content: space-between;
       transform: translateY(-50%);
-      z-index: 10;
       pointer-events: none;
     }
 
-    .reel-controls button {
+    .carousel-buttons button {
       background: rgba(255,255,255,0.9);
       border: none;
       font-size: 2rem;
-      padding: 0.4rem 1rem;
+      padding: 0.5rem 1rem;
       cursor: pointer;
       pointer-events: all;
     }
 
-    @media (max-width: 768px) {
-      .reel-track img {
-        height: 40vh;
+    @media screen and (max-width: 768px) {
+      .carousel-track img {
+        height: 45vh;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- Header -->
-  <header>
-    <div class="logo">
-      <a href="/index.html"><img src="/img/logo.jpg" alt="oniricboy logo"></a>
-    </div>
+<header>
+  <div class="logo">
+    <a href="/index.html"><img src="/img/logo.jpg" alt="oniricboy logo"></a>
+  </div>
 
-    <nav>
-      <ul>
-        <li><a href="/index.html">Home</a></li>
-        <li>
-          <a href="#">Work ▾</a>
-          <ul class="dropdown">
-            <li><a href="/work/2015-2016/">2015–2016</a></li>
-            <li><a href="/work/2017-2018/">2017–2018</a></li>
-            <li><a href="/work/2019-2021/">2019–2021</a></li>
-            <li><a href="/work/2023-2024/">2023–2024</a></li>
-          </ul>
-        </li>
-        <li><a href="/projects.html">Projects</a></li>
-        <li><a href="/about.html">About</a></li>
-        <li><a href="/shop.html">Shop</a></li>
-      </ul>
-    </nav>
+  <nav>
+    <ul>
+      <li><a href="/index.html">Home</a></li>
+      <li>
+        <a href="#">Work ▾</a>
+        <ul class="dropdown">
+          <li><a href="/work/2015-2016/">2015–2016</a></li>
+          <li><a href="/work/2017-2018/">2017–2018</a></li>
+          <li><a href="/work/2019-2021/">2019–2021</a></li>
+          <li><a href="/work/2023-2024/">2023–2024</a></li>
+        </ul>
+      </li>
+      <li><a href="/projects.html">Projects</a></li>
+      <li><a href="/about.html">About</a></li>
+      <li><a href="/shop.html">Shop</a></li>
+    </ul>
+  </nav>
 
-    <div class="socials">
-      <a href="https://instagram.com/_oniricboy" target="_blank"><i class="fab fa-instagram"></i></a>
-      <a href="https://twitter.com/_oniricboy" target="_blank"><i class="fab fa-twitter"></i></a>
-    </div>
-  </header>
+  <div class="socials">
+    <a href="https://instagram.com/_oniricboy" target="_blank"><i class="fab fa-instagram"></i></a>
+    <a href="https://twitter.com/_oniricboy" target="_blank"><i class="fab fa-twitter"></i></a>
+  </div>
+</header>
 
-  <!-- Carrusel -->
-  <section class="carousel-section">
-    <div class="reel-wrapper">
-      <div class="reel-track" id="reelTrack">
-        <img src="/work/2015-2016/art_01.jpg" alt="Art 1">
-        <img src="/work/2015-2016/art_02.png" alt="Art 2">
-        <img src="/work/2015-2016/art_03.jpg" alt="Art 3">
-        <img src="/work/2015-2016/art_04.png" alt="Art 4">
-        <img src="/work/2015-2016/art_05.png" alt="Art 5">
-        <!-- Copias para efecto loop -->
-        <img src="/work/2015-2016/art_01.jpg" alt="Art 1 Copy">
-        <img src="/work/2015-2016/art_02.png" alt="Art 2 Copy">
-        <img src="/work/2015-2016/art_03.jpg" alt="Art 3 Copy">
-        <img src="/work/2015-2016/art_04.png" alt="Art 4 Copy">
-        <img src="/work/2015-2016/art_05.png" alt="Art 5 Copy">
-      </div>
+<!-- Carrusel estilo OMOCAT -->
+<section class="carousel-container">
+  <div class="carousel-track" id="carousel">
+    <img src="/work/2015-2016/art_01.jpg" alt="Art 1">
+    <img src="/work/2015-2016/art_02.png" alt="Art 2">
+    <img src="/work/2015-2016/art_03.jpg" alt="Art 3">
+    <img src="/work/2015-2016/art_04.png" alt="Art 4">
+    <img src="/work/2015-2016/art_05.png" alt="Art 5">
+  </div>
 
-      <div class="reel-controls">
-        <button onclick="scrollReel(-1)">‹</button>
-        <button onclick="scrollReel(1)">›</button>
-      </div>
-    </div>
-  </section>
+  <div class="carousel-buttons">
+    <button onclick="slide(-1)">‹</button>
+    <button onclick="slide(1)">›</button>
+  </div>
+</section>
 
-  <script>
-    const reel = document.getElementById('reelTrack');
-    const images = reel.querySelectorAll('img');
-    let position = 0;
+<script>
+  const carousel = document.getElementById('carousel');
+  let index = 0;
+  const images = carousel.children;
+  const total = images.length;
 
-    function scrollReel(direction) {
-      const imageWidth = images[0].offsetWidth;
-      const visibleWidth = reel.parentElement.offsetWidth;
-      const totalWidth = reel.scrollWidth;
+  function slide(dir) {
+    index += dir;
+    if (index < 0) index = total - 1;
+    if (index >= total) index = 0;
+    const offset = index * window.innerWidth;
+    carousel.style.transform = `translateX(-${offset}px)`;
+  }
 
-      position += direction * imageWidth;
-
-      if (position < 0) {
-        position = totalWidth / 2;
-      } else if (position > totalWidth / 2) {
-        position = 0;
-      }
-
-      reel.style.transform = `translateX(-${position}px)`;
-    }
-  </script>
+  window.addEventListener('resize', () => {
+    const offset = index * window.innerWidth;
+    carousel.style.transform = `translateX(-${offset}px)`;
+  });
+</script>
 
 </body>
 </html>
