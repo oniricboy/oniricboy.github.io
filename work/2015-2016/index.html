@@ -2,15 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>oniricboy – Portfolio</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     body {
       margin: 0;
       font-family: 'DM Sans', sans-serif;
-      background-color: #fff;
+      background: #fff;
       color: #000;
     }
 
@@ -104,54 +104,61 @@
       }
     }
 
-    .carousel-wrapper {
+    /* CARRUSEL OMOCAT STYLE */
+    .carousel-section {
+      padding: 2rem;
       position: relative;
-      width: 100%;
       overflow: hidden;
     }
 
-    .carousel-track {
+    .gallery-reel-wrapper {
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .gallery-reel-list {
       display: flex;
-      overflow-x: scroll;
-      scroll-behavior: smooth;
-      scrollbar-width: none;
+      transition: transform 0.4s ease;
+      will-change: transform;
     }
 
-    .carousel-track::-webkit-scrollbar {
-      display: none;
-    }
-
-    .carousel-track img {
-      height: 65vh;
+    .gallery-reel-list img {
+      height: 250px;
       width: auto;
-      object-fit: contain;
       flex-shrink: 0;
-      margin: 0;
+      object-fit: contain;
+      pointer-events: none;
     }
 
-    .arrow {
+    .gallery-reel-controls {
       position: absolute;
       top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
       transform: translateY(-50%);
-      background: rgba(255,255,255,0.8);
+      pointer-events: none;
+    }
+
+    .gallery-reel-controls button {
+      background: rgba(255,255,255,0.9);
       border: none;
       font-size: 2rem;
-      padding: 0.3rem 0.8rem;
+      padding: 0.4rem 1rem;
       cursor: pointer;
-      z-index: 10;
+      pointer-events: all;
     }
 
-    .arrow.left {
-      left: 10px;
-    }
-
-    .arrow.right {
-      right: 10px;
+    @media (max-width: 768px) {
+      .gallery-reel-list img {
+        height: 150px;
+      }
     }
   </style>
 </head>
 <body>
 
+  <!-- HEADER + MENÚ -->
   <header>
     <div class="logo">
       <a href="/index.html"><img src="/img/logo.jpg" alt="oniricboy logo"></a>
@@ -181,43 +188,45 @@
     </div>
   </header>
 
-  <div class="carousel-wrapper">
-    <button class="arrow left" onclick="scrollCarousel(-1)">‹</button>
-    <div class="carousel-track" id="carousel">
-      <!-- Original -->
-      <img src="/work/2015-2016/art_01.jpg" alt="Art 1">
-      <img src="/work/2015-2016/art_02.png" alt="Art 2">
-      <img src="/work/2015-2016/art_03.jpg" alt="Art 3">
-      <img src="/work/2015-2016/art_04.png" alt="Art 4">
-      <img src="/work/2015-2016/art_05.png" alt="Art 5">
-      <!-- Copia para loop visual -->
-      <img src="/work/2015-2016/art_01.jpg" alt="Art 1 duplicate">
-      <img src="/work/2015-2016/art_02.png" alt="Art 2 duplicate">
-      <img src="/work/2015-2016/art_03.jpg" alt="Art 3 duplicate">
-      <img src="/work/2015-2016/art_04.png" alt="Art 4 duplicate">
-      <img src="/work/2015-2016/art_05.png" alt="Art 5 duplicate">
+  <!-- CARRUSEL -->
+  <section class="carousel-section">
+    <div class="gallery-reel-wrapper">
+      <div class="gallery-reel-list" id="galleryReel">
+        <img src="/work/2015-2016/art_01.jpg" alt="Art 1">
+        <img src="/work/2015-2016/art_02.png" alt="Art 2">
+        <img src="/work/2015-2016/art_03.jpg" alt="Art 3">
+        <img src="/work/2015-2016/art_04.png" alt="Art 4">
+        <img src="/work/2015-2016/art_05.png" alt="Art 5">
+      </div>
     </div>
-    <button class="arrow right" onclick="scrollCarousel(1)">›</button>
-  </div>
+
+    <div class="gallery-reel-controls">
+      <button onclick="moveCarousel(-1)">‹</button>
+      <button onclick="moveCarousel(1)">›</button>
+    </div>
+  </section>
 
   <script>
-    const carousel = document.getElementById('carousel');
-    const scrollAmount = 600; // Avance más largo
+    const reel = document.getElementById('galleryReel');
+    let position = 0;
 
-    function scrollCarousel(direction) {
-      const maxScroll = carousel.scrollWidth / 2; // porque hay duplicado
-      let newScroll = carousel.scrollLeft + direction * scrollAmount;
+    // Ancho estimado de cada imagen
+    const itemWidth = 300;
 
-      if (newScroll >= maxScroll) {
-        // salto invisible al inicio del carrusel
-        carousel.scrollLeft = 0;
-        newScroll = direction * scrollAmount;
-      } else if (newScroll < 0) {
-        carousel.scrollLeft = maxScroll;
-        newScroll = maxScroll + direction * scrollAmount;
+    function moveCarousel(direction) {
+      const totalWidth = reel.scrollWidth;
+      const visibleWidth = reel.parentElement.offsetWidth;
+      const maxOffset = totalWidth - visibleWidth;
+
+      position += direction * itemWidth;
+
+      if (position < 0) {
+        position = maxOffset;
+      } else if (position > maxOffset) {
+        position = 0;
       }
 
-      carousel.scrollTo({ left: newScroll, behavior: 'smooth' });
+      reel.style.transform = `translateX(-${position}px)`;
     }
   </script>
 
