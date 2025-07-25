@@ -12,6 +12,7 @@
       font-family: 'DM Sans', sans-serif;
       background: #fff;
       color: #000;
+      overflow-x: hidden;
     }
 
     header {
@@ -104,11 +105,12 @@
       }
     }
 
-    /* CARRUSEL ESTILO OMOCAT */
+    /* Carrusel estilo OMOCAT */
     .carousel-section {
       position: relative;
-      padding: 0;
+      overflow: hidden;
       margin: 0;
+      padding: 0;
     }
 
     .reel-wrapper {
@@ -119,7 +121,7 @@
 
     .reel-track {
       display: flex;
-      transition: transform 0.4s ease;
+      transition: transform 0.5s ease;
       will-change: transform;
     }
 
@@ -130,6 +132,7 @@
       flex-shrink: 0;
       margin: 0;
       pointer-events: none;
+      border: none;
     }
 
     .reel-controls {
@@ -140,12 +143,12 @@
       display: flex;
       justify-content: space-between;
       transform: translateY(-50%);
-      z-index: 2;
+      z-index: 10;
       pointer-events: none;
     }
 
     .reel-controls button {
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255,255,255,0.9);
       border: none;
       font-size: 2rem;
       padding: 0.4rem 1rem;
@@ -162,7 +165,7 @@
 </head>
 <body>
 
-  <!-- HEADER -->
+  <!-- Header -->
   <header>
     <div class="logo">
       <a href="/index.html"><img src="/img/logo.jpg" alt="oniricboy logo"></a>
@@ -192,7 +195,7 @@
     </div>
   </header>
 
-  <!-- CARRUSEL OMOCAT -->
+  <!-- Carrusel -->
   <section class="carousel-section">
     <div class="reel-wrapper">
       <div class="reel-track" id="reelTrack">
@@ -201,7 +204,7 @@
         <img src="/work/2015-2016/art_03.jpg" alt="Art 3">
         <img src="/work/2015-2016/art_04.png" alt="Art 4">
         <img src="/work/2015-2016/art_05.png" alt="Art 5">
-        <!-- Duplicadas para loop visual -->
+        <!-- Copias para efecto loop -->
         <img src="/work/2015-2016/art_01.jpg" alt="Art 1 Copy">
         <img src="/work/2015-2016/art_02.png" alt="Art 2 Copy">
         <img src="/work/2015-2016/art_03.jpg" alt="Art 3 Copy">
