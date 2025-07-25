@@ -101,81 +101,80 @@
       padding: 0;
     }
 
-    /* Carrusel siempre activo */
-    .carousel {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      scroll-padding: 0;
-      gap: 0;
-      height: 100vh;
-      white-space: nowrap;
-    }
+<style>
+  .carousel-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
 
-    .carousel img {
-      height: 100vh;
-      object-fit: cover;
-      scroll-snap-align: center;
-      flex-shrink: 0;
-      margin: 0;
-      border: none;
-    }
+  .carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 0;
+    gap: 0;
+    white-space: nowrap;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+  }
 
-    @media screen and (max-width: 768px) {
-      nav ul {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 1rem;
-      }
+  .carousel::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge */
+  }
 
-      header {
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-      }
+  .carousel img {
+    height: 66vh;
+    object-fit: cover;
+    scroll-snap-align: center;
+    flex-shrink: 0;
+    margin: 0;
+    border: none;
+  }
 
-      .socials {
-        margin-top: 1rem;
-      }
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <div class="logo">
-      <a href="/index.html"><img src="/img/logo.jpg" alt="oniricboy logo"></a>
-    </div>
+  .arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+    background: rgba(255,255,255,0.8);
+    border: none;
+    font-size: 2rem;
+    padding: 0.3rem 0.8rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
 
-    <nav>
-      <ul>
-        <li><a href="/index.html">Home</a></li>
-        <li>
-          <a href="#">Work ▾</a>
-          <ul class="dropdown">
-            <li><a href="/work/2015-2016/">2015–2016</a></li>
-            <li><a href="/work/2017-2018/">2017–2018</a></li>
-            <li><a href="/work/2019-2021/">2019–2021</a></li>
-            <li><a href="/work/2023-2024/">2023–2024</a></li>
-          </ul>
-        </li>
-        <li><a href="/projects.html">Projects</a></li>
-        <li><a href="/about.html">About</a></li>
-        <li><a href="/shop.html">Shop</a></li>
-      </ul>
-    </nav>
+  .arrow:hover {
+    background: rgba(255,255,255,1);
+  }
 
-    <div class="socials">
-      <a href="https://instagram.com/_oniricboy" target="_blank"><i class="fab fa-instagram"></i></a>
-      <a href="https://twitter.com/_oniricboy" target="_blank"><i class="fab fa-twitter"></i></a>
-    </div>
-  </header>
+  .arrow.left {
+    left: 10px;
+  }
 
-  <div class="carousel">
+  .arrow.right {
+    right: 10px;
+  }
+</style>
+
+<div class="carousel-wrapper">
+  <button class="arrow left" onclick="scrollCarousel(-1)">‹</button>
+  <div class="carousel" id="carousel">
     <img src="/work/2015-2016/art_01.jpg" alt="Art 1">
     <img src="/work/2015-2016/art_02.png" alt="Art 2">
     <img src="/work/2015-2016/art_03.jpg" alt="Art 3">
     <img src="/work/2015-2016/art_04.png" alt="Art 4">
     <img src="/work/2015-2016/art_05.png" alt="Art 5">
   </div>
-</body>
-</html>
+  <button class="arrow right" onclick="scrollCarousel(1)">›</button>
+</div>
+
+<script>
+  function scrollCarousel(direction) {
+    const carousel = document.getElementById('carousel');
+    const imageWidth = carousel.querySelector('img').clientWidth;
+    carousel.scrollBy({ left: direction * imageWidth, behavior: 'smooth' });
+  }
+</script>
+
