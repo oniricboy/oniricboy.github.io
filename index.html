@@ -1,69 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>oniricboy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
     body {
-      font-family: sans-serif;
-      background-color: #fff;
-      color: #000;
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: #fff;
+      color: #111;
+      padding: 40px;
     }
     header {
-      padding: 2rem;
       text-align: center;
-    }
-    nav {
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      background: #f3f3f3;
-      padding: 1rem 0;
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      margin-bottom: 40px;
     }
     nav a {
+      margin: 0 15px;
       text-decoration: none;
-      color: #000;
-      font-weight: bold;
-      transition: color 0.3s;
+      color: #555;
     }
     nav a:hover {
-      color: #888;
+      color: #000;
     }
-    section {
-      padding: 2rem;
-      max-width: 1000px;
-      margin: auto;
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
     }
-    h2 {
-      margin-bottom: 1rem;
-      font-size: 2rem;
-    }
-    .carousel {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      gap: 1rem;
-      margin-bottom: 3rem;
-    }
-    .carousel img {
-      height: 400px;
-      scroll-snap-align: center;
-      flex-shrink: 0;
-      border: 2px solid #ccc;
+    .gallery img {
+      width: 100%;
+      border: 1px solid #ddd;
+      border-radius: 8px;
     }
     footer {
+      margin-top: 60px;
       text-align: center;
-      padding: 2rem;
-      font-size: 0.9rem;
+      font-size: 14px;
       color: #888;
     }
   </style>
@@ -71,79 +46,22 @@
 <body>
   <header>
     <h1>oniricboy</h1>
-    <p>Portfolio</p>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">Work</a>
+      <a href="#">Projects</a>
+      <a href="#">About</a>
+      <a href="#">Shop</a>
+    </nav>
   </header>
-
-  <nav>
-    <a href="#home">Home</a>
-    <a href="#work">Work</a>
-    <a href="#projects">Projects</a>
-    <a href="#about">About</a>
-    <a href="/shop">Shop</a>
-  </nav>
-
-  <section id="home">
-    <h2>Welcome</h2>
-    <p>I'm oniricboy, an illustrator and visual artist. This is my personal portfolio showcasing my evolution and current projects.</p>
-  </section>
-
-  <section id="work">
-    <h2>Work</h2>
-    <h3>2015–2016</h3>
-    <div class="carousel">
-      <img src="/work/2015-2016/art_01.jpg">
-      <img src="/work/2015-2016/art_02.jpg">
-      <img src="/work/2015-2016/art_03.jpg">
-      <img src="/work/2015-2016/art_04.jpg">
-      <img src="/work/2015-2016/art_05.jpg">
-    </div>
-    <h3>2017–2018</h3>
-    <div class="carousel">
-      <img src="/work/2017-2018/art_01.jpg">
-      <img src="/work/2017-2018/art_02.jpg">
-      <img src="/work/2017-2018/art_03.jpg">
-      <img src="/work/2017-2018/art_04.jpg">
-      <img src="/work/2017-2018/art_05.jpg">
-      <img src="/work/2017-2018/art_06.jpg">
-      <img src="/work/2017-2018/art_07.jpg">
-      <img src="/work/2017-2018/art_08.jpg">
-      <img src="/work/2017-2018/art_09.jpg">
-      <img src="/work/2017-2018/art_10.jpg">
-    </div>
-    <h3>2019–2021</h3>
-    <div class="carousel">
-      <img src="/work/2019-2021/art_01.jpg">
-      <img src="/work/2019-2021/art_02.jpg">
-      <img src="/work/2019-2021/art_03.jpg">
-      <img src="/work/2019-2021/art_04.jpg">
-      <img src="/work/2019-2021/art_05.jpg">
-    </div>
-    <h3>2023–2024</h3>
-    <div class="carousel">
-      <img src="/work/2023-2024/art_01.jpg">
-      <img src="/work/2023-2024/art_02.jpg">
-      <img src="/work/2023-2024/art_03.jpg">
-      <img src="/work/2023-2024/art_04.jpg">
-      <img src="/work/2023-2024/art_05.jpg">
-    </div>
-  </section>
-
-  <section id="projects">
-    <h2>Projects</h2>
-    <div class="carousel">
-      <img src="/projects/inside_01.jpg" alt="Comic preview 1">
-      <img src="/projects/inside_02.jpg" alt="Comic preview 2">
-      <img src="/projects/inside_03.jpg" alt="Comic preview 3">
-    </div>
-  </section>
-
-  <section id="about">
-    <h2>About</h2>
-    <p>I’m an artist exploring identity, memory, and alternate realities through drawing and narrative. This site is a record of that ongoing process.</p>
+  
+  <section class="gallery">
+    <img src="https://via.placeholder.com/400x400.png?text=Artwork+1" alt="Artwork 1"/>
+    <img src="https://via.placeholder.com/400x400.png?text=Artwork+2" alt="Artwork 2"/>
   </section>
 
   <footer>
-    &copy; 2025 oniricboy — contact@oniricboy.com
+    &copy; 2025 oniricboy — contact@yourdomain.com
   </footer>
 </body>
 </html>
