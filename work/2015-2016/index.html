@@ -123,7 +123,7 @@
     }
 
     .gallery-reel-list img {
-      height: 250px;
+      height: 65vh;
       width: auto;
       flex-shrink: 0;
       object-fit: contain;
@@ -148,17 +148,11 @@
       cursor: pointer;
       pointer-events: all;
     }
-
-    @media (max-width: 768px) {
-      .gallery-reel-list img {
-        height: 150px;
-      }
-    }
   </style>
 </head>
 <body>
 
-  <!-- HEADER + MENÚ -->
+  <!-- HEADER -->
   <header>
     <div class="logo">
       <a href="/index.html"><img src="/img/logo.jpg" alt="oniricboy logo"></a>
@@ -210,10 +204,9 @@
     const reel = document.getElementById('galleryReel');
     let position = 0;
 
-    // Ancho estimado de cada imagen
-    const itemWidth = 300;
-
     function moveCarousel(direction) {
+      const item = reel.querySelector('img');
+      const itemWidth = item.offsetWidth;
       const totalWidth = reel.scrollWidth;
       const visibleWidth = reel.parentElement.offsetWidth;
       const maxOffset = totalWidth - visibleWidth;
