@@ -82,19 +82,25 @@
       overflow: hidden;
       width: 100%;
       background: #fff;
+      padding: 1rem 0;
     }
 
     .carousel-track {
       display: flex;
-      transition: transform 0.5s ease;
-      will-change: transform;
+      gap: 1rem;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding: 0 2rem;
+    }
+
+    .carousel-track::-webkit-scrollbar {
+      display: none;
     }
 
     .carousel-track img {
       height: 65vh;
       object-fit: contain;
       flex-shrink: 0;
-      width: 100vw;
     }
 
     .carousel-buttons {
@@ -108,7 +114,7 @@
     }
 
     .carousel-buttons button {
-      background: rgba(255,255,255,0.9);
+      background: rgba(255, 255, 255, 0.9);
       border: none;
       font-size: 2rem;
       padding: 0.5rem 1rem;
@@ -117,6 +123,11 @@
     }
 
     @media screen and (max-width: 768px) {
+      .carousel-track {
+        gap: 0.5rem;
+        padding: 0 1rem;
+      }
+
       .carousel-track img {
         height: 45vh;
       }
@@ -154,7 +165,7 @@
   </div>
 </header>
 
-<!-- Carrusel estilo OMOCAT -->
+<!-- Gallery Reel tipo OMOCAT -->
 <section class="carousel-container">
   <div class="carousel-track" id="carousel">
     <img src="/work/2015-2016/art_01.jpg" alt="Art 1">
@@ -165,55 +176,20 @@
   </div>
 
   <div class="carousel-buttons">
-    <button onclick="slide(-1)">‹</button>
-    <button onclick="slide(1)">›</button>
+    <button onclick="scrollCarousel(-1)">‹</button>
+    <button onclick="scrollCarousel(1)">›</button>
   </div>
 </section>
 
 <script>
-  const track = document.getElementById('carousel');
-  const originalImages = Array.from(track.children);
-  const total = originalImages.length;
-
-  // Duplicar imágenes
-  originalImages.forEach(img => {
-    track.appendChild(img.cloneNode(true)); // al final
-  });
-  originalImages.forEach(img => {
-    track.insertBefore(img.cloneNode(true), track.firstChild); // al inicio
-  });
-
-  let index = total;
-  const slideWidth = window.innerWidth;
-  track.style.transform = `translateX(-${slideWidth * index}px)`;
-
-  function slide(dir) {
-    index += dir;
-    track.style.transition = 'transform 0.5s ease';
-    track.style.transform = `translateX(-${slideWidth * index}px)`;
-
-    // Espera que termine la transición y luego ajusta instantáneamente
-    track.addEventListener('transitionend', handleTransitionEnd, { once: true });
+  function scrollCarousel(direction) {
+    const track = document.getElementById('carousel');
+    const scrollAmount = window.innerWidth * 0.7;
+    track.scrollBy({
+      left: direction * scrollAmount,
+      behavior: 'smooth'
+    });
   }
-
-  function handleTransitionEnd() {
-    if (index >= total * 2) {
-      index = total;
-      track.style.transition = 'none';
-      track.style.transform = `translateX(-${window.innerWidth * index}px)`;
-    } else if (index < total) {
-      index = total + (index % total);
-      track.style.transition = 'none';
-      track.style.transform = `translateX(-${window.innerWidth * index}px)`;
-    }
-  }
-
-  // Responder a resize
-  window.addEventListener('resize', () => {
-    const slideWidth = window.innerWidth;
-    track.style.transition = 'none';
-    track.style.transform = `translateX(-${slideWidth * index}px)`;
-  });
 </script>
 
 </body>
