@@ -86,94 +86,138 @@
       opacity: 0.6;
     }
 
-    .hero {
-      text-align: center;
-      padding: 0;
-      margin: 0;
+    @media screen and (max-width: 768px) {
+      nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+      }
+
+      header {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .socials {
+        margin-top: 1rem;
+      }
     }
 
-    .hero img {
+    /* Carrusel */
+    .carousel-wrapper {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .carousel {
+      display: flex;
+      overflow: hidden;
+      scroll-snap-type: x mandatory;
+      gap: 0;
+      white-space: nowrap;
+    }
+
+    .carousel img {
+      height: 33vh;
+      flex-shrink: 0;
       width: 100vw;
-      height: auto;
-      display: block;
       object-fit: cover;
-      margin: 0;
-      padding: 0;
+      scroll-snap-align: center;
     }
 
-<style>
-  .carousel-wrapper {
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-  }
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      background: rgba(255,255,255,0.8);
+      border: none;
+      font-size: 2rem;
+      padding: 0.3rem 0.8rem;
+      cursor: pointer;
+    }
 
-  .carousel {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-padding: 0;
-    gap: 0;
-    white-space: nowrap;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE 10+ */
-  }
+    .arrow.left {
+      left: 10px;
+    }
 
-  .carousel::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Edge */
-  }
+    .arrow.right {
+      right: 10px;
+    }
+  </style>
+</head>
 
-  .carousel img {
-    height: 66vh;
-    object-fit: cover;
-    scroll-snap-align: center;
-    flex-shrink: 0;
-    margin: 0;
-    border: none;
-  }
+<body>
+  <header>
+    <div class="logo">
+      <a href="/index.html"><img src="/img/logo.jpg" alt="oniricboy logo"></a>
+    </div>
 
-  .arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 5;
-    background: rgba(255,255,255,0.8);
-    border: none;
-    font-size: 2rem;
-    padding: 0.3rem 0.8rem;
-    cursor: pointer;
-    transition: background 0.2s ease;
-  }
+    <nav>
+      <ul>
+        <li><a href="/index.html">Home</a></li>
+        <li>
+          <a href="#">Work ▾</a>
+          <ul class="dropdown">
+            <li><a href="/work/2015-2016/">2015–2016</a></li>
+            <li><a href="/work/2017-2018/">2017–2018</a></li>
+            <li><a href="/work/2019-2021/">2019–2021</a></li>
+            <li><a href="/work/2023-2024/">2023–2024</a></li>
+          </ul>
+        </li>
+        <li><a href="/projects.html">Projects</a></li>
+        <li><a href="/about.html">About</a></li>
+        <li><a href="/shop.html">Shop</a></li>
+      </ul>
+    </nav>
 
-  .arrow:hover {
-    background: rgba(255,255,255,1);
-  }
+    <div class="socials">
+      <a href="https://instagram.com/_oniricboy" target="_blank"><i class="fab fa-instagram"></i></a>
+      <a href="https://twitter.com/_oniricboy" target="_blank"><i class="fab fa-twitter"></i></a>
+    </div>
+  </header>
 
-  .arrow.left {
-    left: 10px;
-  }
-
-  .arrow.right {
-    right: 10px;
-  }
-</style>
-
-<div class="carousel-wrapper">
-  <button class="arrow left" onclick="scrollCarousel(-1)">‹</button>
-  <div class="carousel" id="carousel">
-    <img src="/work/2015-2016/art_01.jpg" alt="Art 1">
-    <img src="/work/2015-2016/art_02.png" alt="Art 2">
-    <img src="/work/2015-2016/art_03.jpg" alt="Art 3">
-    <img src="/work/2015-2016/art_04.png" alt="Art 4">
-    <img src="/work/2015-2016/art_05.png" alt="Art 5">
+  <div class="carousel-wrapper">
+    <button class="arrow left" onclick="scrollCarousel(-1)">‹</button>
+    <div class="carousel" id="carousel">
+      <img src="/work/2015-2016/art_01.jpg" alt="Art 1">
+      <img src="/work/2015-2016/art_02.png" alt="Art 2">
+      <img src="/work/2015-2016/art_03.jpg" alt="Art 3">
+      <img src="/work/2015-2016/art_04.png" alt="Art 4">
+      <img src="/work/2015-2016/art_05.png" alt="Art 5">
+    </div>
+    <button class="arrow right" onclick="scrollCarousel(1)">›</button>
   </div>
-  <button class="arrow right" onclick="scrollCarousel(1)">›</button>
-</div>
 
-<script>
-  function scrollCarousel(direction) {
+  <script>
     const carousel = document.getElementById('carousel');
-    const imageWidth = carousel.querySelector('img').clientWidth;
-    carousel.scrollBy({ left: direction * imageWidth, behavior: 'smooth' });
-  }
-</script>
+    const images = carousel.querySelectorAll('img');
+    const total = images.length;
+    let index = 0;
+    let interval;
+
+    function scrollCarousel(direction) {
+      index = (index + direction + total) % total;
+      const width = images[0].clientWidth;
+      carousel.scrollTo({ left: width * index, behavior: 'smooth' });
+    }
+
+    function startAutoScroll() {
+      interval = setInterval(() => scrollCarousel(1), 5000);
+    }
+
+    function stopAutoScroll() {
+      clearInterval(interval);
+    }
+
+    carousel.addEventListener('mouseenter', stopAutoScroll);
+    carousel.addEventListener('mouseleave', startAutoScroll);
+
+    window.addEventListener('load', () => {
+      startAutoScroll();
+    });
+  </script>
+</body>
+</html>
