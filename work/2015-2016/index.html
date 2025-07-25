@@ -31,7 +31,6 @@
       gap: 2rem;
       margin: 0;
       padding: 0;
-      position: relative;
     }
 
     nav li {
@@ -84,40 +83,41 @@
     .carousel-container {
       position: relative;
       overflow: hidden;
-      width: 100%;
+      width: 100vw;
+      height: 65vh;
     }
 
     .carousel-track {
       display: flex;
-      transition: transform 0.4s ease;
-      will-change: transform;
+      transition: transform 0.5s ease;
+      height: 100%;
     }
 
     .carousel-track img {
-      height: 65vh;
-      width: auto;
       flex-shrink: 0;
-      object-fit: contain;
+      width: 100vw;
+      height: 100%;
+      object-fit: cover;
     }
 
-    .carousel-controls {
+    .carousel-button {
       position: absolute;
       top: 50%;
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
       transform: translateY(-50%);
-      z-index: 2;
-      pointer-events: none;
-    }
-
-    .carousel-controls button {
-      background: rgba(255,255,255,0.9);
+      background: rgba(255, 255, 255, 0.8);
       border: none;
       font-size: 2rem;
-      padding: 0.4rem 1rem;
+      padding: 0.5rem 1rem;
       cursor: pointer;
-      pointer-events: all;
+      z-index: 10;
+    }
+
+    .prev {
+      left: 0.5rem;
+    }
+
+    .next {
+      right: 0.5rem;
     }
   </style>
 </head>
@@ -150,44 +150,62 @@
   </header>
 
   <div class="carousel-container">
+    <button class="carousel-button prev" onclick="moveSlide(-1)">‹</button>
     <div class="carousel-track" id="carouselTrack">
-      <img src="/work/2015-2016/art_01.jpg" alt="Art 1">
-      <img src="/work/2015-2016/art_02.png" alt="Art 2">
-      <img src="/work/2015-2016/art_03.jpg" alt="Art 3">
-      <img src="/work/2015-2016/art_04.png" alt="Art 4">
-      <img src="/work/2015-2016/art_05.png" alt="Art 5">
-      <img src="/work/2015-2016/art_01.jpg" alt="Clone 1">
+      <img src="work/2015-2016/art_05.png" alt="Art 5 Clone" />
+      <img src="work/2015-2016/art_01.jpg" alt="Art 1" />
+      <img src="work/2015-2016/art_02.png" alt="Art 2" />
+      <img src="work/2015-2016/art_03.jpg" alt="Art 3" />
+      <img src="work/2015-2016/art_04.png" alt="Art 4" />
+      <img src="work/2015-2016/art_05.png" alt="Art 5" />
+      <img src="work/2015-2016/art_01.jpg" alt="Art 1 Clone" />
     </div>
-    <div class="carousel-controls">
-      <button onclick="moveSlide(-1)">‹</button>
-      <button onclick="moveSlide(1)">›</button>
-    </div>
+    <button class="carousel-button next" onclick="moveSlide(1)">›</button>
   </div>
 
   <script>
     const track = document.getElementById('carouselTrack');
-    const images = track.children;
-    const imageWidth = images[0].getBoundingClientRect().width;
-    let index = 0;
+    const slides = Array.from(track.children);
+    let index = 1;
+    let transitioning = false;
+
+    function updatePosition() {
+      track.style.transition = 'transform 0.5s ease';
+      track.style.transform = `translateX(-${index * 100}vw)`;
+    }
 
     function moveSlide(direction) {
-      track.style.transition = 'transform 0.4s ease';
+      if (transitioning) return;
+      transitioning = true;
       index += direction;
-      track.style.transform = `translateX(-${index * imageWidth}px)`;
-
-      track.addEventListener('transitionend', () => {
-        if (index >= images.length - 1) {
-          track.style.transition = 'none';
-          index = 0;
-          track.style.transform = `translateX(0px)`;
-        }
-        if (index < 0) {
-          track.style.transition = 'none';
-          index = images.length - 2;
-          track.style.transform = `translateX(-${index * imageWidth}px)`;
-        }
-      }, { once: true });
+      updatePosition();
     }
+
+    track.addEventListener('transitionend', () => {
+      if (index === 0) {
+        track.style.transition = 'none';
+        index = slides.length - 2;
+        track.style.transform = `translateX(-${index * 100}vw)`;
+        requestAnimationFrame(() => {
+          track.offsetHeight;
+          track.style.transition = 'transform 0.5s ease';
+        });
+      }
+      if (index === slides.length - 1) {
+        track.style.transition = 'none';
+        index = 1;
+        track.style.transform = `translateX(-${index * 100}vw)`;
+        requestAnimationFrame(() => {
+          track.offsetHeight;
+          track.style.transition = 'transform 0.5s ease';
+        });
+      }
+      transitioning = false;
+    });
+
+    // Inicializar posición
+    track.style.transition = 'none';
+    track.style.transform = `translateX(-${index * 100}vw)`;
   </script>
 </body>
 </html>
