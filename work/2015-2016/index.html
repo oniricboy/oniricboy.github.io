@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>oniricboy – Portfolio</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     body {
       margin: 0;
@@ -25,8 +26,14 @@
       background: #fff;
     }
 
-    .logo img {
-      height: 40px;
+    .logo {
+      flex: 1;
+    }
+
+    nav {
+      flex: 2;
+      display: flex;
+      justify-content: center;
     }
 
     nav ul {
@@ -68,6 +75,23 @@
       padding: 0.5rem 1rem;
     }
 
+    .socials {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .socials a {
+      color: #000;
+      font-size: 1.1rem;
+      margin-left: 1.2rem;
+      transition: opacity 0.3s ease;
+    }
+
+    .socials a:hover {
+      opacity: 0.6;
+    }
+
     .carousel-container {
       position: relative;
       overflow: hidden;
@@ -84,7 +108,7 @@
 
     .carousel-slide {
       flex: 0 0 auto;
-      width: 33.3333%; 
+      width: 33.3333%;
       box-sizing: border-box;
     }
 
@@ -122,6 +146,10 @@
       .carousel-slide img {
         height: 45vh;
       }
+
+      nav {
+        display: none; /* puedes luego agregar menú hamburguesa si deseas */
+      }
     }
   </style>
 </head>
@@ -149,6 +177,11 @@
       <li><a href="/shop.html">Shop</a></li>
     </ul>
   </nav>
+
+  <div class="socials">
+    <a href="https://instagram.com/_oniricboy" target="_blank"><i class="fab fa-instagram"></i></a>
+    <a href="https://twitter.com/_oniricboy" target="_blank"><i class="fab fa-twitter"></i></a>
+  </div>
 </header>
 
 <section class="carousel-container">
