@@ -26,18 +26,13 @@
       height: 40px;
     }
 
-    nav {
-      flex: 2;
-      display: flex;
-      justify-content: center;
-    }
-
-    nav ul {
+   nav ul {
       list-style: none;
       display: flex;
       gap: 2rem;
       margin: 0;
       padding: 0;
+      position: relative;
     }
 
     nav li {
@@ -51,7 +46,7 @@
       font-size: 0.9rem;
     }
 
-    nav ul li:hover .dropdown {
+     nav ul li:hover .dropdown {
       display: block;
     }
 
@@ -66,15 +61,18 @@
       z-index: 10;
     }
 
+    .dropdown li {
+      padding: 0;
+    }
+
     .dropdown a {
       display: block;
       padding: 0.5rem 1rem;
+      white-space: nowrap;
     }
 
-    .socials {
-      flex: 1;
-      display: flex;
-      justify-content: flex-end;
+    .dropdown a:hover {
+      background-color: #f3f3f3;
     }
 
     .socials a {
@@ -86,6 +84,21 @@
 
     .socials a:hover {
       opacity: 0.6;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 0;
+      margin: 0;
+    }
+
+    .hero img {
+      width: 100vw;
+      height: auto;
+      display: block;
+      object-fit: cover;
+      margin: 0;
+      padding: 0;
     }
 
     .carousel-container {
