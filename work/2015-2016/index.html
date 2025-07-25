@@ -230,7 +230,7 @@
   function moveCarousel(dir) {
     if (isTransitioning) return;
     isTransitioning = true;
-    const totalSlides = slides.length / 3;
+    const totalSlides = slides.length / 4;
     position += dir;
     track.style.transition = 'transform 0.5s ease';
     track.style.transform = `translateX(-${(slideWidth * (totalSlides + position))}px)`;
@@ -257,7 +257,7 @@
   window.addEventListener('resize', () => {
     slideWidth = document.querySelector('.carousel-slide').offsetWidth;
     track.style.transition = 'none';
-    track.style.transform = `translateX(-${slideWidth * (slides.length / 3)}px)`;
+    track.style.transform = `translateX(-${slideWidth * (slides.length / 4)}px)`;
   });
 </script>
 
