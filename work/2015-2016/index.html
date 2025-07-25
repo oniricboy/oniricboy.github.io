@@ -104,34 +104,37 @@
       }
     }
 
-    .carousel-wrapper {
+    /* Carrusel estilo cinta infinita */
+    .carousel-container {
       position: relative;
-      width: 100%;
       overflow: hidden;
+      width: 100%;
     }
 
-    .carousel {
+    .carousel-track {
       display: flex;
-      transition: transform 0.5s ease;
+      transition: transform 0.4s ease;
+      scroll-behavior: smooth;
     }
 
-    .carousel img {
+    .carousel-track img {
       height: 66vh;
-      width: 100vw;
+      width: auto;
       object-fit: contain;
       flex-shrink: 0;
+      margin-right: 10px;
     }
 
     .arrow {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      z-index: 10;
       background: rgba(255,255,255,0.8);
       border: none;
       font-size: 2rem;
       padding: 0.3rem 0.8rem;
       cursor: pointer;
+      z-index: 10;
     }
 
     .arrow.left {
@@ -141,10 +144,20 @@
     .arrow.right {
       right: 10px;
     }
+
+    /* Ocultar barra de scroll */
+    .carousel-container::-webkit-scrollbar,
+    .carousel-track::-webkit-scrollbar {
+      display: none;
+    }
+
+    .carousel-track {
+      scrollbar-width: none; /* Firefox */
+    }
   </style>
 </head>
-
 <body>
+
   <header>
     <div class="logo">
       <a href="/index.html"><img src="/img/logo.jpg" alt="oniricboy logo"></a>
@@ -174,29 +187,36 @@
     </div>
   </header>
 
-  <div class="carousel-wrapper">
-    <button class="arrow left" onclick="scrollCarousel(-1)">‹</button>
-    <div class="carousel" id="carousel">
+  <!-- CARRUSEL -->
+  <div class="carousel-container">
+    <button class="arrow left" onclick="moveCarousel(-1)">‹</button>
+    <div class="carousel-track" id="carousel">
       <img src="/work/2015-2016/art_01.jpg" alt="Art 1">
       <img src="/work/2015-2016/art_02.png" alt="Art 2">
       <img src="/work/2015-2016/art_03.jpg" alt="Art 3">
       <img src="/work/2015-2016/art_04.png" alt="Art 4">
       <img src="/work/2015-2016/art_05.png" alt="Art 5">
     </div>
-    <button class="arrow right" onclick="scrollCarousel(1)">›</button>
+    <button class="arrow right" onclick="moveCarousel(1)">›</button>
   </div>
 
   <script>
-    const carousel = document.getElementById('carousel');
-    const images = carousel.querySelectorAll('img');
-    let index = 0;
+    const carousel = document.getElementById("carousel");
+    const step = 300; // cuánto se mueve en px cada vez
+    function moveCarousel(direction) {
+      const maxScroll = carousel.scrollWidth;
+      const current = carousel.scrollLeft;
+      const next = current + direction * step;
 
-    function scrollCarousel(direction) {
-      const total = images.length;
-      index = (index + direction + total) % total;
-      const offset = index * window.innerWidth;
-      carousel.style.transform = `translateX(-${offset}px)`;
+      if (next >= maxScroll - carousel.clientWidth) {
+        carousel.scrollTo({ left: 0, behavior: 'smooth' }); // al final, vuelve al inicio
+      } else if (next < 0) {
+        carousel.scrollTo({ left: maxScroll, behavior: 'smooth' }); // al inicio, va al final
+      } else {
+        carousel.scrollBy({ left: direction * step, behavior: 'smooth' });
+      }
     }
   </script>
+
 </body>
 </html>
