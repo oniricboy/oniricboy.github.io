@@ -171,22 +171,48 @@
 </section>
 
 <script>
-  const carousel = document.getElementById('carousel');
-  let index = 0;
-  const images = carousel.children;
-  const total = images.length;
+  const track = document.getElementById('carousel');
+  const originalImages = Array.from(track.children);
+  const total = originalImages.length;
+
+  // Duplicar imágenes
+  originalImages.forEach(img => {
+    track.appendChild(img.cloneNode(true)); // al final
+  });
+  originalImages.forEach(img => {
+    track.insertBefore(img.cloneNode(true), track.firstChild); // al inicio
+  });
+
+  let index = total;
+  const slideWidth = window.innerWidth;
+  track.style.transform = `translateX(-${slideWidth * index}px)`;
 
   function slide(dir) {
     index += dir;
-    if (index < 0) index = total - 1;
-    if (index >= total) index = 0;
-    const offset = index * window.innerWidth;
-    carousel.style.transform = `translateX(-${offset}px)`;
+    track.style.transition = 'transform 0.5s ease';
+    track.style.transform = `translateX(-${slideWidth * index}px)`;
+
+    // Espera que termine la transición y luego ajusta instantáneamente
+    track.addEventListener('transitionend', handleTransitionEnd, { once: true });
   }
 
+  function handleTransitionEnd() {
+    if (index >= total * 2) {
+      index = total;
+      track.style.transition = 'none';
+      track.style.transform = `translateX(-${window.innerWidth * index}px)`;
+    } else if (index < total) {
+      index = total + (index % total);
+      track.style.transition = 'none';
+      track.style.transform = `translateX(-${window.innerWidth * index}px)`;
+    }
+  }
+
+  // Responder a resize
   window.addEventListener('resize', () => {
-    const offset = index * window.innerWidth;
-    carousel.style.transform = `translateX(-${offset}px)`;
+    const slideWidth = window.innerWidth;
+    track.style.transition = 'none';
+    track.style.transform = `translateX(-${slideWidth * index}px)`;
   });
 </script>
 
