@@ -5,12 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>oniricboy – Portfolio</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     body {
       margin: 0;
       font-family: 'DM Sans', sans-serif;
       background-color: #fff;
       color: #000;
+      overflow-x: hidden;
     }
 
     header {
@@ -62,11 +64,6 @@
     .dropdown a {
       display: block;
       padding: 0.5rem 1rem;
-      white-space: nowrap;
-    }
-
-    .dropdown a:hover {
-      background-color: #f3f3f3;
     }
 
     .socials a {
@@ -83,119 +80,115 @@
     .carousel-container {
       position: relative;
       overflow: hidden;
-      width: 100vw;
-      height: 65vh;
+      width: 100%;
+      background: #fff;
     }
 
     .carousel-track {
       display: flex;
       transition: transform 0.5s ease;
-      height: 100%;
+      will-change: transform;
     }
 
     .carousel-track img {
+      height: 65vh;
+      object-fit: contain;
       flex-shrink: 0;
       width: 100vw;
-      height: 100%;
-      object-fit: cover;
     }
 
-    .carousel-button {
+    .carousel-buttons {
       position: absolute;
       top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
       transform: translateY(-50%);
-      background: rgba(255, 255, 255, 0.8);
+      pointer-events: none;
+    }
+
+    .carousel-buttons button {
+      background: rgba(255,255,255,0.9);
       border: none;
       font-size: 2rem;
       padding: 0.5rem 1rem;
       cursor: pointer;
-      z-index: 10;
+      pointer-events: all;
     }
 
-    .prev { left: 0.5rem; }
-    .next { right: 0.5rem; }
+    @media screen and (max-width: 768px) {
+      .carousel-track img {
+        height: 45vh;
+      }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <div class="logo">
-      <img src="img/logo.jpg" alt="oniricboy logo">
-    </div>
-    <nav>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li>
-          <a href="#">Work ▾</a>
-          <ul class="dropdown">
-            <li><a href="work/2015-2016/">2015–2016</a></li>
-            <li><a href="work/2017-2018/">2017–2018</a></li>
-            <li><a href="work/2019-2021/">2019–2021</a></li>
-            <li><a href="work/2023-2024/">2023–2024</a></li>
-          </ul>
-        </li>
-        <li><a href="#">Projects</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Shop</a></li>
-      </ul>
-    </nav>
-    <div class="socials">
-      <a href="https://instagram.com/_oniricboy" target="_blank">IG</a>
-      <a href="https://twitter.com/_oniricboy" target="_blank">TW</a>
-    </div>
-  </header>
 
-  <div class="carousel-container">
-    <button class="carousel-button prev" onclick="moveSlide(-1)">‹</button>
-    <div class="carousel-track" id="carouselTrack">
-      <img src="work/2015-2016/art_05.png" alt="Art 5 Clone" />
-      <img src="work/2015-2016/art_01.jpg" alt="Art 1" />
-      <img src="work/2015-2016/art_02.png" alt="Art 2" />
-      <img src="work/2015-2016/art_03.jpg" alt="Art 3" />
-      <img src="work/2015-2016/art_04.png" alt="Art 4" />
-      <img src="work/2015-2016/art_05.png" alt="Art 5" />
-      <img src="work/2015-2016/art_01.jpg" alt="Art 1 Clone" />
-    </div>
-    <button class="carousel-button next" onclick="moveSlide(1)">›</button>
+<header>
+  <div class="logo">
+    <a href="/index.html"><img src="/img/logo.jpg" alt="oniricboy logo"></a>
   </div>
 
-  <script>
-    const track = document.getElementById('carouselTrack');
-    const slides = track.children;
-    let index = 1;
-    let isTransitioning = false;
+  <nav>
+    <ul>
+      <li><a href="/index.html">Home</a></li>
+      <li>
+        <a href="#">Work ▾</a>
+        <ul class="dropdown">
+          <li><a href="/work/2015-2016/">2015–2016</a></li>
+          <li><a href="/work/2017-2018/">2017–2018</a></li>
+          <li><a href="/work/2019-2021/">2019–2021</a></li>
+          <li><a href="/work/2023-2024/">2023–2024</a></li>
+        </ul>
+      </li>
+      <li><a href="/projects.html">Projects</a></li>
+      <li><a href="/about.html">About</a></li>
+      <li><a href="/shop.html">Shop</a></li>
+    </ul>
+  </nav>
 
-    function updatePosition() {
-      track.style.transform = `translateX(-${index * 100}vw)`;
-    }
+  <div class="socials">
+    <a href="https://instagram.com/_oniricboy" target="_blank"><i class="fab fa-instagram"></i></a>
+    <a href="https://twitter.com/_oniricboy" target="_blank"><i class="fab fa-twitter"></i></a>
+  </div>
+</header>
 
-    function moveSlide(direction) {
-      if (isTransitioning) return;
-      isTransitioning = true;
-      index += direction;
-      track.style.transition = 'transform 0.5s ease';
-      updatePosition();
-    }
+<!-- Carrusel estilo OMOCAT -->
+<section class="carousel-container">
+  <div class="carousel-track" id="carousel">
+    <img src="/work/2015-2016/art_01.jpg" alt="Art 1">
+    <img src="/work/2015-2016/art_02.png" alt="Art 2">
+    <img src="/work/2015-2016/art_03.jpg" alt="Art 3">
+    <img src="/work/2015-2016/art_04.png" alt="Art 4">
+    <img src="/work/2015-2016/art_05.png" alt="Art 5">
+  </div>
 
-    track.addEventListener('transitionend', () => {
-      if (index === 0) {
-        track.style.transition = 'none';
-        index = slides.length - 2;
-        updatePosition();
-        track.offsetHeight;
-        track.style.transition = 'transform 0.5s ease';
-      } else if (index === slides.length - 1) {
-        track.style.transition = 'none';
-        index = 1;
-        updatePosition();
-        track.offsetHeight;
-        track.style.transition = 'transform 0.5s ease';
-      }
-      isTransitioning = false;
-    });
+  <div class="carousel-buttons">
+    <button onclick="slide(-1)">‹</button>
+    <button onclick="slide(1)">›</button>
+  </div>
+</section>
 
-    // Initial position
-    track.style.transition = 'none';
-    updatePosition();
-  </script>
+<script>
+  const carousel = document.getElementById('carousel');
+  let index = 0;
+  const images = carousel.children;
+  const total = images.length;
+
+  function slide(dir) {
+    index += dir;
+    if (index < 0) index = total - 1;
+    if (index >= total) index = 0;
+    const offset = index * window.innerWidth;
+    carousel.style.transform = `translateX(-${offset}px)`;
+  }
+
+  window.addEventListener('resize', () => {
+    const offset = index * window.innerWidth;
+    carousel.style.transform = `translateX(-${offset}px)`;
+  });
+</script>
+
 </body>
 </html>
