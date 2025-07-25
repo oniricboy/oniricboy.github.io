@@ -104,7 +104,6 @@
       }
     }
 
-    /* CARRUSEL */
     .carousel-wrapper {
       position: relative;
       width: 100%;
@@ -115,15 +114,15 @@
       display: flex;
       overflow-x: scroll;
       scroll-behavior: smooth;
-      scrollbar-width: none; /* Firefox */
+      scrollbar-width: none;
     }
 
     .carousel-track::-webkit-scrollbar {
-      display: none; /* Chrome, Safari */
+      display: none;
     }
 
     .carousel-track img {
-      height: 66vh;
+      height: 65vh;
       width: auto;
       object-fit: contain;
       flex-shrink: 0;
@@ -182,34 +181,43 @@
     </div>
   </header>
 
-  <!-- CARRUSEL FUNCIONAL -->
   <div class="carousel-wrapper">
     <button class="arrow left" onclick="scrollCarousel(-1)">‹</button>
     <div class="carousel-track" id="carousel">
+      <!-- Original -->
       <img src="/work/2015-2016/art_01.jpg" alt="Art 1">
       <img src="/work/2015-2016/art_02.png" alt="Art 2">
       <img src="/work/2015-2016/art_03.jpg" alt="Art 3">
       <img src="/work/2015-2016/art_04.png" alt="Art 4">
       <img src="/work/2015-2016/art_05.png" alt="Art 5">
+      <!-- Copia para loop visual -->
+      <img src="/work/2015-2016/art_01.jpg" alt="Art 1 duplicate">
+      <img src="/work/2015-2016/art_02.png" alt="Art 2 duplicate">
+      <img src="/work/2015-2016/art_03.jpg" alt="Art 3 duplicate">
+      <img src="/work/2015-2016/art_04.png" alt="Art 4 duplicate">
+      <img src="/work/2015-2016/art_05.png" alt="Art 5 duplicate">
     </div>
     <button class="arrow right" onclick="scrollCarousel(1)">›</button>
   </div>
 
   <script>
     const carousel = document.getElementById('carousel');
-    const scrollAmount = 300;
+    const scrollAmount = 600; // Avance más largo
 
     function scrollCarousel(direction) {
-      const maxScroll = carousel.scrollWidth - carousel.clientWidth;
-      const newScrollLeft = carousel.scrollLeft + direction * scrollAmount;
+      const maxScroll = carousel.scrollWidth / 2; // porque hay duplicado
+      let newScroll = carousel.scrollLeft + direction * scrollAmount;
 
-      if (newScrollLeft >= maxScroll) {
-        carousel.scrollTo({ left: 0, behavior: 'smooth' });
-      } else if (newScrollLeft < 0) {
-        carousel.scrollTo({ left: maxScroll, behavior: 'smooth' });
-      } else {
-        carousel.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+      if (newScroll >= maxScroll) {
+        // salto invisible al inicio del carrusel
+        carousel.scrollLeft = 0;
+        newScroll = direction * scrollAmount;
+      } else if (newScroll < 0) {
+        carousel.scrollLeft = maxScroll;
+        newScroll = maxScroll + direction * scrollAmount;
       }
+
+      carousel.scrollTo({ left: newScroll, behavior: 'smooth' });
     }
   </script>
 
