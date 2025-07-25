@@ -87,18 +87,18 @@
     }
 
     .hero {
-  text-align: center;
-  padding: 0;
-  margin: 0;
-   }
+      text-align: center;
+      padding: 0;
+      margin: 0;
+    }
 
     .hero img {
-  width: 100vw;
-  height: auto;
-  display: block;
-  object-fit: cover;
-  margin: 0;
-  padding: 0;
+      width: 100vw;
+      height: auto;
+      display: block;
+      object-fit: cover;
+      margin: 0;
+      padding: 0;
     }
 
     @media screen and (max-width: 768px) {
@@ -117,6 +117,46 @@
       .socials {
         margin-top: 1rem;
       }
+    }
+
+    .carousel {
+      padding: 3rem 2rem;
+    }
+
+    .carousel h2 {
+      text-align: center;
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .carousel-track {
+      display: flex;
+      overflow-x: auto;
+      gap: 1rem;
+      padding-bottom: 0.5rem;
+      scroll-snap-type: x mandatory;
+    }
+
+    .carousel-track img {
+      flex: 0 0 auto;
+      height: 300px;
+      object-fit: contain;
+      scroll-snap-align: start;
+      border: 1px solid #eee;
+      border-radius: 8px;
+    }
+
+    .carousel-track::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .carousel-track::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 4px;
+    }
+
+    .carousel-track::-webkit-scrollbar-track {
+      background: #f3f3f3;
     }
   </style>
 </head>
@@ -161,5 +201,56 @@
     <img src="img/cover.png" alt="oniricboy hero image">
   </main>
 
+  <!-- Carrusel -->
+  <section id="year-2016" class="carousel">
+    <h2>2015–2016</h2>
+    <div class="carousel-track">
+      <img src="assets/2015-2016/art_01.jpg" alt="art 01">
+      <img src="assets/2015-2016/art_02.jpg" alt="art 02">
+      <img src="assets/2015-2016/art_03.jpg" alt="art 03">
+      <img src="assets/2015-2016/art_04.jpg" alt="art 04">
+      <img src="assets/2015-2016/art_05.jpg" alt="art 05">
+    </div>
+  </section>
+
+  <section id="year-2018" class="carousel">
+    <h2>2017–2018</h2>
+    <div class="carousel-track">
+      <img src="assets/2017-2018/art_01.jpg" alt="art 01">
+      <img src="assets/2017-2018/art_02.jpg" alt="art 02">
+      <img src="assets/2017-2018/art_03.jpg" alt="art 03">
+      <img src="assets/2017-2018/art_04.jpg" alt="art 04">
+      <img src="assets/2017-2018/art_05.jpg" alt="art 05">
+      <img src="assets/2017-2018/art_06.jpg" alt="art 06">
+      <img src="assets/2017-2018/art_07.jpg" alt="art 07">
+      <img src="assets/2017-2018/art_08.jpg" alt="art 08">
+      <img src="assets/2017-2018/art_09.jpg" alt="art 09">
+      <img src="assets/2017-2018/art_10.jpg" alt="art 10">
+    </div>
+  </section>
+
+  <section id="year-2020" class="carousel">
+    <h2>2019–2021</h2>
+    <div class="carousel-track">
+      <img src="assets/2019-2021/art_01.jpg" alt="art 01">
+      <img src="assets/2019-2021/art_02.jpg" alt="art 02">
+      <img src="assets/2019-2021/art_03.jpg" alt="art 03">
+      <img src="assets/2019-2021/art_04.jpg" alt="art 04">
+      <img src="assets/2019-2021/art_05.jpg" alt="art 05">
+    </div>
+  </section>
+
+  <section id="year-2024" class="carousel">
+    <h2>2023–2024</h2>
+    <div class="carousel-track">
+      <img src="assets/2023-2024/art_01.jpg" alt="art 01">
+      <img src="assets/2023-2024/art_02.jpg" alt="art 02">
+      <img src="assets/2023-2024/art_03.jpg" alt="art 03">
+      <img src="assets/2023-2024/art_04.jpg" alt="art 04">
+      <img src="assets/2023-2024/art_05.jpg" alt="art 05">
+    </div>
+  </section>
+
 </body>
 </html>
+
