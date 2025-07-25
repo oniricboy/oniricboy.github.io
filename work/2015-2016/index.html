@@ -48,6 +48,26 @@
       font-size: 0.9rem;
     }
 
+    nav ul li:hover .dropdown {
+      display: block;
+    }
+
+    .dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 0.5rem 0;
+      z-index: 10;
+    }
+
+    .dropdown a {
+      display: block;
+      padding: 0.5rem 1rem;
+    }
+
     .carousel-container {
       position: relative;
       overflow: hidden;
@@ -64,7 +84,7 @@
 
     .carousel-slide {
       flex: 0 0 auto;
-      width: 25%; /* 3 imágenes visibles por vista */
+      width: 33.3333%; 
       box-sizing: border-box;
     }
 
@@ -96,7 +116,7 @@
 
     @media (max-width: 768px) {
       .carousel-slide {
-        width: 100%; /* 1 imagen visible en móviles */
+        width: 100%;
       }
 
       .carousel-slide img {
@@ -109,13 +129,24 @@
 
 <header>
   <div class="logo">
-    <a href="#"><img src="/img/logo.jpg" alt="oniricboy logo"></a>
+    <a href="/index.html"><img src="/img/logo.jpg" alt="oniricboy logo"></a>
   </div>
+
   <nav>
     <ul>
-      <li><a href="#">Home</a></li>
-      <li><a href="#">Projects</a></li>
-      <li><a href="#">About</a></li>
+      <li><a href="/index.html">Home</a></li>
+      <li>
+        <a href="#">Work ▾</a>
+        <ul class="dropdown">
+          <li><a href="/work/2015-2016/">2015–2016</a></li>
+          <li><a href="/work/2017-2018/">2017–2018</a></li>
+          <li><a href="/work/2019-2021/">2019–2021</a></li>
+          <li><a href="/work/2023-2024/">2023–2024</a></li>
+        </ul>
+      </li>
+      <li><a href="/projects.html">Projects</a></li>
+      <li><a href="/about.html">About</a></li>
+      <li><a href="/shop.html">Shop</a></li>
     </ul>
   </nav>
 </header>
