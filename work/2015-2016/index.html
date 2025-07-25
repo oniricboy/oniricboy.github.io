@@ -104,17 +104,22 @@
       }
     }
 
-    /* Carrusel estilo cinta infinita */
-    .carousel-container {
+    /* CARRUSEL */
+    .carousel-wrapper {
       position: relative;
-      overflow: hidden;
       width: 100%;
+      overflow: hidden;
     }
 
     .carousel-track {
       display: flex;
-      transition: transform 0.4s ease;
+      overflow-x: scroll;
       scroll-behavior: smooth;
+      scrollbar-width: none; /* Firefox */
+    }
+
+    .carousel-track::-webkit-scrollbar {
+      display: none; /* Chrome, Safari */
     }
 
     .carousel-track img {
@@ -122,7 +127,7 @@
       width: auto;
       object-fit: contain;
       flex-shrink: 0;
-      margin: 0; /* sin espacio entre imágenes */
+      margin: 0;
     }
 
     .arrow {
@@ -143,16 +148,6 @@
 
     .arrow.right {
       right: 10px;
-    }
-
-    /* Ocultar barra de scroll */
-    .carousel-container::-webkit-scrollbar,
-    .carousel-track::-webkit-scrollbar {
-      display: none;
-    }
-
-    .carousel-track {
-      scrollbar-width: none;
     }
   </style>
 </head>
@@ -187,9 +182,9 @@
     </div>
   </header>
 
-  <!-- CARRUSEL -->
-  <div class="carousel-container">
-    <button class="arrow left" onclick="moveCarousel(-1)">‹</button>
+  <!-- CARRUSEL FUNCIONAL -->
+  <div class="carousel-wrapper">
+    <button class="arrow left" onclick="scrollCarousel(-1)">‹</button>
     <div class="carousel-track" id="carousel">
       <img src="/work/2015-2016/art_01.jpg" alt="Art 1">
       <img src="/work/2015-2016/art_02.png" alt="Art 2">
@@ -197,25 +192,24 @@
       <img src="/work/2015-2016/art_04.png" alt="Art 4">
       <img src="/work/2015-2016/art_05.png" alt="Art 5">
     </div>
-    <button class="arrow right" onclick="moveCarousel(1)">›</button>
+    <button class="arrow right" onclick="scrollCarousel(1)">›</button>
   </div>
 
   <script>
-    const carousel = document.getElementById("carousel");
-    const scrollStep = 300; // en píxeles
+    const carousel = document.getElementById('carousel');
+    const scrollAmount = 300;
 
-    function moveCarousel(direction) {
-      const maxScrollLeft = carousel.scrollWidth - carousel.clientWidth;
-      const currentScroll = carousel.scrollLeft;
-      let newScroll = currentScroll + direction * scrollStep;
+    function scrollCarousel(direction) {
+      const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+      const newScrollLeft = carousel.scrollLeft + direction * scrollAmount;
 
-      if (newScroll >= maxScrollLeft) {
-        newScroll = 0;
-      } else if (newScroll <= 0 && direction === -1) {
-        newScroll = maxScrollLeft;
+      if (newScrollLeft >= maxScroll) {
+        carousel.scrollTo({ left: 0, behavior: 'smooth' });
+      } else if (newScrollLeft < 0) {
+        carousel.scrollTo({ left: maxScroll, behavior: 'smooth' });
+      } else {
+        carousel.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
       }
-
-      carousel.scrollTo({ left: newScroll, behavior: 'smooth' });
     }
   </script>
 
