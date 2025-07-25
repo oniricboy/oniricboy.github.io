@@ -104,7 +104,7 @@
       }
     }
 
-    /* === OMOCAT REEL STYLE === */
+    /* CARRUSEL ESTILO OMOCAT */
     .carousel-section {
       position: relative;
       padding: 0;
@@ -192,7 +192,7 @@
     </div>
   </header>
 
-  <!-- REEL CARRUSEL -->
+  <!-- CARRUSEL OMOCAT -->
   <section class="carousel-section">
     <div class="reel-wrapper">
       <div class="reel-track" id="reelTrack">
@@ -201,13 +201,14 @@
         <img src="/work/2015-2016/art_03.jpg" alt="Art 3">
         <img src="/work/2015-2016/art_04.png" alt="Art 4">
         <img src="/work/2015-2016/art_05.png" alt="Art 5">
-        <!-- Duplicados para loop -->
+        <!-- Duplicadas para loop visual -->
         <img src="/work/2015-2016/art_01.jpg" alt="Art 1 Copy">
         <img src="/work/2015-2016/art_02.png" alt="Art 2 Copy">
         <img src="/work/2015-2016/art_03.jpg" alt="Art 3 Copy">
         <img src="/work/2015-2016/art_04.png" alt="Art 4 Copy">
         <img src="/work/2015-2016/art_05.png" alt="Art 5 Copy">
       </div>
+
       <div class="reel-controls">
         <button onclick="scrollReel(-1)">‹</button>
         <button onclick="scrollReel(1)">›</button>
@@ -217,20 +218,19 @@
 
   <script>
     const reel = document.getElementById('reelTrack');
-    const image = reel.querySelector('img');
+    const images = reel.querySelectorAll('img');
     let position = 0;
 
     function scrollReel(direction) {
-      const imageWidth = image.offsetWidth;
-      const totalWidth = reel.scrollWidth;
+      const imageWidth = images[0].offsetWidth;
       const visibleWidth = reel.parentElement.offsetWidth;
-      const maxOffset = totalWidth - visibleWidth;
+      const totalWidth = reel.scrollWidth;
 
       position += direction * imageWidth;
 
       if (position < 0) {
-        position = maxOffset;
-      } else if (position > maxOffset) {
+        position = totalWidth / 2;
+      } else if (position > totalWidth / 2) {
         position = 0;
       }
 
@@ -240,4 +240,3 @@
 
 </body>
 </html>
-
