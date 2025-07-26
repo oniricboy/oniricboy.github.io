@@ -222,60 +222,45 @@
     const prevBtn = document.querySelector('.carousel-button.prev');
     const nextBtn = document.querySelector('.carousel-button.next');
     let slides = Array.from(track.children);
-    const CLONES = 3; // Número de slides a clonar
 
-    // Clonar primeros y últimos N
-    for (let i = 0; i < CLONES; i++) {
-      const firstClone = slides[i].cloneNode(true);
-      const lastClone = slides[slides.length - 1 - i].cloneNode(true);
-      firstClone.classList.add('clone');
-      lastClone.classList.add('clone');
-      track.appendChild(firstClone); // clones al final
-      track.insertBefore(lastClone, track.firstChild); // clones al inicio
-    }
+    // Clona el primer y último slide
+    const firstClone = slides[0].cloneNode(true);
+    const lastClone = slides[slides.length - 1].cloneNode(true);
+    firstClone.classList.add('clone');
+    lastClone.classList.add('clone');
+    track.appendChild(firstClone);
+    track.insertBefore(lastClone, slides[0]);
 
     slides = Array.from(track.children);
-    let currentIndex = CLONES;
+    let currentIndex = 1;
     let slideWidth = slides[currentIndex].offsetWidth;
 
-    function updatePosition() {
-      track.style.transition = 'none';
-      track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
-    }
+    // Posiciona en slide real inicial
+    track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
 
-    updatePosition();
-
-    function moveToSlide(index) {
+    function moveTo(index) {
       track.style.transition = 'transform 0.4s ease';
       track.style.transform = `translateX(-${slideWidth * index}px)`;
       currentIndex = index;
     }
 
-    nextBtn.addEventListener('click', () => {
-      moveToSlide(currentIndex + 1);
-    });
-
-    prevBtn.addEventListener('click', () => {
-      moveToSlide(currentIndex - 1);
-    });
+    nextBtn.addEventListener('click', () => moveTo(currentIndex + 1));
+    prevBtn.addEventListener('click', () => moveTo(currentIndex - 1));
 
     track.addEventListener('transitionend', () => {
       if (slides[currentIndex].classList.contains('clone')) {
-        if (currentIndex >= slides.length - CLONES) {
-          currentIndex = CLONES;
-        } else if (currentIndex < CLONES) {
-          currentIndex = slides.length - CLONES * 2;
-        }
-        updatePosition();
+        track.style.transition = 'none';
+        currentIndex = currentIndex === 0 ? slides.length - 2 : 1;
+        track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
       }
     });
 
     window.addEventListener('resize', () => {
       slideWidth = slides[currentIndex].offsetWidth;
-      updatePosition();
+      track.style.transition = 'none';
+      track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
     });
   });
 </script>
-
 </body>
 </html>
