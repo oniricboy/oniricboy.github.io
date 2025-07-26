@@ -217,77 +217,68 @@
 </section>
 
 <script>
-  const track = document.getElementById('carousel');
-  let slides;
-  let slideWidth;
-  let isTransitioning = false;
-  let position = 0;
+  const track = document.querySelector('.carousel-track');
+  const slides = Array.from(track.children);
+  const prevBtn = document.querySelector('.carousel-button.prev');
+  const nextBtn = document.querySelector('.carousel-button.next');
+  let currentIndex = 0;
 
-  function updateSlideWidth() {
-    slides = track.querySelectorAll('.carousel-slide');
-    slideWidth = slides[0].offsetWidth;
+  // 1. Clonar slides al inicio y al final
+  const clonesBefore = slides.map(slide => slide.cloneNode(true));
+  const clonesAfter = slides.map(slide => slide.cloneNode(true));
+  clonesBefore.forEach(clone => {
+    clone.classList.add('clone');
+    track.insertBefore(clone, track.firstChild);
+  });
+  clonesAfter.forEach(clone => {
+    clone.classList.add('clone');
+    track.appendChild(clone);
+  });
+
+  const allSlides = Array.from(track.children);
+  const slideWidth = slides[0].getBoundingClientRect().width;
+  let slideCount = slides.length;
+
+  // 2. Posiciona el scroll en la primera slide real
+  track.style.transform = `translateX(-${slideWidth * slideCount}px)`;
+  currentIndex = slideCount;
+
+  // 3. Función de desplazamiento
+  function moveToSlide(index) {
+    track.style.transition = 'transform 0.4s ease';
+    track.style.transform = `translateX(-${slideWidth * index}px)`;
+    currentIndex = index;
   }
 
-  function cloneSlides() {
-    const originals = Array.from(track.children);
-    originals.forEach(el => track.appendChild(el.cloneNode(true)));
-    for (let i = originals.length - 1; i >= 0; i--) {
-      track.insertBefore(originals[i].cloneNode(true), track.firstChild);
+  // 4. Botones
+  nextBtn.addEventListener('click', () => {
+    moveToSlide(currentIndex + 1);
+  });
+
+  prevBtn.addEventListener('click', () => {
+    moveToSlide(currentIndex - 1);
+  });
+
+  // 5. Cuando termina la transición, ajusta si está en clonado
+  track.addEventListener('transitionend', () => {
+    if (currentIndex >= allSlides.length - slideCount) {
+      // Ir al primer real sin animación
+      track.style.transition = 'none';
+      currentIndex = slideCount;
+      track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
     }
-  }
+    if (currentIndex < slideCount) {
+      track.style.transition = 'none';
+      currentIndex = allSlides.length - (2 * slideCount);
+      track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
+    }
+  });
 
-  function moveCarousel(dir) {
-    if (isTransitioning) return;
-    isTransitioning = true;
-
-    const totalSlides = slides.length / 3;
-    position += dir;
-
-    track.style.transition = 'transform 0.5s ease';
-    track.style.transform = `translateX(-${(slideWidth * (totalSlides + position))}px)`;
-
-    setTimeout(() => {
-      if (position <= -totalSlides || position >= totalSlides) {
-        position = 0;
-        track.style.transition = 'none';
-        track.style.transform = `translateX(-${slideWidth * totalSlides}px)`;
-      }
-      isTransitioning = false;
-    }, 510);
-  }
-
-  function initializeCarousel() {
-    cloneSlides();
-
-    // Esperar a que carguen todas las imágenes antes de calcular slideWidth
-    const images = track.querySelectorAll('img');
-    let loaded = 0;
-    images.forEach(img => {
-      if (img.complete) {
-        loaded++;
-        if (loaded === images.length) finalizeInit();
-      } else {
-        img.onload = () => {
-          loaded++;
-          if (loaded === images.length) finalizeInit();
-        };
-      }
-    });
-  }
-
-  function finalizeInit() {
-    updateSlideWidth();
-    const total = slides.length / 3;
-    track.style.transition = 'none';
-    track.style.transform = `translateX(-${slideWidth * total}px)`;
-  }
-
-  window.addEventListener('load', initializeCarousel);
+  // 6. Ajustar tamaño si cambia el viewport
   window.addEventListener('resize', () => {
-    updateSlideWidth();
-    const total = slides.length / 3;
+    const newSlideWidth = slides[0].getBoundingClientRect().width;
     track.style.transition = 'none';
-    track.style.transform = `translateX(-${slideWidth * (total + position)}px)`;
+    track.style.transform = `translateX(-${newSlideWidth * currentIndex}px)`;
   });
 </script>
 
