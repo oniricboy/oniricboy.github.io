@@ -217,77 +217,63 @@
 </section>
 
 <script>
-  const track = document.getElementById('carousel');
-  let slides;
-  let slideWidth;
-  let isTransitioning = false;
-  let position = 0;
+  window.addEventListener("load", () => {
+    const track = document.querySelector('.carousel-track');
+    const prevBtn = document.querySelector('.carousel-button.prev');
+    const nextBtn = document.querySelector('.carousel-button.next');
+    let slides = Array.from(track.children);
+    const CLONES = 3; // Número de slides a clonar
 
-  function updateSlideWidth() {
-    slides = track.querySelectorAll('.carousel-slide');
-    slideWidth = slides[0].offsetWidth;
-  }
-
-  function cloneSlides() {
-    const originals = Array.from(track.children);
-    originals.forEach(el => track.appendChild(el.cloneNode(true)));
-    for (let i = originals.length - 1; i >= 0; i--) {
-      track.insertBefore(originals[i].cloneNode(true), track.firstChild);
+    // Clonar primeros y últimos N
+    for (let i = 0; i < CLONES; i++) {
+      const firstClone = slides[i].cloneNode(true);
+      const lastClone = slides[slides.length - 1 - i].cloneNode(true);
+      firstClone.classList.add('clone');
+      lastClone.classList.add('clone');
+      track.appendChild(firstClone); // clones al final
+      track.insertBefore(lastClone, track.firstChild); // clones al inicio
     }
-  }
 
-  function moveCarousel(dir) {
-    if (isTransitioning) return;
-    isTransitioning = true;
+    slides = Array.from(track.children);
+    let currentIndex = CLONES;
+    let slideWidth = slides[currentIndex].offsetWidth;
 
-    const totalSlides = slides.length / 3;
-    position += dir;
+    function updatePosition() {
+      track.style.transition = 'none';
+      track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
+    }
 
-    track.style.transition = 'transform 0.5s ease';
-    track.style.transform = `translateX(-${(slideWidth * (totalSlides + position))}px)`;
+    updatePosition();
 
-    setTimeout(() => {
-      if (position <= -totalSlides || position >= totalSlides) {
-        position = 0;
-        track.style.transition = 'none';
-        track.style.transform = `translateX(-${slideWidth * totalSlides}px)`;
-      }
-      isTransitioning = false;
-    }, 510);
-  }
+    function moveToSlide(index) {
+      track.style.transition = 'transform 0.4s ease';
+      track.style.transform = `translateX(-${slideWidth * index}px)`;
+      currentIndex = index;
+    }
 
-  function initializeCarousel() {
-    cloneSlides();
+    nextBtn.addEventListener('click', () => {
+      moveToSlide(currentIndex + 1);
+    });
 
-    // Esperar a que carguen todas las imágenes antes de calcular slideWidth
-    const images = track.querySelectorAll('img');
-    let loaded = 0;
-    images.forEach(img => {
-      if (img.complete) {
-        loaded++;
-        if (loaded === images.length) finalizeInit();
-      } else {
-        img.onload = () => {
-          loaded++;
-          if (loaded === images.length) finalizeInit();
-        };
+    prevBtn.addEventListener('click', () => {
+      moveToSlide(currentIndex - 1);
+    });
+
+    track.addEventListener('transitionend', () => {
+      if (slides[currentIndex].classList.contains('clone')) {
+        if (currentIndex >= slides.length - CLONES) {
+          currentIndex = CLONES;
+        } else if (currentIndex < CLONES) {
+          currentIndex = slides.length - CLONES * 2;
+        }
+        updatePosition();
       }
     });
-  }
 
-  function finalizeInit() {
-    updateSlideWidth();
-    const total = slides.length / 3;
-    track.style.transition = 'none';
-    track.style.transform = `translateX(-${slideWidth * total}px)`;
-  }
-
-  window.addEventListener('load', initializeCarousel);
-  window.addEventListener('resize', () => {
-    updateSlideWidth();
-    const total = slides.length / 3;
-    track.style.transition = 'none';
-    track.style.transform = `translateX(-${slideWidth * (total + position)}px)`;
+    window.addEventListener('resize', () => {
+      slideWidth = slides[currentIndex].offsetWidth;
+      updatePosition();
+    });
   });
 </script>
 
