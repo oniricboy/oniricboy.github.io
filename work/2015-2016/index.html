@@ -221,66 +221,61 @@
   const slides = Array.from(track.children);
   const prevBtn = document.querySelector('.carousel-button.prev');
   const nextBtn = document.querySelector('.carousel-button.next');
-  let currentIndex = 0;
 
-  // 1. Clonar slides al inicio y al final
-  const clonesBefore = slides.map(slide => slide.cloneNode(true));
-  const clonesAfter = slides.map(slide => slide.cloneNode(true));
-  clonesBefore.forEach(clone => {
-    clone.classList.add('clone');
-    track.insertBefore(clone, track.firstChild);
-  });
-  clonesAfter.forEach(clone => {
-    clone.classList.add('clone');
-    track.appendChild(clone);
-  });
+  const slideWidth = slides[0].getBoundingClientRect().width;
+
+  // Clonar primero y último slide
+  const firstClone = slides[0].cloneNode(true);
+  const lastClone = slides[slides.length - 1].cloneNode(true);
+
+  firstClone.classList.add('clone');
+  lastClone.classList.add('clone');
+
+  track.appendChild(firstClone);
+  track.insertBefore(lastClone, slides[0]);
 
   const allSlides = Array.from(track.children);
-  const slideWidth = slides[0].getBoundingClientRect().width;
-  let slideCount = slides.length;
+  let currentIndex = 1;
 
-  // 2. Posiciona el scroll en la primera slide real
-  track.style.transform = `translateX(-${slideWidth * slideCount}px)`;
-  currentIndex = slideCount;
+  // Posicionar en primer slide real
+  track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
 
-  // 3. Función de desplazamiento
   function moveToSlide(index) {
     track.style.transition = 'transform 0.4s ease';
     track.style.transform = `translateX(-${slideWidth * index}px)`;
     currentIndex = index;
   }
 
-  // 4. Botones
   nextBtn.addEventListener('click', () => {
+    if (currentIndex >= allSlides.length - 1) return;
     moveToSlide(currentIndex + 1);
   });
 
   prevBtn.addEventListener('click', () => {
+    if (currentIndex <= 0) return;
     moveToSlide(currentIndex - 1);
   });
 
-  // 5. Cuando termina la transición, ajusta si está en clonado
   track.addEventListener('transitionend', () => {
-    if (currentIndex >= allSlides.length - slideCount) {
-      // Ir al primer real sin animación
+    if (allSlides[currentIndex].classList.contains('clone')) {
       track.style.transition = 'none';
-      currentIndex = slideCount;
-      track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
-    }
-    if (currentIndex < slideCount) {
-      track.style.transition = 'none';
-      currentIndex = allSlides.length - (2 * slideCount);
+      if (currentIndex === 0) {
+        currentIndex = slides.length;
+      } else if (currentIndex === allSlides.length - 1) {
+        currentIndex = 1;
+      }
       track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
     }
   });
 
-  // 6. Ajustar tamaño si cambia el viewport
+  // Resize handler para mantener el scroll correcto
   window.addEventListener('resize', () => {
-    const newSlideWidth = slides[0].getBoundingClientRect().width;
+    const newWidth = slides[0].getBoundingClientRect().width;
     track.style.transition = 'none';
-    track.style.transform = `translateX(-${newSlideWidth * currentIndex}px)`;
+    track.style.transform = `translateX(-${newWidth * currentIndex}px)`;
   });
 </script>
+
 
 </body>
 </html>
