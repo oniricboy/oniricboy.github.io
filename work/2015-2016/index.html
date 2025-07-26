@@ -201,14 +201,17 @@
   </div>
 </header>
 
-<section class="carousel-container">
-  <div class="carousel-track" id="carousel">
-    <div class="carousel-slide"><img src="/work/2015-2016/art_01.jpg" alt="Art 1"></div>
-    <div class="carousel-slide"><img src="/work/2015-2016/art_02.png" alt="Art 2"></div>
-    <div class="carousel-slide"><img src="/work/2015-2016/art_03.jpg" alt="Art 3"></div>
-    <div class="carousel-slide"><img src="/work/2015-2016/art_04.png" alt="Art 4"></div>
-    <div class="carousel-slide"><img src="/work/2015-2016/art_05.png" alt="Art 5"></div>
+<div class="carousel-container">
+  <button class="carousel-button prev">‹</button>
+  <div class="carousel-track">
+    <div class="carousel-slide"><img src="art_01.jpg" /></div>
+    <div class="carousel-slide"><img src="art_02.jpg" /></div>
+    <div class="carousel-slide"><img src="art_03.jpg" /></div>
+    <div class="carousel-slide"><img src="art_04.jpg" /></div>
+    <div class="carousel-slide"><img src="art_05.jpg" /></div>
   </div>
+  <button class="carousel-button next">›</button>
+</div>
 
   <div class="carousel-buttons">
     <button onclick="moveCarousel(-1)">‹</button>
@@ -217,65 +220,66 @@
 </section>
 
 <script>
-  const track = document.querySelector('.carousel-track');
-  const slides = Array.from(track.children);
-  const prevBtn = document.querySelector('.carousel-button.prev');
-  const nextBtn = document.querySelector('.carousel-button.next');
+  window.addEventListener("load", () => {
+    const track = document.querySelector('.carousel-track');
+    const prevBtn = document.querySelector('.carousel-button.prev');
+    const nextBtn = document.querySelector('.carousel-button.next');
+    let slides = Array.from(track.children);
 
-  const slideWidth = slides[0].getBoundingClientRect().width;
+    // Clona primero y último
+    const firstClone = slides[0].cloneNode(true);
+    const lastClone = slides[slides.length - 1].cloneNode(true);
 
-  // Clonar primero y último slide
-  const firstClone = slides[0].cloneNode(true);
-  const lastClone = slides[slides.length - 1].cloneNode(true);
+    firstClone.classList.add('clone');
+    lastClone.classList.add('clone');
 
-  firstClone.classList.add('clone');
-  lastClone.classList.add('clone');
+    track.appendChild(firstClone);
+    track.insertBefore(lastClone, slides[0]);
 
-  track.appendChild(firstClone);
-  track.insertBefore(lastClone, slides[0]);
+    slides = Array.from(track.children);
 
-  const allSlides = Array.from(track.children);
-  let currentIndex = 1;
+    let currentIndex = 1;
+    let slideWidth = slides[currentIndex].getBoundingClientRect().width;
 
-  // Posicionar en primer slide real
-  track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
+    // Posicionar en el primer slide real
+    track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
 
-  function moveToSlide(index) {
-    track.style.transition = 'transform 0.4s ease';
-    track.style.transform = `translateX(-${slideWidth * index}px)`;
-    currentIndex = index;
-  }
-
-  nextBtn.addEventListener('click', () => {
-    if (currentIndex >= allSlides.length - 1) return;
-    moveToSlide(currentIndex + 1);
-  });
-
-  prevBtn.addEventListener('click', () => {
-    if (currentIndex <= 0) return;
-    moveToSlide(currentIndex - 1);
-  });
-
-  track.addEventListener('transitionend', () => {
-    if (allSlides[currentIndex].classList.contains('clone')) {
-      track.style.transition = 'none';
-      if (currentIndex === 0) {
-        currentIndex = slides.length;
-      } else if (currentIndex === allSlides.length - 1) {
-        currentIndex = 1;
-      }
-      track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
+    function moveToSlide(index) {
+      track.style.transition = 'transform 0.4s ease';
+      track.style.transform = `translateX(-${slideWidth * index}px)`;
+      currentIndex = index;
     }
-  });
 
-  // Resize handler para mantener el scroll correcto
-  window.addEventListener('resize', () => {
-    const newWidth = slides[0].getBoundingClientRect().width;
-    track.style.transition = 'none';
-    track.style.transform = `translateX(-${newWidth * currentIndex}px)`;
+    nextBtn.addEventListener('click', () => {
+      if (currentIndex >= slides.length - 1) return;
+      moveToSlide(currentIndex + 1);
+    });
+
+    prevBtn.addEventListener('click', () => {
+      if (currentIndex <= 0) return;
+      moveToSlide(currentIndex - 1);
+    });
+
+    track.addEventListener('transitionend', () => {
+      if (slides[currentIndex].classList.contains('clone')) {
+        track.style.transition = 'none';
+        if (currentIndex === 0) {
+          currentIndex = slides.length - 2;
+        } else if (currentIndex === slides.length - 1) {
+          currentIndex = 1;
+        }
+        track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
+      }
+    });
+
+    // Ajuste en resize
+    window.addEventListener('resize', () => {
+      slideWidth = slides[currentIndex].getBoundingClientRect().width;
+      track.style.transition = 'none';
+      track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
+    });
   });
 </script>
-
 
 </body>
 </html>
