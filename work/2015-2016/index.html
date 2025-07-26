@@ -13,7 +13,6 @@
       background-color: #fff;
       color: #000;
     }
-
     header {
       display: flex;
       justify-content: space-between;
@@ -21,11 +20,9 @@
       padding: 1.5rem 2rem;
       border-bottom: 1px solid #eee;
     }
-
     .logo img {
       height: 60px;
     }
-
     nav ul {
       list-style: none;
       display: flex;
@@ -34,22 +31,18 @@
       padding: 0;
       position: relative;
     }
-
     nav li {
       position: relative;
     }
-
     nav a {
       text-decoration: none;
       color: #000;
       font-weight: 600;
       font-size: 0.9rem;
     }
-
     nav ul li:hover .dropdown {
       display: block;
     }
-
     .dropdown {
       display: none;
       position: absolute;
@@ -60,47 +53,26 @@
       padding: 0.5rem 0;
       z-index: 10;
     }
-
     .dropdown li {
       padding: 0;
     }
-
     .dropdown a {
       display: block;
       padding: 0.5rem 1rem;
       white-space: nowrap;
     }
-
     .dropdown a:hover {
       background-color: #f3f3f3;
     }
-
     .socials a {
       color: #000;
       font-size: 1.1rem;
       margin-left: 1.2rem;
       transition: opacity 0.3s ease;
     }
-
     .socials a:hover {
       opacity: 0.6;
     }
-
-    .hero {
-      text-align: center;
-      padding: 0;
-      margin: 0;
-    }
-
-    .hero img {
-      width: 100vw;
-      height: auto;
-      display: block;
-      object-fit: cover;
-      margin: 0;
-      padding: 0;
-    }
-
     .carousel-container {
       position: relative;
       overflow: hidden;
@@ -111,14 +83,12 @@
       display: flex;
       justify-content: center;
     }
-
     .carousel-track {
       display: flex;
       transition: transform 0.5s ease;
       align-items: center;
       gap: 0;
     }
-
     .carousel-slide {
       flex: 0 0 400px;
       height: 600px;
@@ -129,14 +99,12 @@
       background-color: #fff;
       overflow: hidden;
     }
-
     .carousel-slide img {
       height: 100%;
       width: auto;
       object-fit: cover;
       display: block;
     }
-
     .carousel-buttons {
       position: absolute;
       top: 50%;
@@ -146,7 +114,6 @@
       transform: translateY(-50%);
       pointer-events: none;
     }
-
     .carousel-buttons button {
       background: rgba(255, 255, 255, 0.9);
       border: none;
@@ -155,29 +122,13 @@
       cursor: pointer;
       pointer-events: all;
     }
-
-    @media (max-width: 768px) {
-      .carousel-slide {
-        width: 100%;
-      }
-
-      .carousel-slide img {
-        height: 45vh;
-      }
-
-      nav {
-        display: none; /* puedes luego agregar menú hamburguesa si deseas */
-      }
-    }
   </style>
 </head>
 <body>
-
 <header>
   <div class="logo">
     <a href="/index.html"><img src="/img/logo.png" alt="oniricboy logo"></a>
   </div>
-
   <nav>
     <ul>
       <li><a href="/index.html">Home</a></li>
@@ -187,7 +138,7 @@
           <li><a href="/work/2023-2024/">2023–2024</a></li>
           <li><a href="/work/2019-2021/">2019–2021</a></li>
           <li><a href="/work/2017-2018/">2017–2018</a></li>
-          <li><a href="/work/2015-2016/">2015–2016</a></li>   
+          <li><a href="/work/2015-2016/">2015–2016</a></li>
         </ul>
       </li>
       <li><a href="/projects.html">Projects</a></li>
@@ -195,13 +146,11 @@
       <li><a href="/shop.html">Shop</a></li>
     </ul>
   </nav>
-
   <div class="socials">
     <a href="https://instagram.com/_oniricboy" target="_blank"><i class="fab fa-instagram"></i></a>
     <a href="https://twitter.com/_oniricboy" target="_blank"><i class="fab fa-twitter"></i></a>
   </div>
 </header>
-
 <section class="carousel-container">
   <div class="carousel-track" id="carousel">
     <div class="carousel-slide"><img src="/work/2015-2016/art_01.jpg" alt="Art 1"></div>
@@ -210,72 +159,82 @@
     <div class="carousel-slide"><img src="/work/2015-2016/art_04.png" alt="Art 4"></div>
     <div class="carousel-slide"><img src="/work/2015-2016/art_05.png" alt="Art 5"></div>
   </div>
-
   <div class="carousel-buttons">
     <button onclick="moveCarousel(-1)">‹</button>
     <button onclick="moveCarousel(1)">›</button>
   </div>
 </section>
-
 <script>
-window.addEventListener("load", () => {
-  const track = document.querySelector(".carousel-track");
-  const prevBtn = document.querySelector(".carousel-button.prev");
-  const nextBtn = document.querySelector(".carousel-button.next");
-  let slides = Array.from(track.children);
+  const track = document.getElementById('carousel');
+  let slides;
+  let slideWidth;
+  let position = 0;
+  let isTransitioning = false;
+  let visibleSlides = 0;
 
-  const slideWidth = slides[0].offsetWidth;
-  const gap = parseInt(getComputedStyle(track).gap) || 0;
-
-  // Clonar todos los slides para un loop perfecto
-  slides.forEach(slide => {
-    const cloneBefore = slide.cloneNode(true);
-    const cloneAfter = slide.cloneNode(true);
-    cloneBefore.classList.add("clone");
-    cloneAfter.classList.add("clone");
-    track.insertBefore(cloneBefore, track.firstChild);
-    track.appendChild(cloneAfter);
-  });
-
-  slides = Array.from(track.children);
-
-  let currentIndex = slides.length / 2 - Math.floor(slides.length / 4);
-
-  function updatePosition(skipTransition = false) {
-    if (skipTransition) {
-      track.style.transition = "none";
-    } else {
-      track.style.transition = "transform 0.4s ease";
-    }
-    const offset = (slideWidth + gap) * currentIndex - (window.innerWidth - slideWidth) / 2;
-    track.style.transform = `translateX(-${offset}px)`;
+  function updateSlideWidth() {
+    slides = track.querySelectorAll('.carousel-slide');
+    slideWidth = slides[0].offsetWidth;
   }
 
-  updatePosition(true);
-
-  function move(direction) {
-    currentIndex += direction;
-    updatePosition();
+  function cloneSlides() {
+    const originals = Array.from(track.children);
+    visibleSlides = originals.length;
+    originals.forEach(el => track.appendChild(el.cloneNode(true)));
+    for (let i = originals.length - 1; i >= 0; i--) {
+      track.insertBefore(originals[i].cloneNode(true), track.firstChild);
+    }
   }
 
-  nextBtn.addEventListener("click", () => move(1));
-  prevBtn.addEventListener("click", () => move(-1));
+  function moveCarousel(dir) {
+    if (isTransitioning) return;
+    isTransitioning = true;
+    position += dir;
+    track.style.transition = 'transform 0.5s ease';
+    track.style.transform = `translateX(-${slideWidth * (visibleSlides + position)}px)`;
+    setTimeout(() => {
+      if (position >= visibleSlides) {
+        position = 0;
+        track.style.transition = 'none';
+        track.style.transform = `translateX(-${slideWidth * visibleSlides}px)`;
+      } else if (position < 0) {
+        position = visibleSlides - 1;
+        track.style.transition = 'none';
+        track.style.transform = `translateX(-${slideWidth * (visibleSlides + position)}px)`;
+      }
+      isTransitioning = false;
+    }, 510);
+  }
 
-  track.addEventListener("transitionend", () => {
-    const totalSlides = slides.length;
-    const realSlideCount = totalSlides / 3;
-    if (currentIndex >= totalSlides - realSlideCount) {
-      currentIndex = realSlideCount;
-      updatePosition(true);
-    } else if (currentIndex < realSlideCount) {
-      currentIndex = totalSlides - realSlideCount * 2;
-      updatePosition(true);
-    }
+  function initializeCarousel() {
+    cloneSlides();
+    const images = track.querySelectorAll('img');
+    let loaded = 0;
+    images.forEach(img => {
+      if (img.complete) {
+        loaded++;
+        if (loaded === images.length) finalizeInit();
+      } else {
+        img.onload = () => {
+          loaded++;
+          if (loaded === images.length) finalizeInit();
+        };
+      }
+    });
+  }
+
+  function finalizeInit() {
+    updateSlideWidth();
+    track.style.transition = 'none';
+    track.style.transform = `translateX(-${slideWidth * visibleSlides}px)`;
+  }
+
+  window.addEventListener('load', initializeCarousel);
+  window.addEventListener('resize', () => {
+    updateSlideWidth();
+    track.style.transition = 'none';
+    track.style.transform = `translateX(-${slideWidth * (visibleSlides + position)}px)`;
   });
-
-  window.addEventListener("resize", () => updatePosition(true));
-});
 </script>
-
 </body>
 </html>
