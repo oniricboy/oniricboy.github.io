@@ -219,31 +219,52 @@
 
 <script>
   const track = document.getElementById('carousel');
-  const slides = Array.from(track.children);
+  let slides = Array.from(track.children);
   const slideWidth = 400;
   let currentIndex = 0;
 
-  function centerSlide(index) {
+  // Clonar primero y ultimo
+  const firstClone = slides[0].cloneNode(true);
+  const lastClone = slides[slides.length - 1].cloneNode(true);
+  firstClone.classList.add('clone');
+  lastClone.classList.add('clone');
+
+  track.appendChild(firstClone);
+  track.insertBefore(lastClone, slides[0]);
+
+  slides = Array.from(track.children);
+  currentIndex = 1;
+
+  function centerSlide(index, withTransition = true) {
     const containerWidth = document.querySelector('.carousel-container').offsetWidth;
     const offset = (slideWidth * index) - (containerWidth - slideWidth) / 2;
-    track.style.transition = 'transform 0.5s ease';
+    track.style.transition = withTransition ? 'transform 0.5s ease' : 'none';
     track.style.transform = `translateX(-${offset}px)`;
     currentIndex = index;
   }
 
   function moveCarousel(dir) {
-    let nextIndex = currentIndex + dir;
-    if (nextIndex < 0) nextIndex = slides.length - 1;
-    if (nextIndex >= slides.length) nextIndex = 0;
-    centerSlide(nextIndex);
+    centerSlide(currentIndex + dir);
   }
 
+  track.addEventListener('transitionend', () => {
+    if (slides[currentIndex].classList.contains('clone')) {
+      if (currentIndex === 0) {
+        currentIndex = slides.length - 2;
+        centerSlide(currentIndex, false);
+      } else if (currentIndex === slides.length - 1) {
+        currentIndex = 1;
+        centerSlide(currentIndex, false);
+      }
+    }
+  });
+
   window.addEventListener('load', () => {
-    centerSlide(currentIndex);
+    centerSlide(currentIndex, false);
   });
 
   window.addEventListener('resize', () => {
-    centerSlide(currentIndex);
+    centerSlide(currentIndex, false);
   });
 </script>
 
