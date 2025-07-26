@@ -217,50 +217,87 @@
 </section>
 
 <script>
-  window.addEventListener("load", () => {
-    const track = document.querySelector('.carousel-track');
-    const prevBtn = document.querySelector('.carousel-button.prev');
-    const nextBtn = document.querySelector('.carousel-button.next');
-    let slides = Array.from(track.children);
+  const track = document.getElementById('carousel');
+  let slides = Array.from(track.children);
+  let slideWidth;
+  let currentIndex = 1;
 
-    // Clona el primer y último slide
-    const firstClone = slides[0].cloneNode(true);
-    const lastClone = slides[slides.length - 1].cloneNode(true);
-    firstClone.classList.add('clone');
-    lastClone.classList.add('clone');
-    track.appendChild(firstClone);
-    track.insertBefore(lastClone, slides[0]);
+  // 1. Clonar el primer y último slide
+  const firstClone = slides[0].cloneNode(true);
+  const lastClone = slides[slides.length - 1].cloneNode(true);
+  firstClone.classList.add('clone');
+  lastClone.classList.add('clone');
+  track.appendChild(firstClone);
+  track.insertBefore(lastClone, slides[0]);
 
-    slides = Array.from(track.children);
-    let currentIndex = 1;
-    let slideWidth = slides[currentIndex].offsetWidth;
+  // 2. Recalcular slides después de clonación
+  slides = Array.from(track.children);
 
-    // Posiciona en slide real inicial
+  function updateSlideWidth() {
+    slideWidth = slides[currentIndex].offsetWidth;
+  }
+
+  function moveCarousel(direction) {
+    if (track.classList.contains('is-transitioning')) return;
+    track.classList.add('is-transitioning');
+
+    currentIndex += direction;
+    track.style.transition = 'transform 0.5s ease';
     track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
+  }
 
-    function moveTo(index) {
-      track.style.transition = 'transform 0.4s ease';
-      track.style.transform = `translateX(-${slideWidth * index}px)`;
-      currentIndex = index;
+  function handleTransitionEnd() {
+    track.classList.remove('is-transitioning');
+
+    if (slides[currentIndex].classList.contains('clone')) {
+      track.style.transition = 'none';
+      if (currentIndex === 0) {
+        currentIndex = slides.length - 2;
+      } else if (currentIndex === slides.length - 1) {
+        currentIndex = 1;
+      }
+      track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
     }
+  }
 
-    nextBtn.addEventListener('click', () => moveTo(currentIndex + 1));
-    prevBtn.addEventListener('click', () => moveTo(currentIndex - 1));
+  function initializeCarousel() {
+    const images = track.querySelectorAll('img');
+    let loaded = 0;
 
-    track.addEventListener('transitionend', () => {
-      if (slides[currentIndex].classList.contains('clone')) {
-        track.style.transition = 'none';
-        currentIndex = currentIndex === 0 ? slides.length - 2 : 1;
-        track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
+    images.forEach(img => {
+      if (img.complete) {
+        loaded++;
+        if (loaded === images.length) finalizeInit();
+      } else {
+        img.onload = () => {
+          loaded++;
+          if (loaded === images.length) finalizeInit();
+        };
       }
     });
+  }
 
-    window.addEventListener('resize', () => {
-      slideWidth = slides[currentIndex].offsetWidth;
-      track.style.transition = 'none';
-      track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
-    });
+  function finalizeInit() {
+    updateSlideWidth();
+    track.style.transition = 'none';
+    track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
+  }
+
+  // Eventos
+  document.querySelector('.carousel-buttons button:first-child')
+    .addEventListener('click', () => moveCarousel(-1));
+  document.querySelector('.carousel-buttons button:last-child')
+    .addEventListener('click', () => moveCarousel(1));
+
+  track.addEventListener('transitionend', handleTransitionEnd);
+
+  window.addEventListener('load', initializeCarousel);
+  window.addEventListener('resize', () => {
+    updateSlideWidth();
+    track.style.transition = 'none';
+    track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
   });
 </script>
+  
 </body>
 </html>
