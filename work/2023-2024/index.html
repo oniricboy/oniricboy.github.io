@@ -13,7 +13,6 @@
       background-color: #fff;
       color: #000;
     }
-
     header {
       display: flex;
       justify-content: space-between;
@@ -21,11 +20,9 @@
       padding: 1.5rem 2rem;
       border-bottom: 1px solid #eee;
     }
-
     .logo img {
-      height: 40px;
+      height: 60px;
     }
-
     nav ul {
       list-style: none;
       display: flex;
@@ -34,22 +31,18 @@
       padding: 0;
       position: relative;
     }
-
     nav li {
       position: relative;
     }
-
     nav a {
       text-decoration: none;
       color: #000;
       font-weight: 600;
       font-size: 0.9rem;
     }
-
     nav ul li:hover .dropdown {
       display: block;
     }
-
     .dropdown {
       display: none;
       position: absolute;
@@ -60,98 +53,201 @@
       padding: 0.5rem 0;
       z-index: 10;
     }
-
     .dropdown li {
       padding: 0;
     }
-
     .dropdown a {
       display: block;
       padding: 0.5rem 1rem;
       white-space: nowrap;
     }
-
     .dropdown a:hover {
       background-color: #f3f3f3;
     }
-
     .socials a {
       color: #000;
       font-size: 1.1rem;
       margin-left: 1.2rem;
       transition: opacity 0.3s ease;
     }
-
     .socials a:hover {
       opacity: 0.6;
     }
-
-    .hero {
-      text-align: center;
-      padding: 0;
-      margin: 0;
+    .carousel-container {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      background: #fff;
+      padding: 2rem 0;
+      z-index: 1;
     }
-
-    .hero img {
-      width: 100vw;
-      height: auto;
-      display: block;
+    .carousel-track {
+      display: flex;
+      transition: transform 0.5s ease;
+      align-items: center;
+      gap: 0;
+    }
+    .carousel-slide {
+  flex: 0 0 auto;
+  width: 33vw; /* esto centra cada imagen en el viewport */
+  height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  background-color: #fff;
+  overflow: hidden;
+    }
+    .carousel-slide img {
+      height: 100%;
+      width: auto;
       object-fit: cover;
-      margin: 0;
-      padding: 0;
+      display: block;
     }
-
-    @media screen and (max-width: 768px) {
-      nav ul {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 1rem;
+    .carousel-buttons {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+    .carousel-buttons button {
+      background: rgba(255, 255, 255, 0.9);
+      border: none;
+      font-size: 2rem;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      pointer-events: all;
+    }
+    @media (max-width: 768px) {
+      .carousel-slide {
+        width: 100%;
       }
-
-      header {
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
+      .carousel-slide img {
+        height: 45vh;
       }
-
-      .socials {
-        margin-top: 1rem;
+      nav {
+        display: none;
       }
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="logo">
-      <img src="img/logo.jpg" alt="oniricboy logo">
-    </div>
 
-    <nav>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li>
-          <a href="#">Work ▾</a>
-          <ul class="dropdown">
-            <li><a href="2015-2016.html">2015–2016</a></li>
-            <li><a href="2017-2018.html">2017–2018</a></li>
-            <li><a href="2019-2021.html">2019–2021</a></li>
-            <li><a href="2023-2024.html">2023–2024</a></li>
-          </ul>
-        </li>
-        <li><a href="#">Projects</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Shop</a></li>
-      </ul>
-    </nav>
+<header>
+  <div class="logo">
+    <a href="/index.html"><img src="/img/logo.png" alt="oniricboy logo"></a>
+  </div>
+  <nav>
+    <ul>
+      <li><a href="/index.html">Home</a></li>
+      <li>
+        <a href="#">Work ▾</a>
+        <ul class="dropdown">
+          <li><a href="/work/2023-2024/">2023–2024</a></li>
+          <li><a href="/work/2019-2021/">2019–2021</a></li>
+          <li><a href="/work/2017-2018/">2017–2018</a></li>
+          <li><a href="/work/2015-2016/">2015–2016</a></li>   
+        </ul>
+      </li>
+      <li><a href="/projects.html">Projects</a></li>
+      <li><a href="/about.html">About</a></li>
+      <li><a href="/shop.html">Shop</a></li>
+    </ul>
+  </nav>
+  <div class="socials">
+    <a href="https://instagram.com/_oniricboy" target="_blank"><i class="fab fa-instagram"></i></a>
+    <a href="https://twitter.com/_oniricboy" target="_blank"><i class="fab fa-twitter"></i></a>
+  </div>
+</header>
 
-    <div class="socials">
-      <a href="https://instagram.com/_oniricboy" target="_blank"><i class="fab fa-instagram"></i></a>
-      <a href="https://twitter.com/_oniricboy" target="_blank"><i class="fab fa-twitter"></i></a>
-    </div>
-  </header>
+<section class="carousel-container">
+  <div class="carousel-track" id="carousel">
+    <div class="carousel-slide"><img src="/work/2023-2024/art_01.png" alt="Art 1"></div>
+    <div class="carousel-slide"><img src="/work/2023-2024/art_02.png" alt="Art 2"></div>
+    <div class="carousel-slide"><img src="/work/2023-2024/art_03.png" alt="Art 3"></div>
+    <div class="carousel-slide"><img src="/work/2023-2024/art_04.png" alt="Art 4"></div>
+  </div>
+  <div class="carousel-buttons">
+    <button onclick="moveCarousel(-1)">‹</button>
+    <button onclick="moveCarousel(1)">›</button>
+  </div>
+</section>
 
-  <main class="hero">
-    <img src="img/cover.png" alt="oniricboy hero image">
-  </main>
+<script>
+  const track = document.getElementById('carousel');
+  let slides;
+  let slideWidth;
+  let isTransitioning = false;
+  let position = 0;
+
+  function updateSlideWidth() {
+    slides = track.querySelectorAll('.carousel-slide');
+    slideWidth = slides[0].offsetWidth;
+  }
+
+  function cloneSlides() {
+    const originals = Array.from(track.children);
+    originals.forEach(el => track.appendChild(el.cloneNode(true)));
+    for (let i = originals.length - 1; i >= 0; i--) {
+      track.insertBefore(originals[i].cloneNode(true), track.firstChild);
+    }
+  }
+
+  function moveCarousel(dir) {
+    if (isTransitioning) return;
+    isTransitioning = true;
+
+    const totalSlides = slides.length / 3;
+    position += dir;
+
+    track.style.transition = 'transform 0.5s ease';
+    track.style.transform = `translateX(-${(slideWidth * (totalSlides + position))}px)`;
+
+    setTimeout(() => {
+      if (position <= -totalSlides || position >= totalSlides) {
+        position = 0;
+        track.style.transition = 'none';
+        track.style.transform = `translateX(-${slideWidth * totalSlides}px)`;
+      }
+      isTransitioning = false;
+    }, 510);
+  }
+
+  function initializeCarousel() {
+    cloneSlides();
+    const images = track.querySelectorAll('img');
+    let loaded = 0;
+    images.forEach(img => {
+      if (img.complete) {
+        loaded++;
+        if (loaded === images.length) finalizeInit();
+      } else {
+        img.onload = () => {
+          loaded++;
+          if (loaded === images.length) finalizeInit();
+        };
+      }
+    });
+  }
+
+  function finalizeInit() {
+    updateSlideWidth();
+    const total = slides.length / 3;
+    track.style.transition = 'none';
+    track.style.transform = `translateX(-${slideWidth * total}px)`;
+  }
+
+  window.addEventListener('load', initializeCarousel);
+  window.addEventListener('resize', () => {
+    updateSlideWidth();
+    const total = slides.length / 3;
+    track.style.transition = 'none';
+    track.style.transform = `translateX(-${slideWidth * (total + position)}px)`;
+  });
+</script>
+
 </body>
 </html>
