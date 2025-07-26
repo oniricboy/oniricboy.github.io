@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>oniricboy – Portfolio</title>
+  <title>oniricboy – Contact</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
   <style>
@@ -86,21 +86,6 @@
       opacity: 0.6;
     }
 
-    .hero {
-      text-align: center;
-      padding: 0;
-      margin: 0;
-    }
-
-    .hero img {
-      width: 100vw;
-      height: 20%;
-      display: block;
-      object-fit: cover;
-      margin: 0;
-      padding: 0;
-    }
-
     .contact-section {
       max-width: 600px;
       margin: 4rem auto;
@@ -148,6 +133,23 @@
 
     .contact-section button:hover {
       background: #333;
+    }
+
+    .contact-links {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .contact-links a {
+      margin: 0 1rem;
+      font-size: 1.4rem;
+      color: #000;
+      text-decoration: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .contact-links a:hover {
+      opacity: 0.6;
     }
 
     @media screen and (max-width: 768px) {
@@ -205,10 +207,6 @@
     </div>
   </header>
 
-  <main class="hero">
-    <img src="img/cover.png" alt="oniricboy hero image">
-  </main>
-
   <section id="contact" class="contact-section">
     <h2>contact</h2>
     <form action="https://formsubmit.co/contact@oniricboy.com" method="POST">
@@ -232,6 +230,11 @@
 
       <button type="submit">Send</button>
     </form>
+
+    <div class="contact-links">
+      <a href="https://instagram.com/_oniricboy" target="_blank"><i class="fab fa-instagram"></i></a>
+      <a href="https://twitter.com/_oniricboy" target="_blank"><i class="fab fa-twitter"></i></a>
+    </div>
   </section>
 </body>
 </html>
