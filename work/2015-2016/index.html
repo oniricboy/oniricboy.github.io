@@ -26,7 +26,7 @@
       height: 60px;
     }
 
-    nav ul {
+   nav ul {
       list-style: none;
       display: flex;
       gap: 2rem;
@@ -46,7 +46,7 @@
       font-size: 0.9rem;
     }
 
-    nav ul li:hover .dropdown {
+     nav ul li:hover .dropdown {
       display: block;
     }
 
@@ -86,6 +86,21 @@
       opacity: 0.6;
     }
 
+    .hero {
+      text-align: center;
+      padding: 0;
+      margin: 0;
+    }
+
+    .hero img {
+      width: 100vw;
+      height: auto;
+      display: block;
+      object-fit: cover;
+      margin: 0;
+      padding: 0;
+    }
+
     .carousel-container {
       position: relative;
       overflow: hidden;
@@ -96,49 +111,48 @@
     }
 
     .carousel-track {
-      display: flex;
-      transition: transform 0.5s ease;
-      align-items: center;
-      gap: 0;
+  display: flex;
+  transition: transform 0.5s ease;
+  align-items: center;
+  gap: 0;
     }
 
     .carousel-slide {
-      flex: 0 0 auto;
-      width: auto;
-      height: 600px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-sizing: border-box;
-      background-color: #fff;
-      overflow: hidden;
+  flex: 0 0 auto;
+  width: auto;
+  height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  background-color: #fff;
+  overflow: hidden;
     }
 
     .carousel-slide img {
-      height: 100%;
-      width: auto;
-      object-fit: cover;
-      display: block;
-    }
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  display: block;
+    } 
 
-    .carousel-button {
+    .carousel-buttons {
       position: absolute;
       top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
       transform: translateY(-50%);
+      pointer-events: none;
+    }
+
+    .carousel-buttons button {
       background: rgba(255, 255, 255, 0.9);
       border: none;
       font-size: 2rem;
       padding: 0.5rem 1rem;
       cursor: pointer;
-      z-index: 2;
-    }
-
-    .carousel-button.prev {
-      left: 0;
-    }
-
-    .carousel-button.next {
-      right: 0;
+      pointer-events: all;
     }
 
     @media (max-width: 768px) {
@@ -151,7 +165,7 @@
       }
 
       nav {
-        display: none;
+        display: none; /* puedes luego agregar menú hamburguesa si deseas */
       }
     }
   </style>
@@ -172,7 +186,7 @@
           <li><a href="/work/2023-2024/">2023–2024</a></li>
           <li><a href="/work/2019-2021/">2019–2021</a></li>
           <li><a href="/work/2017-2018/">2017–2018</a></li>
-          <li><a href="/work/2015-2016/">2015–2016</a></li>
+          <li><a href="/work/2015-2016/">2015–2016</a></li>   
         </ul>
       </li>
       <li><a href="/projects.html">Projects</a></li>
@@ -190,14 +204,20 @@
 <div class="carousel-container">
   <button class="carousel-button prev">‹</button>
   <div class="carousel-track">
-    <div class="carousel-slide"><img src="art_01.jpg" alt="art 1" /></div>
-    <div class="carousel-slide"><img src="art_02.png" alt="art 2" /></div>
-    <div class="carousel-slide"><img src="art_03.jpg" alt="art 3" /></div>
-    <div class="carousel-slide"><img src="art_04.png" alt="art 4" /></div>
-    <div class="carousel-slide"><img src="art_05.png" alt="art 5" /></div>
+    <div class="carousel-slide"><img src="art_01.jpg" /></div>
+    <div class="carousel-slide"><img src="art_02.jpg" /></div>
+    <div class="carousel-slide"><img src="art_03.jpg" /></div>
+    <div class="carousel-slide"><img src="art_04.jpg" /></div>
+    <div class="carousel-slide"><img src="art_05.jpg" /></div>
   </div>
   <button class="carousel-button next">›</button>
 </div>
+
+  <div class="carousel-buttons">
+    <button onclick="moveCarousel(-1)">‹</button>
+    <button onclick="moveCarousel(1)">›</button>
+  </div>
+</section>
 
 <script>
   window.addEventListener("load", () => {
@@ -252,6 +272,7 @@
       }
     });
 
+    // Ajuste en resize
     window.addEventListener('resize', () => {
       slideWidth = slides[currentIndex].getBoundingClientRect().width;
       track.style.transition = 'none';
