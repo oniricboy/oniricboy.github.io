@@ -218,84 +218,32 @@
 
 <script>
   const track = document.getElementById('carousel');
-  let slides = Array.from(track.children);
-  let slideWidth;
-  let currentIndex = 1;
+  const slides = Array.from(track.children);
+  let currentIndex = 0;
+  let slideWidth = slides[0].offsetWidth;
+  let container = document.querySelector('.carousel-container');
 
-  // 1. Clonar el primer y último slide
-  const firstClone = slides[0].cloneNode(true);
-  const lastClone = slides[slides.length - 1].cloneNode(true);
-  firstClone.classList.add('clone');
-  lastClone.classList.add('clone');
-  track.appendChild(firstClone);
-  track.insertBefore(lastClone, slides[0]);
-
-  // 2. Recalcular slides después de clonación
-  slides = Array.from(track.children);
-
-  function updateSlideWidth() {
-    slideWidth = slides[currentIndex].offsetWidth;
+  function centerSlide(index) {
+    const containerWidth = container.offsetWidth;
+    const offset = slideWidth * index - (containerWidth - slideWidth) / 2;
+    track.style.transform = `translateX(-${offset}px)`;
+    currentIndex = index;
   }
 
-  function moveCarousel(direction) {
-    if (track.classList.contains('is-transitioning')) return;
-    track.classList.add('is-transitioning');
-
-    currentIndex += direction;
-    track.style.transition = 'transform 0.5s ease';
-    track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
+  function moveCarousel(dir) {
+    let nextIndex = currentIndex + dir;
+    if (nextIndex < 0) nextIndex = slides.length - 1;
+    if (nextIndex >= slides.length) nextIndex = 0;
+    centerSlide(nextIndex);
   }
 
-  function handleTransitionEnd() {
-    track.classList.remove('is-transitioning');
-
-    if (slides[currentIndex].classList.contains('clone')) {
-      track.style.transition = 'none';
-      if (currentIndex === 0) {
-        currentIndex = slides.length - 2;
-      } else if (currentIndex === slides.length - 1) {
-        currentIndex = 1;
-      }
-      track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
-    }
-  }
-
-  function initializeCarousel() {
-    const images = track.querySelectorAll('img');
-    let loaded = 0;
-
-    images.forEach(img => {
-      if (img.complete) {
-        loaded++;
-        if (loaded === images.length) finalizeInit();
-      } else {
-        img.onload = () => {
-          loaded++;
-          if (loaded === images.length) finalizeInit();
-        };
-      }
-    });
-  }
-
-  function finalizeInit() {
-    updateSlideWidth();
-    track.style.transition = 'none';
-    track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
-  }
-
-  // Eventos
-  document.querySelector('.carousel-buttons button:first-child')
-    .addEventListener('click', () => moveCarousel(-1));
-  document.querySelector('.carousel-buttons button:last-child')
-    .addEventListener('click', () => moveCarousel(1));
-
-  track.addEventListener('transitionend', handleTransitionEnd);
-
-  window.addEventListener('load', initializeCarousel);
   window.addEventListener('resize', () => {
-    updateSlideWidth();
-    track.style.transition = 'none';
-    track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
+    slideWidth = slides[0].offsetWidth;
+    centerSlide(currentIndex);
+  });
+
+  window.addEventListener('load', () => {
+    centerSlide(currentIndex);
   });
 </script>
   
