@@ -26,7 +26,7 @@
       height: 60px;
     }
 
-   nav ul {
+    nav ul {
       list-style: none;
       display: flex;
       gap: 2rem;
@@ -46,7 +46,7 @@
       font-size: 0.9rem;
     }
 
-     nav ul li:hover .dropdown {
+    nav ul li:hover .dropdown {
       display: block;
     }
 
@@ -108,33 +108,34 @@
       background: #fff;
       padding: 2rem 0;
       z-index: 1;
+      display: flex;
+      justify-content: center;
     }
 
     .carousel-track {
-  display: flex;
-  transition: transform 0.5s ease;
-  align-items: center;
-  gap: 0;
+      display: flex;
+      transition: transform 0.5s ease;
+      align-items: center;
+      gap: 0;
     }
 
     .carousel-slide {
-  flex: 0 0 auto;
-  width: auto;
-  height: 600px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  background-color: #fff;
-  overflow: hidden;
+      flex: 0 0 400px;
+      height: 600px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      background-color: #fff;
+      overflow: hidden;
     }
 
     .carousel-slide img {
-  height: 100%;
-  width: auto;
-  object-fit: cover;
-  display: block;
-    } 
+      height: 100%;
+      width: auto;
+      object-fit: cover;
+      display: block;
+    }
 
     .carousel-buttons {
       position: absolute;
@@ -219,13 +220,13 @@
 <script>
   const track = document.getElementById('carousel');
   const slides = Array.from(track.children);
+  const slideWidth = 400;
   let currentIndex = 0;
-  let slideWidth = slides[0].offsetWidth;
-  let container = document.querySelector('.carousel-container');
 
   function centerSlide(index) {
-    const containerWidth = container.offsetWidth;
-    const offset = slideWidth * index - (containerWidth - slideWidth) / 2;
+    const containerWidth = document.querySelector('.carousel-container').offsetWidth;
+    const offset = (slideWidth * index) - (containerWidth - slideWidth) / 2;
+    track.style.transition = 'transform 0.5s ease';
     track.style.transform = `translateX(-${offset}px)`;
     currentIndex = index;
   }
@@ -237,15 +238,14 @@
     centerSlide(nextIndex);
   }
 
-  window.addEventListener('resize', () => {
-    slideWidth = slides[0].offsetWidth;
-    centerSlide(currentIndex);
-  });
-
   window.addEventListener('load', () => {
     centerSlide(currentIndex);
   });
+
+  window.addEventListener('resize', () => {
+    centerSlide(currentIndex);
+  });
 </script>
-  
+
 </body>
 </html>
