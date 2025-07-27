@@ -121,7 +121,7 @@
       cursor: pointer;
       pointer-events: all;
     }
-    @media screen and (max-width: 768px) {
+  @media screen and (max-width: 768px) {
   .carousel-slide {
     width: 100%;
   }
@@ -136,20 +136,19 @@
     gap: 1rem;
   }
 
-header {
-  margin-bottom: 0;
-  padding-bottom: 0;
-}
+  header {
+    flex-direction: column;
+    align-items: center;
+    gap: 0rem;
+  }
 
-.socials {
-  margin-top: 0;
-  margin-bottom: 0;
-  padding-bottom: 0;
-}
+  .socials {
+    margin-top: 0rem;
+  }
 
-.carousel-container {
-  margin-top: 0;
-  padding-top: 0;
+  .carousel-container {
+    padding-top: 0rem; /* reduce espacio superior */
+  }
 }
 }
   </style>
