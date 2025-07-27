@@ -61,10 +61,6 @@
       z-index: 10;
     }
 
-    .dropdown li {
-      padding: 0;
-    }
-
     .dropdown a {
       display: block;
       padding: 0.5rem 1rem;
@@ -102,25 +98,38 @@
     }
 
     @media screen and (max-width: 768px) {
-      nav ul {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 1rem;
-      }
+nav ul {
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
 
-      header {
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-      }
+  header {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
 
-      .socials {
-        margin-top: 1rem;
-      }
-    }
+  .socials {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0;
+    margin-bottom: 0;
+    gap: 0rem;
+  }
+      
+.hero img {
+    width: 100%;
+    height: 55vh;
+    object-fit: cover;
+    object-position: center;
+  }
+}
   </style>
 </head>
 <body>
+  
   <header>
     <div class="logo">
       <img src="img/logo.png" alt="oniricboy logo">
