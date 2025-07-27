@@ -16,7 +16,7 @@
 
     header {
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
       padding: 1.5rem 2rem;
       border-bottom: 1px solid #eee;
@@ -61,6 +61,10 @@
       z-index: 10;
     }
 
+    .dropdown li {
+      padding: 0;
+    }
+
     .dropdown a {
       display: block;
       padding: 0.5rem 1rem;
@@ -69,6 +73,11 @@
 
     .dropdown a:hover {
       background-color: #f3f3f3;
+    }
+
+    .socials {
+      position: absolute;
+      right: 2rem;
     }
 
     .socials a {
@@ -82,57 +91,6 @@
       opacity: 0.6;
     }
 
-    .carousel-container {
-      position: relative;
-      overflow: hidden;
-      width: 100%;
-      background: #fff;
-      padding: 2rem 0;
-      z-index: 1;
-    }
-
-    .carousel-track {
-      display: flex;
-      transition: transform 0.5s ease;
-      align-items: center;
-    }
-
-    .carousel-slide {
-      flex: 0 0 auto;
-      width: 33vw;
-      height: 600px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #fff;
-    }
-
-    .carousel-slide img {
-      height: 100%;
-      width: auto;
-      object-fit: cover;
-    }
-
-    .carousel-buttons {
-      position: absolute;
-      top: 50%;
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      transform: translateY(-50%);
-      pointer-events: none;
-    }
-
-    .carousel-buttons button {
-      background: rgba(255, 255, 255, 0.9);
-      border: none;
-      font-size: 2rem;
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-      pointer-events: all;
-    }
-
-    /* Estilos menú móvil */
     .mobile-toggle {
       display: none;
       background: none;
@@ -141,12 +99,13 @@
       position: absolute;
       left: 1.5rem;
       top: 1.5rem;
-      z-index: 1001;
+      z-index: 1002;
       cursor: pointer;
       color: #000;
     }
 
-    .mobile-menu {
+    .mobile-menu,
+    .mobile-submenu {
       display: none;
       flex-direction: column;
       justify-content: space-between;
@@ -161,20 +120,23 @@
       padding-top: 6rem;
     }
 
-    .mobile-menu ul {
+    .mobile-menu ul,
+    .mobile-submenu ul {
       list-style: none;
       padding: 0;
       text-align: center;
     }
 
-    .mobile-menu ul li {
+    .mobile-menu ul li,
+    .mobile-submenu ul li {
       margin: 1.5rem 0;
     }
 
-    .mobile-menu ul li a {
+    .mobile-menu ul li a,
+    .mobile-submenu ul li a {
       color: #000;
       font-weight: 600;
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       text-decoration: none;
     }
 
@@ -187,6 +149,15 @@
     .mobile-socials a {
       font-size: 1.5rem;
       color: #000;
+    }
+
+    .back-button {
+      position: absolute;
+      left: 1.5rem;
+      top: 1.5rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
     }
 
     @media (max-width: 768px) {
@@ -237,12 +208,7 @@
           <li><a href="/work/2015-2016/">2015–2016</a></li>
         </ul>
       </li>
-      <li>
-        <a href="#">Project ▾</a>
-        <ul class="dropdown">
-          <li><a href="/project/inside/">The Inside and the Boy</a></li>
-        </ul>
-      </li>
+      <li><a href="/project/inside/">Project</a></li>
       <li><a href="/about.html">About</a></li>
       <li><a href="/contact.html">Contact</a></li>
       <li><a href="/shop.html">Shop</a></li>
@@ -255,14 +221,12 @@
   </div>
 </header>
 
+<!-- Menú móvil principal -->
 <div id="mobileMenu" class="mobile-menu">
   <ul>
     <li><a href="/">Home</a></li>
-    <li><a href="/work/2023-2024/">Work ▾</a></li>
-    <li><a href="/work/2019-2021/">2019–2021</a></li>
-    <li><a href="/work/2017-2018/">2017–2018</a></li>
-    <li><a href="/work/2015-2016/">2015–2016</a></li>
-    <li><a href="/project/inside/">Project ▾</a></li>
+    <li><a href="#" onclick="openSubmenu(event)">Work ▾</a></li>
+    <li><a href="/project/inside/">Project</a></li>
     <li><a href="/about.html">About</a></li>
     <li><a href="/contact.html">Contact</a></li>
     <li><a href="/shop.html">Shop</a></li>
@@ -273,91 +237,36 @@
   </div>
 </div>
 
-<section class="carousel-container">
-  <div class="carousel-track" id="carousel">
-    <div class="carousel-slide"><img src="/work/2015-2016/art_01.jpg" alt="Art 1"></div>
-    <div class="carousel-slide"><img src="/work/2015-2016/art_02.png" alt="Art 2"></div>
-    <div class="carousel-slide"><img src="/work/2015-2016/art_03.jpg" alt="Art 3"></div>
-    <div class="carousel-slide"><img src="/work/2015-2016/art_04.png" alt="Art 4"></div>
-    <div class="carousel-slide"><img src="/work/2015-2016/art_05.png" alt="Art 5"></div>
-  </div>
-  <div class="carousel-buttons">
-    <button onclick="moveCarousel(-1)">‹</button>
-    <button onclick="moveCarousel(1)">›</button>
-  </div>
-</section>
+<!-- Submenú WORK -->
+<div id="mobileSubmenu" class="mobile-submenu">
+  <div class="back-button" onclick="closeSubmenu()">← Back</div>
+  <ul>
+    <li><a href="/work/2023-2024/">2023–2024</a></li>
+    <li><a href="/work/2019-2021/">2019–2021</a></li>
+    <li><a href="/work/2017-2018/">2017–2018</a></li>
+    <li><a href="/work/2015-2016/">2015–2016</a></li>
+  </ul>
+</div>
 
 <script>
   function toggleMenu() {
     const menu = document.getElementById('mobileMenu');
     const btn = document.getElementById('toggleBtn');
+    const submenu = document.getElementById('mobileSubmenu');
     const isOpen = menu.style.display === 'flex';
     menu.style.display = isOpen ? 'none' : 'flex';
+    submenu.style.display = 'none';
     btn.textContent = isOpen ? '☰' : '×';
   }
 
-  const track = document.getElementById('carousel');
-  let slides, slideWidth, isTransitioning = false, position = 0;
-
-  function updateSlideWidth() {
-    slides = track.querySelectorAll('.carousel-slide');
-    slideWidth = slides[0].offsetWidth;
+  function openSubmenu(e) {
+    e.preventDefault();
+    document.getElementById('mobileMenu').style.display = 'none';
+    document.getElementById('mobileSubmenu').style.display = 'flex';
   }
 
-  function cloneSlides() {
-    const originals = Array.from(track.children);
-    originals.forEach(el => track.appendChild(el.cloneNode(true)));
-    for (let i = originals.length - 1; i >= 0; i--) {
-      track.insertBefore(originals[i].cloneNode(true), track.firstChild);
-    }
+  function closeSubmenu() {
+    document.getElementById('mobileSubmenu').style.display = 'none';
+    document.getElementById('mobileMenu').style.display = 'flex';
   }
-
-  function moveCarousel(dir) {
-    if (isTransitioning) return;
-    isTransitioning = true;
-
-    const totalSlides = slides.length / 3;
-    position += dir;
-
-    track.style.transition = 'transform 0.5s ease';
-    track.style.transform = `translateX(-${(slideWidth * (totalSlides + position))}px)`;
-
-    setTimeout(() => {
-      if (position <= -totalSlides || position >= totalSlides) {
-        position = 0;
-        track.style.transition = 'none';
-        track.style.transform = `translateX(-${slideWidth * totalSlides}px)`;
-      }
-      isTransitioning = false;
-    }, 510);
-  }
-
-  function initializeCarousel() {
-    cloneSlides();
-    const images = track.querySelectorAll('img');
-    let loaded = 0;
-    images.forEach(img => {
-      if (img.complete) loaded++;
-      else img.onload = () => { loaded++; if (loaded === images.length) finalizeInit(); };
-    });
-    if (loaded === images.length) finalizeInit();
-  }
-
-  function finalizeInit() {
-    updateSlideWidth();
-    const total = slides.length / 3;
-    track.style.transition = 'none';
-    track.style.transform = `translateX(-${slideWidth * total}px)`;
-  }
-
-  window.addEventListener('load', initializeCarousel);
-  window.addEventListener('resize', () => {
-    updateSlideWidth();
-    const total = slides.length / 3;
-    track.style.transition = 'none';
-    track.style.transform = `translateX(-${slideWidth * (total + position)}px)`;
-  });
 </script>
-
-</body>
-</html>
