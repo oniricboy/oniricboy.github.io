@@ -20,6 +20,7 @@
       align-items: center;
       padding: 1.5rem 2rem;
       border-bottom: 1px solid #eee;
+      position: relative;
     }
 
     .logo img {
@@ -112,39 +113,67 @@
       display: block;
     }
 
-    .mobile-hint-arrows {
+    .carousel-button {
       position: absolute;
       top: 50%;
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
       transform: translateY(-50%);
-      pointer-events: none;
-      z-index: 5;
-    }
-
-    .mobile-hint-arrows span {
       background: rgba(255, 255, 255, 0.8);
       color: #000;
       font-size: 2rem;
       padding: 0.5rem 1rem;
-      user-select: none;
+      border: none;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    .carousel-button.left {
+      left: 0;
+    }
+
+    .carousel-button.right {
+      right: 0;
+    }
+
+    .mobile-menu-icon {
+      display: none;
+      font-size: 2rem;
+      cursor: pointer;
     }
 
     @media screen and (max-width: 768px) {
-      nav ul {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 1rem;
-      }
-
       header {
         flex-direction: column;
-        align-items: center;
+      }
+
+      .logo {
+        order: 1;
+      }
+
+      .mobile-menu-icon {
+        display: block;
+        position: absolute;
+        left: 1rem;
+        top: 1.5rem;
+      }
+
+      nav {
+        order: 2;
+        display: none;
+        width: 100%;
+        text-align: center;
+      }
+
+      nav.active {
+        display: block;
+      }
+
+      nav ul {
+        flex-direction: column;
         gap: 1rem;
       }
 
       .socials {
+        order: 3;
         margin-top: 1rem;
       }
     }
@@ -152,6 +181,10 @@
 </head>
 <body>
   <header>
+    <div class="mobile-menu-icon" onclick="document.querySelector('nav').classList.toggle('active')">
+      &#9776;
+    </div>
+
     <div class="logo">
       <a href="/"><img src="/img/logo.png" alt="oniricboy logo"></a>
     </div>
@@ -186,16 +219,22 @@
     </div>
   </header>
 
-  <section class="carousel-container">
-    <div class="mobile-hint-arrows">
-      <span>❮</span>
-      <span>❯</span>
-    </div>
+  <section class="carousel-container" id="carousel">
+    <button class="carousel-button left" onclick="scrollCarousel(-1)">❮</button>
+    <button class="carousel-button right" onclick="scrollCarousel(1)">❯</button>
     <div class="carousel-slide"><img src="/work/2015-2016/art_01.jpg" alt="Art 1"></div>
     <div class="carousel-slide"><img src="/work/2015-2016/art_02.png" alt="Art 2"></div>
     <div class="carousel-slide"><img src="/work/2015-2016/art_03.jpg" alt="Art 3"></div>
     <div class="carousel-slide"><img src="/work/2015-2016/art_04.png" alt="Art 4"></div>
     <div class="carousel-slide"><img src="/work/2015-2016/art_05.png" alt="Art 5"></div>
   </section>
+
+  <script>
+    function scrollCarousel(direction) {
+      const carousel = document.getElementById('carousel');
+      const width = carousel.offsetWidth;
+      carousel.scrollBy({ left: direction * width, behavior: 'smooth' });
+    }
+  </script>
 </body>
 </html>
