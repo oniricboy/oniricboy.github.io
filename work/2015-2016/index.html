@@ -121,14 +121,31 @@
       cursor: pointer;
       pointer-events: all;
     }
-    @media (max-width: 768px) {
-      .carousel-slide {
-        width: 100%;
-      }
-      .carousel-slide img {
-        height: 45vh;
-      }
-    }
+    @media screen and (max-width: 768px) {
+  .carousel-slide {
+    width: 100%;
+  }
+
+  .carousel-slide img {
+    height: 45vh;
+  }
+
+  nav ul {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  header {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .socials {
+    margin-top: 1rem;
+  }
+}
   </style>
 </head>
 <body>
