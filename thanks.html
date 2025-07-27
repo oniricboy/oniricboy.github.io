@@ -103,26 +103,55 @@
       color: #444;
     }
 
-    @media screen and (max-width: 768px) {
-      nav ul {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 1rem;
-      }
+ @media screen and (max-width: 768px) {
+  .carousel-slide {
+    width: 100%;
+  }
 
-      header {
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-      }
+  .carousel-slide {
+  height: auto;
+  padding: 0;
+}
 
-      .socials {
-        margin-top: 1rem;
-      }
-    }
+.carousel-slide img {
+  height: auto;
+  max-height: 55vh;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+nav ul {
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+  header {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .socials {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0;
+    margin-bottom: 0;
+    gap: 0rem;
+  }
+
+.carousel-container {
+   margin-top: 0;
+   padding-top: 0;
+  }
+}
+}
   </style>
 </head>
 <body>
+  
   <header>
     <div class="logo">
       <img src="img/logo.png" alt="oniricboy logo">
