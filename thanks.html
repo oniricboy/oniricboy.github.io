@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>oniricboy – Portfolio</title>
+  <title>oniricboy – Thanks</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
   <style>
@@ -86,19 +86,21 @@
       opacity: 0.6;
     }
 
-    .hero {
+    .thanks {
+      max-width: 600px;
+      margin: 5rem auto;
+      padding: 0 2rem;
       text-align: center;
-      padding: 0;
-      margin: 0;
     }
 
-    .hero img {
-      width: 100vw;
-      height: auto;
-      display: block;
-      object-fit: cover;
-      margin: 0;
-      padding: 0;
+    .thanks h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .thanks p {
+      font-size: 1rem;
+      color: #444;
     }
 
     @media screen and (max-width: 768px) {
@@ -132,17 +134,18 @@
         <li>
           <a href="#">Work ▾</a>
           <ul class="dropdown">
-          <li><a href="/work/2023-2024/">2023–2024</a></li>
-          <li><a href="/work/2019-2021/">2019–2021</a></li>
-          <li><a href="/work/2017-2018/">2017–2018</a></li>
-          <li><a href="/work/2015-2016/">2015–2016</a></li>   
+            <li><a href="/work/2023-2024/">2023–2024</a></li>
+            <li><a href="/work/2019-2021/">2019–2021</a></li>
+            <li><a href="/work/2017-2018/">2017–2018</a></li>
+            <li><a href="/work/2015-2016/">2015–2016</a></li>   
           </ul>
-       <li>
+        </li>
+        <li>
           <a href="#">Project ▾</a>
           <ul class="dropdown">
-          <li><a href="/project/inside/">The Inside and the Boy</a></li>
+            <li><a href="/project/inside/">The Inside and the Boy</a></li>
           </ul>
-      </li>
+        </li>
         <li><a href="about.html">About</a></li>
         <li><a href="contact.html">Contact</a></li>
         <li><a href="shop.html">Shop</a></li>
@@ -155,8 +158,9 @@
     </div>
   </header>
 
-  <main class="hero">
-    <img src="img/cover.png" alt="oniricboy hero image">
-  </main>
+  <section class="thanks">
+    <h1>Thank you!</h1>
+    <p>Your message was sent successfully. I’ll get back to you soon.</p>
+  </section>
 </body>
 </html>
