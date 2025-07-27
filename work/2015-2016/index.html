@@ -72,6 +72,11 @@
       background-color: #f3f3f3;
     }
 
+    .socials {
+      display: flex;
+      align-items: center;
+    }
+
     .socials a {
       color: #000;
       font-size: 1.1rem;
@@ -84,26 +89,31 @@
     }
 
     .carousel-container {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scroll-snap-type: x mandatory;
-      display: flex;
-      gap: 0;
-      scroll-behavior: smooth;
       position: relative;
+      overflow: hidden;
+      width: 100%;
+      background: #fff;
+      padding: 2rem 0;
+      z-index: 1;
+    }
+
+    .carousel-track {
+      display: flex;
+      transition: transform 0.5s ease;
+      align-items: center;
+      gap: 0;
     }
 
     .carousel-slide {
-      scroll-snap-align: center;
       flex: 0 0 auto;
-      width: 100vw;
-      max-width: 600px;
-      height: 80vh;
+      width: 33vw;
+      height: 600px;
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
       box-sizing: border-box;
+      background-color: #fff;
+      overflow: hidden;
     }
 
     .carousel-slide img {
@@ -113,25 +123,23 @@
       display: block;
     }
 
-    .carousel-button {
+    .carousel-buttons {
       position: absolute;
       top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
       transform: translateY(-50%);
-      background: rgba(255, 255, 255, 0.8);
-      color: #000;
+      pointer-events: none;
+    }
+
+    .carousel-buttons button {
+      background: rgba(255, 255, 255, 0.9);
+      border: none;
       font-size: 2rem;
       padding: 0.5rem 1rem;
-      border: none;
       cursor: pointer;
-      z-index: 10;
-    }
-
-    .carousel-button.left {
-      left: 0;
-    }
-
-    .carousel-button.right {
-      right: 0;
+      pointer-events: all;
     }
 
     .mobile-menu-icon {
@@ -175,6 +183,8 @@
       .socials {
         order: 3;
         margin-top: 1rem;
+        display: flex;
+        justify-content: center;
       }
     }
   </style>
@@ -212,29 +222,97 @@
         <li><a href="/shop.html">Shop</a></li>
       </ul>
     </nav>
-
     <div class="socials">
       <a href="https://instagram.com/_oniricboy" target="_blank"><i class="fab fa-instagram"></i></a>
       <a href="https://twitter.com/_oniricboy" target="_blank"><i class="fab fa-twitter"></i></a>
     </div>
   </header>
 
-  <section class="carousel-container" id="carousel">
-    <button class="carousel-button left" onclick="scrollCarousel(-1)">❮</button>
-    <button class="carousel-button right" onclick="scrollCarousel(1)">❯</button>
-    <div class="carousel-slide"><img src="/work/2015-2016/art_01.jpg" alt="Art 1"></div>
-    <div class="carousel-slide"><img src="/work/2015-2016/art_02.png" alt="Art 2"></div>
-    <div class="carousel-slide"><img src="/work/2015-2016/art_03.jpg" alt="Art 3"></div>
-    <div class="carousel-slide"><img src="/work/2015-2016/art_04.png" alt="Art 4"></div>
-    <div class="carousel-slide"><img src="/work/2015-2016/art_05.png" alt="Art 5"></div>
+  <section class="carousel-container">
+    <div class="carousel-track" id="carousel">
+      <div class="carousel-slide"><img src="/work/2015-2016/art_01.jpg" alt="Art 1"></div>
+      <div class="carousel-slide"><img src="/work/2015-2016/art_02.png" alt="Art 2"></div>
+      <div class="carousel-slide"><img src="/work/2015-2016/art_03.jpg" alt="Art 3"></div>
+      <div class="carousel-slide"><img src="/work/2015-2016/art_04.png" alt="Art 4"></div>
+      <div class="carousel-slide"><img src="/work/2015-2016/art_05.png" alt="Art 5"></div>
+    </div>
+    <div class="carousel-buttons">
+      <button onclick="moveCarousel(-1)">‹</button>
+      <button onclick="moveCarousel(1)">›</button>
+    </div>
   </section>
 
   <script>
-    function scrollCarousel(direction) {
-      const carousel = document.getElementById('carousel');
-      const width = carousel.offsetWidth;
-      carousel.scrollBy({ left: direction * width, behavior: 'smooth' });
+    const track = document.getElementById('carousel');
+    let slides;
+    let slideWidth;
+    let isTransitioning = false;
+    let position = 0;
+
+    function updateSlideWidth() {
+      slides = track.querySelectorAll('.carousel-slide');
+      slideWidth = slides[0].offsetWidth;
     }
+
+    function cloneSlides() {
+      const originals = Array.from(track.children);
+      originals.forEach(el => track.appendChild(el.cloneNode(true)));
+      for (let i = originals.length - 1; i >= 0; i--) {
+        track.insertBefore(originals[i].cloneNode(true), track.firstChild);
+      }
+    }
+
+    function moveCarousel(dir) {
+      if (isTransitioning) return;
+      isTransitioning = true;
+
+      const totalSlides = slides.length / 3;
+      position += dir;
+
+      track.style.transition = 'transform 0.5s ease';
+      track.style.transform = `translateX(-${(slideWidth * (totalSlides + position))}px)`;
+
+      setTimeout(() => {
+        if (position <= -totalSlides || position >= totalSlides) {
+          position = 0;
+          track.style.transition = 'none';
+          track.style.transform = `translateX(-${slideWidth * totalSlides}px)`;
+        }
+        isTransitioning = false;
+      }, 510);
+    }
+
+    function initializeCarousel() {
+      cloneSlides();
+      const images = track.querySelectorAll('img');
+      let loaded = 0;
+      images.forEach(img => {
+        if (img.complete) {
+          loaded++;
+          if (loaded === images.length) finalizeInit();
+        } else {
+          img.onload = () => {
+            loaded++;
+            if (loaded === images.length) finalizeInit();
+          };
+        }
+      });
+    }
+
+    function finalizeInit() {
+      updateSlideWidth();
+      const total = slides.length / 3;
+      track.style.transition = 'none';
+      track.style.transform = `translateX(-${slideWidth * total}px)`;
+    }
+
+    window.addEventListener('load', initializeCarousel);
+    window.addEventListener('resize', () => {
+      updateSlideWidth();
+      const total = slides.length / 3;
+      track.style.transition = 'none';
+      track.style.transform = `translateX(-${slideWidth * (total + position)}px)`;
+    });
   </script>
 </body>
 </html>
