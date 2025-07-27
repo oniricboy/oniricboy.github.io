@@ -84,7 +84,7 @@
     }
 
     .project-section {
-      max-width: 800px;
+      max-width: 1000px;
       margin: 4rem auto;
       padding: 0 1rem;
     }
@@ -103,15 +103,47 @@
 
     .image-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      grid-auto-rows: 10px;
+      gap: 10px;
       padding: 0 1rem;
     }
 
     .image-grid img {
       width: 100%;
-      height: auto;
+      border-radius: 4px;
       object-fit: cover;
+      display: block;
+    }
+
+    .image-grid img[data-size="tall"] {
+      grid-row: span 35;
+    }
+
+    .image-grid img[data-size="medium"] {
+      grid-row: span 25;
+    }
+
+    .image-grid img[data-size="small"] {
+      grid-row: span 20;
+    }
+
+    @media screen and (max-width: 768px) {
+      nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+      }
+
+      header {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .socials {
+        margin-top: 1rem;
+      }
     }
   </style>
 </head>
@@ -158,21 +190,22 @@
   </p>
 
   <div class="image-grid">
-    <img src="/project/inside/inside_01.png" alt="Inside Image 1">
-    <img src="/project/inside/inside_02.png" alt="Inside Image 2">
-    <img src="/project/inside/inside_03.png" alt="Inside Image 3">
-    <img src="/project/inside/inside_04.png" alt="Inside Image 4">
-    <img src="/project/inside/inside_05.png" alt="Inside Image 5">
-    <img src="/project/inside/inside_06.png" alt="Inside Image 6">
-    <img src="/project/inside/inside_07.png" alt="Inside Image 7">
-    <img src="/project/inside/inside_08.png" alt="Inside Image 8">
-    <img src="/project/inside/inside_09.png" alt="Inside Image 9">
-    <img src="/project/inside/inside_10.png" alt="Inside Image 10">
-    <img src="/project/inside/inside_11.png" alt="Inside Image 11">
-    <img src="/project/inside/inside_12.png" alt="Inside Image 12">
-    <img src="/project/inside/inside_13.png" alt="Inside Image 13">
+    <img src="/project/inside/inside_01.png" data-size="medium" alt="">
+    <img src="/project/inside/inside_02.png" data-size="tall" alt="">
+    <img src="/project/inside/inside_03.png" data-size="medium" alt="">
+    <img src="/project/inside/inside_04.png" data-size="small" alt="">
+    <img src="/project/inside/inside_05.png" data-size="tall" alt="">
+    <img src="/project/inside/inside_06.png" data-size="medium" alt="">
+    <img src="/project/inside/inside_07.png" data-size="medium" alt="">
+    <img src="/project/inside/inside_08.jpg" data-size="small" alt="">
+    <img src="/project/inside/inside_09.jpg" data-size="tall" alt="">
+    <img src="/project/inside/inside_10.jpg" data-size="medium" alt="">
+    <img src="/project/inside/inside_11.png" data-size="small" alt="">
+    <img src="/project/inside/inside_12.jpg" data-size="medium" alt="">
+    <img src="/project/inside/inside_13.jpg" data-size="medium" alt="">
   </div>
 </section>
 
 </body>
 </html>
+
