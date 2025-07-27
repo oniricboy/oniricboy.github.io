@@ -16,11 +16,10 @@
 
     header {
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
       padding: 1.5rem 2rem;
       border-bottom: 1px solid #eee;
-      position: relative;
     }
 
     .logo img {
@@ -33,6 +32,7 @@
       gap: 2rem;
       margin: 0;
       padding: 0;
+      position: relative;
     }
 
     nav li {
@@ -59,10 +59,6 @@
       border: 1px solid #ddd;
       padding: 0.5rem 0;
       z-index: 10;
-    }
-
-    .dropdown li {
-      padding: 0;
     }
 
     .dropdown a {
@@ -104,63 +100,23 @@
       color: #000;
     }
 
-    .mobile-menu,
-    .mobile-submenu {
-      display: none;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-      position: fixed;
-      top: 0;
-      left: 0;
-      background: #fff;
-      width: 100vw;
-      height: 100vh;
-      z-index: 1000;
-      padding-top: 6rem;
-    }
+    @media screen and (max-width: 768px) {
+      nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+      }
 
-    .mobile-menu ul,
-    .mobile-submenu ul {
-      list-style: none;
-      padding: 0;
-      text-align: center;
-    }
+      header {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
 
-    .mobile-menu ul li,
-    .mobile-submenu ul li {
-      margin: 1.5rem 0;
-    }
+      .socials {
+        margin-top: 1rem;
+      }
 
-    .mobile-menu ul li a,
-    .mobile-submenu ul li a {
-      color: #000;
-      font-weight: 600;
-      font-size: 1.3rem;
-      text-decoration: none;
-    }
-
-    .mobile-socials {
-      margin-bottom: 2rem;
-      display: flex;
-      gap: 2rem;
-    }
-
-    .mobile-socials a {
-      font-size: 1.5rem;
-      color: #000;
-    }
-
-    .back-button {
-      position: absolute;
-      left: 1.5rem;
-      top: 1.5rem;
-      font-size: 1.2rem;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    @media (max-width: 768px) {
       nav, .socials {
         display: none;
       }
@@ -168,30 +124,12 @@
       .mobile-toggle {
         display: block;
       }
-
-      header {
-        justify-content: center;
-      }
-
-      .logo {
-        margin: 0 auto;
-      }
-
-      .carousel-slide {
-        width: 100%;
-      }
-
-      .carousel-slide img {
-        height: 45vh;
-      }
     }
   </style>
 </head>
 <body>
 
 <header>
-  <button class="mobile-toggle" id="toggleBtn" onclick="toggleMenu()">☰</button>
-
   <div class="logo">
     <a href="/"><img src="/img/logo.png" alt="oniricboy logo"></a>
   </div>
@@ -208,7 +146,12 @@
           <li><a href="/work/2015-2016/">2015–2016</a></li>
         </ul>
       </li>
-      <li><a href="/project/inside/">Project</a></li>
+      <li>
+        <a href="#">Project ▾</a>
+        <ul class="dropdown">
+          <li><a href="/project/inside/">The Inside and the Boy</a></li>
+        </ul>
+      </li>
       <li><a href="/about.html">About</a></li>
       <li><a href="/contact.html">Contact</a></li>
       <li><a href="/shop.html">Shop</a></li>
@@ -219,54 +162,6 @@
     <a href="https://instagram.com/_oniricboy" target="_blank"><i class="fab fa-instagram"></i></a>
     <a href="https://twitter.com/_oniricboy" target="_blank"><i class="fab fa-twitter"></i></a>
   </div>
+
+  <button class="mobile-toggle" id="toggleBtn" onclick="toggleMenu()">☰</button>
 </header>
-
-<!-- Menú móvil principal -->
-<div id="mobileMenu" class="mobile-menu">
-  <ul>
-    <li><a href="/">Home</a></li>
-    <li><a href="#" onclick="openSubmenu(event)">Work ▾</a></li>
-    <li><a href="/project/inside/">Project</a></li>
-    <li><a href="/about.html">About</a></li>
-    <li><a href="/contact.html">Contact</a></li>
-    <li><a href="/shop.html">Shop</a></li>
-  </ul>
-  <div class="mobile-socials">
-    <a href="https://instagram.com/_oniricboy" target="_blank"><i class="fab fa-instagram"></i></a>
-    <a href="https://twitter.com/_oniricboy" target="_blank"><i class="fab fa-twitter"></i></a>
-  </div>
-</div>
-
-<!-- Submenú WORK -->
-<div id="mobileSubmenu" class="mobile-submenu">
-  <div class="back-button" onclick="closeSubmenu()">← Back</div>
-  <ul>
-    <li><a href="/work/2023-2024/">2023–2024</a></li>
-    <li><a href="/work/2019-2021/">2019–2021</a></li>
-    <li><a href="/work/2017-2018/">2017–2018</a></li>
-    <li><a href="/work/2015-2016/">2015–2016</a></li>
-  </ul>
-</div>
-
-<script>
-  function toggleMenu() {
-    const menu = document.getElementById('mobileMenu');
-    const btn = document.getElementById('toggleBtn');
-    const submenu = document.getElementById('mobileSubmenu');
-    const isOpen = menu.style.display === 'flex';
-    menu.style.display = isOpen ? 'none' : 'flex';
-    submenu.style.display = 'none';
-    btn.textContent = isOpen ? '☰' : '×';
-  }
-
-  function openSubmenu(e) {
-    e.preventDefault();
-    document.getElementById('mobileMenu').style.display = 'none';
-    document.getElementById('mobileSubmenu').style.display = 'flex';
-  }
-
-  function closeSubmenu() {
-    document.getElementById('mobileSubmenu').style.display = 'none';
-    document.getElementById('mobileMenu').style.display = 'flex';
-  }
-</script>
