@@ -13,7 +13,6 @@
       background-color: #fff;
       color: #000;
     }
-
     header {
       display: flex;
       justify-content: space-between;
@@ -21,11 +20,9 @@
       padding: 1.5rem 2rem;
       border-bottom: 1px solid #eee;
     }
-
     .logo img {
       height: 60px;
     }
-
     nav ul {
       list-style: none;
       display: flex;
@@ -34,22 +31,18 @@
       padding: 0;
       position: relative;
     }
-
     nav li {
       position: relative;
     }
-
     nav a {
       text-decoration: none;
       color: #000;
       font-weight: 600;
       font-size: 0.9rem;
     }
-
     nav ul li:hover .dropdown {
       display: block;
     }
-
     .dropdown {
       display: none;
       position: absolute;
@@ -60,69 +53,83 @@
       padding: 0.5rem 0;
       z-index: 10;
     }
-
+    .dropdown li {
+      padding: 0;
+    }
     .dropdown a {
       display: block;
       padding: 0.5rem 1rem;
       white-space: nowrap;
     }
-
     .dropdown a:hover {
       background-color: #f3f3f3;
     }
-
-    .socials {
-      position: absolute;
-      right: 2rem;
-    }
-
     .socials a {
       color: #000;
       font-size: 1.1rem;
       margin-left: 1.2rem;
       transition: opacity 0.3s ease;
     }
-
     .socials a:hover {
       opacity: 0.6;
     }
-
-    .mobile-toggle {
-      display: none;
-      background: none;
+    .carousel-container {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      background: #fff;
+      padding: 2rem 0;
+      z-index: 1;
+    }
+    .carousel-track {
+      display: flex;
+      transition: transform 0.5s ease;
+      align-items: center;
+      gap: 0;
+    }
+    .carousel-slide {
+      flex: 0 0 auto;
+      width: 33vw;
+      height: 600px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      background-color: #fff;
+      overflow: hidden;
+    }
+    .carousel-slide img {
+      height: 100%;
+      width: auto;
+      object-fit: cover;
+      display: block;
+    }
+    .carousel-buttons {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+    .carousel-buttons button {
+      background: rgba(255, 255, 255, 0.9);
       border: none;
       font-size: 2rem;
-      position: absolute;
-      left: 1.5rem;
-      top: 1.5rem;
-      z-index: 1002;
+      padding: 0.5rem 1rem;
       cursor: pointer;
-      color: #000;
+      pointer-events: all;
     }
-
-    @media screen and (max-width: 768px) {
-      nav ul {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 1rem;
+    @media (max-width: 768px) {
+      .carousel-slide {
+        width: 100%;
       }
-
-      header {
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
+      .carousel-slide img {
+        height: 45vh;
       }
-
-      .socials {
-        margin-top: 1rem;
-      }
-
-      nav, .socials {
+      nav {
         display: none;
-      }
-
-      .mobile-toggle {
-        display: block;
       }
     }
   </style>
@@ -162,37 +169,8 @@
     <a href="https://instagram.com/_oniricboy" target="_blank"><i class="fab fa-instagram"></i></a>
     <a href="https://twitter.com/_oniricboy" target="_blank"><i class="fab fa-twitter"></i></a>
   </div>
-
-  <button class="mobile-toggle" id="toggleBtn" onclick="toggleMenu()">☰</button>
 </header>
-<!-- MENÚ MÓVIL -->
-<div id="mobileMenu" class="mobile-menu">
-  <ul>
-    <li><a href="/">Home</a></li>
-    <li><a href="#" onclick="openSubmenu(event)">Work ▾</a></li>
-    <li><a href="/project/inside/">Project</a></li>
-    <li><a href="/about.html">About</a></li>
-    <li><a href="/contact.html">Contact</a></li>
-    <li><a href="/shop.html">Shop</a></li>
-  </ul>
-  <div class="mobile-socials">
-    <a href="https://instagram.com/_oniricboy" target="_blank"><i class="fab fa-instagram"></i></a>
-    <a href="https://twitter.com/_oniricboy" target="_blank"><i class="fab fa-twitter"></i></a>
-  </div>
-</div>
 
-<!-- SUBMENÚ WORK -->
-<div id="mobileSubmenu" class="mobile-submenu">
-  <div class="back-button" onclick="closeSubmenu()">← Back</div>
-  <ul>
-    <li><a href="/work/2023-2024/">2023–2024</a></li>
-    <li><a href="/work/2019-2021/">2019–2021</a></li>
-    <li><a href="/work/2017-2018/">2017–2018</a></li>
-    <li><a href="/work/2015-2016/">2015–2016</a></li>
-  </ul>
-</div>
-
-<!-- CARRUSEL -->
 <section class="carousel-container">
   <div class="carousel-track" id="carousel">
     <div class="carousel-slide"><img src="/work/2015-2016/art_01.jpg" alt="Art 1"></div>
@@ -207,31 +185,12 @@
   </div>
 </section>
 
-<!-- SCRIPT -->
 <script>
-  function toggleMenu() {
-    const menu = document.getElementById('mobileMenu');
-    const submenu = document.getElementById('mobileSubmenu');
-    const btn = document.getElementById('toggleBtn');
-    const isOpen = menu.style.display === 'flex';
-    menu.style.display = isOpen ? 'none' : 'flex';
-    submenu.style.display = 'none';
-    btn.textContent = isOpen ? '☰' : '×';
-  }
-
-  function openSubmenu(e) {
-    e.preventDefault();
-    document.getElementById('mobileMenu').style.display = 'none';
-    document.getElementById('mobileSubmenu').style.display = 'flex';
-  }
-
-  function closeSubmenu() {
-    document.getElementById('mobileSubmenu').style.display = 'none';
-    document.getElementById('mobileMenu').style.display = 'flex';
-  }
-
   const track = document.getElementById('carousel');
-  let slides, slideWidth, isTransitioning = false, position = 0;
+  let slides;
+  let slideWidth;
+  let isTransitioning = false;
+  let position = 0;
 
   function updateSlideWidth() {
     slides = track.querySelectorAll('.carousel-slide');
@@ -271,10 +230,16 @@
     const images = track.querySelectorAll('img');
     let loaded = 0;
     images.forEach(img => {
-      if (img.complete) loaded++;
-      else img.onload = () => { loaded++; if (loaded === images.length) finalizeInit(); };
+      if (img.complete) {
+        loaded++;
+        if (loaded === images.length) finalizeInit();
+      } else {
+        img.onload = () => {
+          loaded++;
+          if (loaded === images.length) finalizeInit();
+        };
+      }
     });
-    if (loaded === images.length) finalizeInit();
   }
 
   function finalizeInit() {
