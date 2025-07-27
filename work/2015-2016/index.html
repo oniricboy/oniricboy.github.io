@@ -126,9 +126,18 @@
     width: 100%;
   }
 
-  .carousel-slide img {
-    height: 45vh;
-  }
+  .carousel-slide {
+  height: auto;
+  padding: 0;
+}
+
+.carousel-slide img {
+  height: auto;
+  max-height: 80vh;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
 
 nav ul {
   flex-wrap: wrap;
@@ -151,9 +160,9 @@ nav ul {
     gap: 0rem;
   }
 
-  .carousel-container {
-  margin-top: 0;
-  padding-top: 0;
+.carousel-container {
+   margin-top: 0;
+   padding-top: 0;
   }
 }
 }
