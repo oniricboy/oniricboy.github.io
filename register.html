@@ -7,20 +7,19 @@
     import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
     import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDyvWRTf8T01x8n2Sm_rOofPfkwt9u_mtk",
-  authDomain: "oniricboy-cards.firebaseapp.com",
-  projectId: "oniricboy-cards",
-  storageBucket: "oniricboy-cards.appspot.com",
-  messagingSenderId: "206699659339",
-  appId: "1:206699659339:web:78b2b5d5ed4d642c4bcdce"
-};
+    const firebaseConfig = {
+      apiKey: "AIzaSyDyvWRTf8T01x8n2Sm_rOofPfkwt9u_mtk",
+      authDomain: "oniricboy-cards.firebaseapp.com",
+      projectId: "oniricboy-cards",
+      storageBucket: "oniricboy-cards.appspot.com",
+      messagingSenderId: "206699659339",
+      appId: "1:206699659339:web:78b2b5d5ed4d642c4bcdce"
+    };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Conecta la función al botón
     window.register = async function () {
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
@@ -33,7 +32,7 @@ const firebaseConfig = {
           unlockedCards: ["card01"]
         });
 
-        alert("Account created!");
+        alert("¡Cuenta creada!");
         window.location.href = "gallery.html";
       } catch (error) {
         alert("Error: " + error.message);
