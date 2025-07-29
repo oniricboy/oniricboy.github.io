@@ -20,7 +20,7 @@
     }
   </style>
 
-  <!-- Firebase SDK -->
+  <!-- Firebase SDK (v10 compat) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 </head>
@@ -40,7 +40,6 @@
       appId: "1:206699659339:web:78b2b5d5ed4d642c4bcdce"
     };
 
-    // Evita que Firebase se inicialice dos veces
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
     }
@@ -51,7 +50,9 @@
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
 
-      auth.signInWithEmailAndPassword(email, password)
+      // 🔒 Establecer persistencia local
+      auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+        .then(() => auth.signInWithEmailAndPassword(email, password))
         .then(() => {
           window.location.href = "gallery.html";
         })
@@ -62,3 +63,4 @@
   </script>
 </body>
 </html>
+
