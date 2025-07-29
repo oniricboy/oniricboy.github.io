@@ -159,7 +159,6 @@
       "card01": { image: "cards/card01.png", code: "AUGUST23" },
       "card02": { image: "cards/card02.png", code: "TORU23" },
       "card03": { image: "cards/card03.png", code: "JUNEGLITCH" }
-      // Puedes agregar más cartas aquí
     };
 
     let currentUserUID = null;
@@ -226,14 +225,25 @@
     }
 
     auth.onAuthStateChanged(async user => {
-      if (user) {
-        currentUserUID = user.uid;
-        document.getElementById("welcome").textContent = "Bienvenido: " + user.email;
+      try {
+        if (user) {
+          currentUserUID = user.uid;
+          document.getElementById("welcome").textContent = "Bienvenido: " + user.email;
 
-        const doc = await db.collection("users").doc(currentUserUID).get();
-        unlockedCards = doc.exists ? doc.data().unlockedCards || [] : [];
-        renderCards();
-      } else {
+          const doc = await db.collection("users").doc(currentUserUID).get();
+          unlockedCards = doc.exists ? doc.data().unlockedCards || [] : [];
+          renderCards();
+        } else {
+          console.log("🔁 No hay sesión. Redirigiendo en 1s...");
+          setTimeout(() => {
+            if (!auth.currentUser) {
+              window.location.href = "login.html";
+            }
+          }, 1000);
+        }
+      } catch (e) {
+        console.error("❌ Error verificando sesión:", e);
+        alert("Error al cargar la sesión.");
         window.location.href = "login.html";
       }
     });
