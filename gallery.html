@@ -24,7 +24,6 @@
     }
   </style>
 
-  <!-- Firebase v9.22.2 compat -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
@@ -81,55 +80,57 @@
       const inputCode = document.getElementById("codeInput").value.trim().toUpperCase();
       const matchedEntry = Object.entries(cardData).find(([id, data]) => data.code === inputCode);
 
-      if (!matchedEntry) {
+      if (matchedEntry) {
+        if (currentUserUID) {
+          const [cardId] = matchedEntry;
+          const userRef = db.collection("users").doc(currentUserUID);
+          const userSnap = await userRef.get();
+
+          let unlocked = [];
+          if (userSnap.exists) {
+            unlocked = userSnap.data().unlockedCards || [];
+          }
+
+          if (!unlocked.includes(cardId)) {
+            await userRef.update({
+              unlockedCards: firebase.firestore.FieldValue.arrayUnion(cardId)
+            });
+            displayCards([...unlocked, cardId]);
+            alert("✅ ¡Carta desbloqueada!");
+          } else {
+            alert("⚠️ Ya desbloqueaste esta carta.");
+          }
+        } else {
+          alert("⚠️ Usuario no identificado. Vuelve a iniciar sesión.");
+          window.location.href = "login.html";
+        }
+      } else {
         alert("❌ Código inválido.");
-        return;
       }
-
-      if (!currentUserUID) {
-        alert("⚠️ Usuario no identificado. Vuelve a iniciar sesión.");
-        window.location.href = "login.html";
-        return;
-      }
-
-      const [cardId] = matchedEntry;
-      const userRef = db.collection("users").doc(currentUserUID);
-      const userSnap = await userRef.get();
-      const unlocked = userSnap.exists ? userSnap.data().unlockedCards || [] : [];
-
-      if (unlocked.includes(cardId)) {
-        alert("⚠️ Ya desbloqueaste esta carta.");
-        return;
-      }
-
-      await userRef.update({
-        unlockedCards: firebase.firestore.FieldValue.arrayUnion(cardId)
-      });
-
-      displayCards([...unlocked, cardId]);
-      alert("✅ ¡Carta desbloqueada!");
     }
 
     window.unlockCard = unlockCard;
 
-    auth.onAuthStateChanged(async user => {
+    auth.onAuthStateChanged(async function(user) {
       try {
         if (user) {
           currentUserUID = user.uid;
           document.getElementById("welcome").textContent = "Bienvenido: " + user.email;
           const userRef = db.collection("users").doc(currentUserUID);
           const userSnap = await userRef.get();
-          const unlocked = userSnap.exists ? userSnap.data().unlockedCards || [] : [];
+          let unlocked = [];
+          if (userSnap.exists) {
+            unlocked = userSnap.data().unlockedCards || [];
+          }
           displayCards(unlocked);
         } else {
-          console.log("❌ No hay sesión activa, redirigiendo...");
           setTimeout(() => {
             window.location.href = "login.html";
-          }, 500);
+          }, 300);
         }
-      } catch (e) {
-        console.error("⚠️ Error al verificar sesión:", e);
-        alert("Error al cargar datos. Intenta de nuevo.");
+      } catch (error) {
+        console.error("⚠️ Error:", error);
+        alert("Error cargando la galería.");
         window.location.href = "login.html";
       }
     });
