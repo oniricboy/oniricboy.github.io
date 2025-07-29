@@ -131,16 +131,16 @@
   <header>
     <img id="logo" src="logo.png" alt="Logo" />
     <h1>The Inside and the Boy – Cards</h1>
-    <input type="text" id="codeInput" placeholder="Ingresa código">
-    <button id="unlockBtn" disabled>Desbloquear</button>
-    <button id="logoutBtn">Cerrar sesión</button>
+    <input type="text" id="codeInput" placeholder="Enter code">
+    <button id="unlockBtn" disabled>Unlock</button>
+    <button id="logoutBtn">Sign out</button>
     <p id="welcome"></p>
   </header>
 
   <div id="cardGrid"></div>
 
   <div id="zoomOverlay" onclick="this.style.display='none'">
-    <img id="zoomImg" src="" alt="Carta ampliada" />
+    <img id="zoomImg" src="" alt="Card view" />
   </div>
 
   <script>
@@ -184,7 +184,7 @@
         try {
           if (user) {
             currentUserUID = user.uid;
-            document.getElementById("welcome").textContent = "Bienvenido: " + user.email;
+            document.getElementById("welcome").textContent = "Welcome: " + user.email;
             unlockBtn.disabled = false;
 
             const doc = await db.collection("users").doc(currentUserUID).get();
@@ -192,7 +192,7 @@
             renderCards();
           } else {
             unlockBtn.disabled = true;
-            console.log("🔁 No hay sesión. Redirigiendo en 1s...");
+            console.log("🔁 No active session. Redirecting...");
             setTimeout(() => {
               if (!auth.currentUser) {
                 window.location.href = "login.html";
@@ -200,8 +200,8 @@
             }, 1000);
           }
         } catch (e) {
-          console.error("❌ Error verificando sesión:", e);
-          alert("Error al cargar la sesión.");
+          console.error("❌ Session check error:", e);
+          alert("Error loading session.");
           window.location.href = "login.html";
         }
       });
@@ -249,21 +249,21 @@
       const input = document.getElementById("codeInput").value.trim().toUpperCase();
 
       if (!currentUserUID) {
-        alert("⚠️ No se ha iniciado sesión correctamente.");
+        alert("⚠️ Session not initialized correctly.");
         return;
       }
 
       const match = Object.entries(cardData).find(([id, data]) => data.code === input);
 
       if (!match) {
-        alert("❌ Código inválido.");
+        alert("❌ Invalid code.");
         return;
       }
 
       const [cardId] = match;
 
       if (unlockedCards.includes(cardId)) {
-        alert("⚠️ Ya tienes esta carta.");
+        alert("⚠️ You already unlocked this card.");
         return;
       }
 
@@ -273,10 +273,10 @@
         });
         unlockedCards.push(cardId);
         renderCards();
-        alert("✅ Carta desbloqueada.");
+        alert("✅ Card unlocked!");
       } catch (error) {
-        console.error("❌ Error al desbloquear carta:", error);
-        alert("Hubo un error al intentar desbloquear la carta.");
+        console.error("❌ Unlock error:", error);
+        alert("An error occurred while unlocking the card.");
       }
     }
   </script>
