@@ -89,10 +89,6 @@
       const userRef = db.collection("users").doc(currentUserUID);
       const userSnap = await userRef.get();
       const unlocked = userSnap.exists ? userSnap.data().unlockedCards || [] : [];
-
-      if (unlocked.includes(cardId)) {
-        alert("⚠️ Ya desbloqueaste esta carta.");
-        return;
       }
 
       await userRef.update({
