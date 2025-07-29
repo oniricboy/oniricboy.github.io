@@ -24,6 +24,7 @@
     }
   </style>
 
+  <!-- Firebase v9.22.2 compat -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
@@ -37,7 +38,7 @@
 
   <script>
     const firebaseConfig = {
-      apiKey: "AIzaSyDyvWRTf8T01x8n2Sm_rOoffpkwt9u_mtk",
+      apiKey: "AIzaSyDyvWRTf8T01x8n2Sm_rOofPfkwt9u_mtk",
       authDomain: "oniricboy-cards.firebaseapp.com",
       projectId: "oniricboy-cards",
       storageBucket: "oniricboy-cards.appspot.com",
@@ -85,10 +86,20 @@
         return;
       }
 
+      if (!currentUserUID) {
+        alert("⚠️ Usuario no identificado. Vuelve a iniciar sesión.");
+        window.location.href = "login.html";
+        return;
+      }
+
       const [cardId] = matchedEntry;
       const userRef = db.collection("users").doc(currentUserUID);
       const userSnap = await userRef.get();
       const unlocked = userSnap.exists ? userSnap.data().unlockedCards || [] : [];
+
+      if (unlocked.includes(cardId)) {
+        alert("⚠️ Ya desbloqueaste esta carta.");
+        return;
       }
 
       await userRef.update({
@@ -102,23 +113,24 @@
     window.unlockCard = unlockCard;
 
     auth.onAuthStateChanged(async user => {
-      console.log("🔍 onAuthStateChanged:", user);
-
-      if (user) {
-        currentUserUID = user.uid;
-        document.getElementById("welcome").textContent = "Bienvenido: " + user.email;
-
-        try {
+      try {
+        if (user) {
+          currentUserUID = user.uid;
+          document.getElementById("welcome").textContent = "Bienvenido: " + user.email;
           const userRef = db.collection("users").doc(currentUserUID);
           const userSnap = await userRef.get();
           const unlocked = userSnap.exists ? userSnap.data().unlockedCards || [] : [];
           displayCards(unlocked);
-        } catch (error) {
-          console.error("❌ Error al cargar cartas:", error);
-          alert("Hubo un error al cargar tus cartas.");
+        } else {
+          console.log("❌ No hay sesión activa, redirigiendo...");
+          setTimeout(() => {
+            window.location.href = "login.html";
+          }, 500);
         }
-
-        }, 500);
+      } catch (e) {
+        console.error("⚠️ Error al verificar sesión:", e);
+        alert("Error al cargar datos. Intenta de nuevo.");
+        window.location.href = "login.html";
       }
     });
   </script>
