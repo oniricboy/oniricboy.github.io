@@ -24,7 +24,6 @@
     }
   </style>
 
-  <!-- Firebase v9.22.2 compat (igual que en login) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
@@ -38,7 +37,7 @@
 
   <script>
     const firebaseConfig = {
-      apiKey: "AIzaSyDyvWRTf8T01x8n2Sm_rOofPfkwt9u_mtk",
+      apiKey: "AIzaSyDyvWRTf8T01x8n2Sm_rOoffpkwt9u_mtk",
       authDomain: "oniricboy-cards.firebaseapp.com",
       projectId: "oniricboy-cards",
       storageBucket: "oniricboy-cards.appspot.com",
@@ -107,16 +106,27 @@
     window.unlockCard = unlockCard;
 
     auth.onAuthStateChanged(async user => {
+      console.log("🔍 onAuthStateChanged:", user);
+
       if (user) {
         currentUserUID = user.uid;
         document.getElementById("welcome").textContent = "Bienvenido: " + user.email;
-        const userRef = db.collection("users").doc(currentUserUID);
-        const userSnap = await userRef.get();
-        const unlocked = userSnap.exists ? userSnap.data().unlockedCards || [] : [];
-        displayCards(unlocked);
+
+        try {
+          const userRef = db.collection("users").doc(currentUserUID);
+          const userSnap = await userRef.get();
+          const unlocked = userSnap.exists ? userSnap.data().unlockedCards || [] : [];
+          displayCards(unlocked);
+        } catch (error) {
+          console.error("❌ Error al cargar cartas:", error);
+          alert("Hubo un error al cargar tus cartas.");
+        }
+
       } else {
-        // ⛔ Te saca si no hay sesión activa
-        window.location.href = "login.html";
+        console.log("❌ No hay sesión activa, redirigiendo...");
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 500);
       }
     });
   </script>
