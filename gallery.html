@@ -2,38 +2,141 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Gallery</title>
+  <title>The Inside and the Boy – Cards</title>
   <style>
     body {
       font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 0;
       text-align: center;
-      margin-top: 30px;
     }
-    input {
+
+    header {
+      padding: 20px;
+      background: #fff;
+      border-bottom: 1px solid #ccc;
+    }
+
+    #logo {
+      height: 80px;
+    }
+
+    h1 {
+      margin: 10px 0 5px;
+    }
+
+    #codeInput {
       padding: 10px;
       width: 250px;
-      margin: 10px;
+      margin-top: 20px;
     }
+
     button {
       padding: 10px 20px;
+      margin-left: 10px;
       cursor: pointer;
     }
-    img {
+
+    #cardGrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 20px;
+      padding: 30px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .card-wrapper {
+      perspective: 1000px;
+    }
+
+    .card {
+      width: 150px;
+      height: 210px;
       border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.6s;
+      cursor: pointer;
+    }
+
+    .card.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card .front, .card .back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+      backface-visibility: hidden;
+    }
+
+    .card .front {
+      background: url('cards/back.png') no-repeat center/cover;
+    }
+
+    .card .back {
+      transform: rotateY(180deg);
+      background-color: #fff;
+    }
+
+    .card .back img {
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+    }
+
+    #zoomOverlay {
+      position: fixed;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(0,0,0,0.8);
+      z-index: 10;
+    }
+
+    #zoomOverlay img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
+    }
+
+    #welcome {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    #logoutBtn {
+      margin-top: 20px;
+      background: #ff4d4d;
+      color: white;
+      border: none;
     }
   </style>
 
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
-  <h2>✨ Tus cartas desbloqueadas ✨</h2>
-  <p id="welcome"></p>
-  <input type="text" id="codeInput" placeholder="Introduce código">
-  <button onclick="unlockCard()">Desbloquear</button>
-  <div id="cardContainer"></div>
+  <header>
+    <img id="logo" src="logo.png" alt="Logo" />
+    <h1>The Inside and the Boy – Cards</h1>
+    <input type="text" id="codeInput" placeholder="Ingresa código">
+    <button onclick="unlockCard()">Desbloquear</button>
+    <button id="logoutBtn">Cerrar sesión</button>
+    <p id="welcome"></p>
+  </header>
+
+  <div id="cardGrid"></div>
+
+  <div id="zoomOverlay" onclick="this.style.display='none'">
+    <img id="zoomImg" src="" alt="Carta ampliada" />
+  </div>
 
   <script>
     const firebaseConfig = {
@@ -53,86 +156,90 @@
     const db = firebase.firestore();
 
     const cardData = {
-      "card01": { name: "August – Perdido", image: "cards/card01.png", code: "AUGUST23" },
-      "card02": { name: "Toru – Vigilante", image: "cards/card02.png", code: "TORU23" },
-      "card03": { name: "June – Glitch", image: "cards/card03.png", code: "JUNEGLITCH" }
+      "card01": { image: "cards/card01.png", code: "AUGUST23" },
+      "card02": { image: "cards/card02.png", code: "TORU23" },
+      "card03": { image: "cards/card03.png", code: "JUNEGLITCH" }
+      // Puedes agregar más cartas aquí
     };
 
     let currentUserUID = null;
+    let unlockedCards = [];
 
-    function displayCards(cards) {
-      const container = document.getElementById("cardContainer");
-      container.innerHTML = "";
-      cards.forEach(cardId => {
-        const card = cardData[cardId];
-        if (card) {
-          const img = document.createElement("img");
-          img.src = card.image;
-          img.alt = card.name;
-          img.style.width = "300px";
-          img.style.margin = "10px";
-          container.appendChild(img);
+    function renderCards() {
+      const grid = document.getElementById("cardGrid");
+      grid.innerHTML = "";
+
+      Object.entries(cardData).forEach(([id, data]) => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "card-wrapper";
+
+        const card = document.createElement("div");
+        card.className = "card";
+        if (unlockedCards.includes(id)) {
+          card.classList.add("flipped");
+        }
+
+        const front = document.createElement("div");
+        front.className = "front";
+
+        const back = document.createElement("div");
+        back.className = "back";
+        const img = document.createElement("img");
+        img.src = data.image;
+        img.alt = id;
+        back.appendChild(img);
+
+        card.appendChild(front);
+        card.appendChild(back);
+        wrapper.appendChild(card);
+        grid.appendChild(wrapper);
+
+        if (unlockedCards.includes(id)) {
+          card.onclick = () => {
+            document.getElementById("zoomImg").src = data.image;
+            document.getElementById("zoomOverlay").style.display = "flex";
+          };
         }
       });
     }
 
     async function unlockCard() {
-      const inputCode = document.getElementById("codeInput").value.trim().toUpperCase();
-      const matchedEntry = Object.entries(cardData).find(([id, data]) => data.code === inputCode);
+      const input = document.getElementById("codeInput").value.trim().toUpperCase();
+      const match = Object.entries(cardData).find(([id, data]) => data.code === input);
 
-      if (matchedEntry) {
-        if (currentUserUID) {
-          const [cardId] = matchedEntry;
-          const userRef = db.collection("users").doc(currentUserUID);
-          const userSnap = await userRef.get();
+      if (match && currentUserUID) {
+        const [cardId] = match;
 
-          let unlocked = [];
-          if (userSnap.exists) {
-            unlocked = userSnap.data().unlockedCards || [];
-          }
-
-          if (!unlocked.includes(cardId)) {
-            await userRef.update({
-              unlockedCards: firebase.firestore.FieldValue.arrayUnion(cardId)
-            });
-            displayCards([...unlocked, cardId]);
-            alert("✅ ¡Carta desbloqueada!");
-          } else {
-            alert("⚠️ Ya desbloqueaste esta carta.");
-          }
+        if (!unlockedCards.includes(cardId)) {
+          await db.collection("users").doc(currentUserUID).update({
+            unlockedCards: firebase.firestore.FieldValue.arrayUnion(cardId)
+          });
+          unlockedCards.push(cardId);
+          renderCards();
+          alert("✅ Carta desbloqueada.");
         } else {
-          alert("⚠️ Usuario no identificado. Vuelve a iniciar sesión.");
-          window.location.href = "login.html";
+          alert("⚠️ Ya tienes esta carta.");
         }
       } else {
         alert("❌ Código inválido.");
       }
     }
 
-    window.unlockCard = unlockCard;
+    auth.onAuthStateChanged(async user => {
+      if (user) {
+        currentUserUID = user.uid;
+        document.getElementById("welcome").textContent = "Bienvenido: " + user.email;
 
-    auth.onAuthStateChanged(async function(user) {
-      try {
-        if (user) {
-          currentUserUID = user.uid;
-          document.getElementById("welcome").textContent = "Bienvenido: " + user.email;
-          const userRef = db.collection("users").doc(currentUserUID);
-          const userSnap = await userRef.get();
-          let unlocked = [];
-          if (userSnap.exists) {
-            unlocked = userSnap.data().unlockedCards || [];
-          }
-          displayCards(unlocked);
-        } else {
-          setTimeout(() => {
-            window.location.href = "login.html";
-          }, 300);
-        }
-      } catch (error) {
-        console.error("⚠️ Error:", error);
-        alert("Error cargando la galería.");
+        const doc = await db.collection("users").doc(currentUserUID).get();
+        unlockedCards = doc.exists ? doc.data().unlockedCards || [] : [];
+        renderCards();
+      } else {
         window.location.href = "login.html";
       }
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      auth.signOut().then(() => window.location.href = "login.html");
     });
   </script>
 </body>
