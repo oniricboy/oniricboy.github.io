@@ -2,41 +2,50 @@
 <html>
 <head>
   <title>Register</title>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    // ✅ Reemplaza esto con tus datos reales
+    const firebaseConfig = {
+      apiKey: "TU_API_KEY",
+      authDomain: "oniricboy-cards.firebaseapp.com",
+      projectId: "oniricboy-cards",
+      storageBucket: "oniricboy-cards.appspot.com",
+      messagingSenderId: "XXXXXXXXX",
+      appId: "XXXXXXXXX"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Conecta la función al botón
+    window.register = async function () {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const uid = userCredential.user.uid;
+
+        await setDoc(doc(db, "users", uid), {
+          unlockedCards: ["card01"]
+        });
+
+        alert("Account created!");
+        window.location.href = "gallery.html";
+      } catch (error) {
+        alert("Error: " + error.message);
+      }
+    }
+  </script>
 </head>
 <body>
   <h2>Create an account</h2>
   <input type="email" id="email" placeholder="Email"><br>
   <input type="password" id="password" placeholder="Password"><br>
   <button onclick="register()">Register</button>
-
-  <script>
-    const firebaseConfig = {
-      apiKey: "TU_API_KEY",
-      authDomain: "oniricboy-cards.firebaseapp.com",
-      projectId: "oniricboy-cards"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
-
-    function register() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      auth.createUserWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-          const uid = userCredential.user.uid;
-          db.collection("users").doc(uid).set({
-            unlockedCards: ["card01"]
-          });
-          alert("Account created!");
-          window.location.href = "gallery.html";
-        })
-        .catch((error) => alert(error.message));
-    }
-  </script>
 </body>
 </html>
