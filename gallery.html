@@ -23,11 +23,20 @@
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
   </style>
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getFirestore, doc, getDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+  <!-- Firebase SDK Compat -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <h2>✨ Your Unlocked Cards ✨</h2>
+  <p id="welcome"></p>
+  <input type="text" id="codeInput" placeholder="Enter unlock code">
+  <button onclick="unlockCard()">Unlock</button>
+  <div id="cardContainer"></div>
+
+  <script>
     const firebaseConfig = {
       apiKey: "AIzaSyDyvWRTf8T01x8n2Sm_rOofPfkwt9u_mtk",
       authDomain: "oniricboy-cards.firebaseapp.com",
@@ -37,9 +46,12 @@
       appId: "1:206699659339:web:78b2b5d5ed4d642c4bcdce"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+
+    const auth = firebase.auth();
+    const db = firebase.firestore();
 
     const cardData = {
       "card01": { name: "August – Perdido", image: "cards/card01.png", code: "AUGUST23" },
@@ -70,55 +82,42 @@
       const matchedEntry = Object.entries(cardData).find(([id, data]) => data.code === inputCode);
 
       if (!matchedEntry) {
-        alert("❌ Invalid code.");
+        alert("❌ Código inválido.");
         return;
       }
 
       const [cardId] = matchedEntry;
-      const userRef = doc(db, "users", currentUserUID);
-      const userSnap = await getDoc(userRef);
-      const unlocked = userSnap.exists() ? userSnap.data().unlockedCards || [] : [];
+      const userRef = db.collection("users").doc(currentUserUID);
+      const userSnap = await userRef.get();
+      const unlocked = userSnap.exists ? userSnap.data().unlockedCards || [] : [];
 
       if (unlocked.includes(cardId)) {
-        alert("⚠️ You already unlocked this card.");
+        alert("⚠️ Ya desbloqueaste esta carta.");
         return;
       }
 
-      await updateDoc(userRef, {
-        unlockedCards: arrayUnion(cardId)
+      await userRef.update({
+        unlockedCards: firebase.firestore.FieldValue.arrayUnion(cardId)
       });
 
       displayCards([...unlocked, cardId]);
-      alert("✅ Card unlocked!");
+      alert("✅ ¡Carta desbloqueada!");
     }
 
     window.unlockCard = unlockCard;
 
-    // Esperar a que Firebase determine sesión
-    onAuthStateChanged(auth, async user => {
+    auth.onAuthStateChanged(async user => {
       if (user) {
         currentUserUID = user.uid;
-        document.getElementById("welcome").textContent = "Welcome: " + user.email;
-        const userRef = doc(db, "users", currentUserUID);
-        const userSnap = await getDoc(userRef);
-        const unlocked = userSnap.exists() ? userSnap.data().unlockedCards || [] : [];
+        document.getElementById("welcome").textContent = "Bienvenido: " + user.email;
+        const userRef = db.collection("users").doc(currentUserUID);
+        const userSnap = await userRef.get();
+        const unlocked = userSnap.exists ? userSnap.data().unlockedCards || [] : [];
         displayCards(unlocked);
       } else {
-        setTimeout(() => {
-          // Espera breve por si Firebase tarda en autenticar
-          if (!auth.currentUser) {
-            window.location.href = "login.html";
-          }
-        }, 500);
+        window.location.href = "login.html";
       }
     });
   </script>
-</head>
-<body>
-  <h2>✨ Your Unlocked Cards ✨</h2>
-  <p id="welcome"></p>
-  <input type="text" id="codeInput" placeholder="Enter unlock code">
-  <button onclick="unlockCard()">Unlock</button>
-  <div id="cardContainer"></div>
 </body>
 </html>
