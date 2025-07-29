@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Login</title>
   <style>
     body {
@@ -20,7 +20,7 @@
     }
   </style>
 
-  <!-- Firebase V9 compat (estilo clásico, funciona sin módulos) -->
+  <!-- Firebase v9 compat (igual que en gallery) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 </head>
@@ -28,10 +28,9 @@
   <h2>Log in</h2>
   <input type="email" id="email" placeholder="Email"><br>
   <input type="password" id="password" placeholder="Password"><br>
-  <button id="loginButton">Login</button>
+  <button id="loginBtn">Login</button>
 
   <script>
-    // Tu configuración real de Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyDyvWRTf8T01x8n2Sm_rOofPfkwt9u_mtk",
       authDomain: "oniricboy-cards.firebaseapp.com",
@@ -41,22 +40,19 @@
       appId: "1:206699659339:web:78b2b5d5ed4d642c4bcdce"
     };
 
-    // Inicializar Firebase
-    firebase.initializeApp(firebaseConfig);
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+
     const auth = firebase.auth();
 
-    // Conectar el botón de login
-    document.getElementById("loginButton").addEventListener("click", function () {
+    document.getElementById("loginBtn").addEventListener("click", () => {
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
 
       auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-        .then(() => {
-          return auth.signInWithEmailAndPassword(email, password);
-        })
-        .then(() => {
-          window.location.href = "gallery.html";
-        })
+        .then(() => auth.signInWithEmailAndPassword(email, password))
+        .then(() => window.location.href = "gallery.html")
         .catch((error) => {
           alert("Login failed: " + error.message);
         });
