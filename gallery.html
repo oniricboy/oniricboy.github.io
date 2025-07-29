@@ -2,103 +2,271 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Card Gallery</title>
+  <title>The Inside and the Boy – Cards</title>
   <style>
     body {
-      font-family: sans-serif;
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 0;
       text-align: center;
+    }
+
+    header {
+      padding: 20px;
       background: #fff;
-      padding: 2rem;
+      border-bottom: 1px solid #ccc;
     }
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 20px;
-      max-width: 900px;
-      margin: auto;
+
+    #logo {
+      height: 80px;
     }
-    .card {
-      border: 1px solid #ddd;
+
+    h1 {
+      margin: 10px 0 5px;
+    }
+
+    #codeInput {
       padding: 10px;
-      border-radius: 10px;
-      background: #f9f9f9;
+      width: 250px;
+      margin-top: 20px;
     }
-    .card img {
+
+    button {
+      padding: 10px 20px;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+
+    #cardGrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 20px;
+      padding: 30px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .card-wrapper {
+      perspective: 1000px;
+    }
+
+    .card {
+      width: 150px;
+      height: 210px;
+      border-radius: 10px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.6s;
+      cursor: pointer;
+    }
+
+    .card.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card .front, .card .back {
+      position: absolute;
       width: 100%;
-      border-radius: 6px;
+      height: 100%;
+      border-radius: 10px;
+      backface-visibility: hidden;
+    }
+
+    .card .front {
+      background: url('cards/back.png') no-repeat center/cover;
+    }
+
+    .card .back {
+      transform: rotateY(180deg);
+      background-color: #fff;
+    }
+
+    .card .back img {
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+    }
+
+    #zoomOverlay {
+      position: fixed;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(0,0,0,0.8);
+      z-index: 10;
+    }
+
+    #zoomOverlay img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
+    }
+
+    #welcome {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    #logoutBtn {
+      margin-top: 20px;
+      background: #ff4d4d;
+      color: white;
+      border: none;
     }
   </style>
-</head>
-<body>
-
-  <h1>✨ Tus cartas desbloqueadas ✨</h1>
-  <div id="user-email"></div>
-  <div class="card-grid" id="cardContainer"></div>
 
   <!-- Firebase SDK -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <header>
+    <img id="logo" src="logo.png" alt="Logo" />
+    <h1>The Inside and the Boy – Cards</h1>
+    <input type="text" id="codeInput" placeholder="Ingresa código">
+    <button id="unlockBtn">Desbloquear</button>
+    <button id="logoutBtn">Cerrar sesión</button>
+    <p id="welcome"></p>
+  </header>
 
-    // 🔧 TU CONFIGURACIÓN AQUÍ
- // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+  <div id="cardGrid"></div>
 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyDyvWRTf8T01x8n2Sm_rOoffpkwt9u_mtk",
-  authDomain: "oniricboy-cards.firebaseapp.com",
-  projectId: "oniricboy-cards",
-  storageBucket: "oniricboy-cards.firebasestorage.app",
-  messagingSenderId: "206699659339",
-  appId: "1:206699659339:web:78b2b5d5ed4d642c4bcdce"
-};
+  <div id="zoomOverlay" onclick="this.style.display='none'">
+    <img id="zoomImg" src="" alt="Carta ampliada" />
+  </div>
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    const cardData = {
-      "card01": { name: "August – Perdido", image: "cards/card01.png" },
-      "card02": { name: "Toru – Vigilante", image: "cards/card02.png" },
-      "card03": { name: "June – Glitch", image: "cards/card03.png" }
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDyvWRTf8T01x8n2Sm_rOofPfkwt9u_mtk",
+      authDomain: "oniricboy-cards.firebaseapp.com",
+      projectId: "oniricboy-cards",
+      storageBucket: "oniricboy-cards.appspot.com",
+      messagingSenderId: "206699659339",
+      appId: "1:206699659339:web:78b2b5d5ed4d642c4bcdce"
     };
 
-    const cardContainer = document.getElementById("cardContainer");
-    const userEmail = document.getElementById("user-email");
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
 
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        userEmail.innerText = `Bienvenido: ${user.email}`;
-        const ref = doc(db, "users", user.uid);
-        const snap = await getDoc(ref);
-        if (snap.exists()) {
-          const unlocked = snap.data().unlockedCards;
-          unlocked.forEach(cardId => {
-            if (cardData[cardId]) {
-              const card = document.createElement("div");
-              card.className = "card";
-              card.innerHTML = `
-                <img src="${cardData[cardId].image}" alt="${cardId}">
-                <p><strong>${cardData[cardId].name}</strong></p>
-              `;
-              cardContainer.appendChild(card);
-            }
-          });
-        } else {
-          cardContainer.innerHTML = "<p>No tienes cartas desbloqueadas aún.</p>";
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    const cardData = {
+      "card01": { image: "cards/card01.png", code: "AUGUST23" },
+      "card02": { image: "cards/card02.png", code: "TORU23" },
+      "card03": { image: "cards/card03.png", code: "JUNEGLITCH" }
+    };
+
+    let currentUserUID = null;
+    let unlockedCards = [];
+
+    window.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("unlockBtn").addEventListener("click", unlockCard);
+      document.getElementById("logoutBtn").addEventListener("click", () => {
+        auth.signOut().then(() => window.location.href = "login.html");
+      });
+
+      auth.onAuthStateChanged(async user => {
+        try {
+          if (user) {
+            currentUserUID = user.uid;
+            document.getElementById("welcome").textContent = "Bienvenido: " + user.email;
+
+            const doc = await db.collection("users").doc(currentUserUID).get();
+            unlockedCards = doc.exists ? doc.data().unlockedCards || [] : [];
+            renderCards();
+          } else {
+            console.log("🔁 No hay sesión. Redirigiendo en 1s...");
+            setTimeout(() => {
+              if (!auth.currentUser) {
+                window.location.href = "login.html";
+              }
+            }, 1000);
+          }
+        } catch (e) {
+          console.error("❌ Error verificando sesión:", e);
+          alert("Error al cargar la sesión.");
+          window.location.href = "login.html";
         }
-      } else {
-        window.location.href = "login.html"; // redirige si no hay sesión
-      }
+      });
     });
+
+    function renderCards() {
+      const grid = document.getElementById("cardGrid");
+      grid.innerHTML = "";
+
+      Object.entries(cardData).forEach(([id, data]) => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "card-wrapper";
+
+        const card = document.createElement("div");
+        card.className = "card";
+        if (unlockedCards.includes(id)) {
+          card.classList.add("flipped");
+        }
+
+        const front = document.createElement("div");
+        front.className = "front";
+
+        const back = document.createElement("div");
+        back.className = "back";
+        const img = document.createElement("img");
+        img.src = data.image;
+        img.alt = id;
+        back.appendChild(img);
+
+        card.appendChild(front);
+        card.appendChild(back);
+        wrapper.appendChild(card);
+        grid.appendChild(wrapper);
+
+        if (unlockedCards.includes(id)) {
+          card.onclick = () => {
+            document.getElementById("zoomImg").src = data.image;
+            document.getElementById("zoomOverlay").style.display = "flex";
+          };
+        }
+      });
+    }
+
+async function unlockCard() {
+  const input = document.getElementById("codeInput").value.trim().toUpperCase();
+
+  if (!currentUserUID) {
+    alert("⚠️ No se ha iniciado sesión correctamente.");
+    return;
+  }
+
+  const match = Object.entries(cardData).find(([id, data]) => data.code === input);
+
+  if (!match) {
+    alert("❌ Código inválido.");
+    return;
+  }
+
+  const [cardId] = match;
+
+  if (unlockedCards.includes(cardId)) {
+    alert("⚠️ Ya tienes esta carta.");
+    return;
+  }
+
+  try {
+    await db.collection("users").doc(currentUserUID).update({
+      unlockedCards: firebase.firestore.FieldValue.arrayUnion(cardId)
+    });
+    unlockedCards.push(cardId);
+    renderCards();
+    alert("✅ Carta desbloqueada.");
+  } catch (error) {
+    console.error("❌ Error al desbloquear carta:", error);
+    alert("Hubo un error al intentar desbloquear la carta.");
+  }
+    }
   </script>
 </body>
 </html>

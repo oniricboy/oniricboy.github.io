@@ -2,9 +2,9 @@
 <html>
 <head>
   <title>Register</title>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
   <h2>Create an account</h2>
@@ -14,28 +14,42 @@
 
   <script>
     const firebaseConfig = {
-      apiKey: "TU_API_KEY",
+      apiKey: "AIzaSyDyvWRTf8T01x8n2Sm_rOoffpkwt9u_mtk",
       authDomain: "oniricboy-cards.firebaseapp.com",
-      projectId: "oniricboy-cards"
+      projectId: "oniricboy-cards",
+      storageBucket: "oniricboy-cards.appspot.com",
+      messagingSenderId: "206699659339",
+      appId: "1:206699659339:web:78b2b5d5ed4d642c4bcdce"
     };
 
-    firebase.initializeApp(firebaseConfig);
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+
     const auth = firebase.auth();
     const db = firebase.firestore();
 
     function register() {
-      const email = document.getElementById("email").value;
+      const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
-      auth.createUserWithEmailAndPassword(email, password)
+
+      auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+        .then(() => {
+          return auth.createUserWithEmailAndPassword(email, password);
+        })
         .then((userCredential) => {
           const uid = userCredential.user.uid;
-          db.collection("users").doc(uid).set({
+          return db.collection("users").doc(uid).set({
             unlockedCards: ["card01"]
           });
-          alert("Account created!");
+        })
+        .then(() => {
+          alert("✅ Cuenta creada con éxito.");
           window.location.href = "gallery.html";
         })
-        .catch((error) => alert(error.message));
+        .catch((error) => {
+          alert("Error: " + error.message);
+        });
     }
   </script>
 </body>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test Login</title>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+</head>
+<body>
+  <h1>🔐 Sesión Firebase</h1>
+  <p id="status">Cargando...</p>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDyvWRTf8T01x8n2Sm_rOofPfkwt9u_mtk",
+      authDomain: "oniricboy-cards.firebaseapp.com",
+      projectId: "oniricboy-cards",
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+
+    const auth = firebase.auth();
+
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        document.getElementById("status").innerText = "✅ Usuario conectado: " + user.email;
+      } else {
+        document.getElementById("status").innerText = "⛔ No hay sesión. Redirigiendo...";
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 1500);
+      }
+    });
+  </script>
+</body>
+</html>
