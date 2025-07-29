@@ -233,7 +233,7 @@
       });
     }
 
-    async function unlockCard() {
+  async function unlockCard() {
       const input = document.getElementById("codeInput").value.trim().toUpperCase();
       const match = Object.entries(cardData).find(([id, data]) => data.code === input);
 
@@ -247,6 +247,12 @@
           unlockedCards.push(cardId);
           renderCards();
           alert("✅ Carta desbloqueada.");
+        } else {
+          alert("⚠️ Ya tienes esta carta.");
+        }
+      } else {
+        alert("❌ Código inválido.");
+      }
     }
   </script>
 </body>
