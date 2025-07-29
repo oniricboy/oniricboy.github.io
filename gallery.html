@@ -222,30 +222,6 @@
       } else {
         alert("❌ Código inválido.");
       }
-    }
-
-    auth.onAuthStateChanged(async user => {
-      try {
-        if (user) {
-          currentUserUID = user.uid;
-          document.getElementById("welcome").textContent = "Bienvenido: " + user.email;
-
-          const doc = await db.collection("users").doc(currentUserUID).get();
-          unlockedCards = doc.exists ? doc.data().unlockedCards || [] : [];
-          renderCards();
-        } else {
-          console.log("🔁 No hay sesión. Redirigiendo en 1s...");
-          setTimeout(() => {
-            if (!auth.currentUser) {
-              window.location.href = "login.html";
-            }
-          }, 1000);
-        }
-      } catch (e) {
-        console.error("❌ Error verificando sesión:", e);
-        alert("Error al cargar la sesión.");
-        window.location.href = "login.html";
-      }
     });
 
     document.getElementById("logoutBtn").addEventListener("click", () => {
