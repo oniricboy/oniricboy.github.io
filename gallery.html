@@ -1,9 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Card Gallery</title>
+  <title>Galería</title>
   <style>
     body {
       font-family: sans-serif;
@@ -17,6 +15,7 @@
       gap: 20px;
       max-width: 900px;
       margin: auto;
+      margin-top: 2rem;
     }
     .card {
       border: 1px solid #ddd;
@@ -28,20 +27,28 @@
       width: 100%;
       border-radius: 6px;
     }
+    #unlockArea {
+      margin-top: 2rem;
+    }
   </style>
+  <!-- Firebase CDN -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
   <h1>✨ Your Unlocked Cards ✨</h1>
   <div id="user-email"></div>
-  <div class="card-grid" id="cardContainer"></div>
-  <button onclick="logout()">Log out</button>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  <div id="unlockArea">
+    <input type="password" id="code" placeholder="Ingresa la clave para ver las cartas" />
+    <button onclick="unlockCards()">Desbloquear</button>
+  </div>
 
+  <div class="card-grid" id="cardContainer" style="display:none;"></div>
+
+  <script>
     const firebaseConfig = {
       apiKey: "AIzaSyDyvWRTf8T01x8n2Sm_rOoffpkwt9u_mtk",
       authDomain: "oniricboy-cards.firebaseapp.com",
@@ -51,9 +58,9 @@
       appId: "1:206699659339:web:78b2b5d5ed4d642c4bcdce"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
 
     const cardData = {
       "card01": { name: "August – Perdido", image: "cards/card01.png" },
@@ -61,41 +68,49 @@
       "card03": { name: "June – Glitch", image: "cards/card03.png" }
     };
 
-    const cardContainer = document.getElementById("cardContainer");
-    const userEmail = document.getElementById("user-email");
+    let currentUser = null;
+    let userCards = [];
 
-    onAuthStateChanged(auth, async (user) => {
+    auth.onAuthStateChanged(async (user) => {
       if (user) {
-        userEmail.innerText = `Welcome: ${user.email}`;
-        const ref = doc(db, "users", user.uid);
-        const snap = await getDoc(ref);
-        if (snap.exists()) {
-          const unlocked = snap.data().unlockedCards;
-          unlocked.forEach(cardId => {
-            if (cardData[cardId]) {
-              const card = document.createElement("div");
-              card.className = "card";
-              card.innerHTML = `
-                <img src="${cardData[cardId].image}" alt="${cardId}">
-                <p><strong>${cardData[cardId].name}</strong></p>
-              `;
-              cardContainer.appendChild(card);
-            }
-          });
-        } else {
-          cardContainer.innerHTML = "<p>You haven't unlocked any cards yet.</p>";
+        document.getElementById("user-email").innerText = `Welcome: ${user.email}`;
+        currentUser = user;
+
+        const docRef = db.collection("users").doc(user.uid);
+        const docSnap = await docRef.get();
+        if (docSnap.exists) {
+          userCards = docSnap.data().unlockedCards;
         }
       } else {
         window.location.href = "login.html";
       }
     });
 
-    // Botón para cerrar sesión
-    window.logout = () => {
-      signOut(auth).then(() => {
-        window.location.href = "login.html";
+    function unlockCards() {
+      const input = document.getElementById("code").value.trim();
+      if (input === "inframundo23") {
+        renderCards();
+        document.getElementById("unlockArea").style.display = "none";
+        document.getElementById("cardContainer").style.display = "grid";
+      } else {
+        alert("Clave incorrecta.");
+      }
+    }
+
+    function renderCards() {
+      const container = document.getElementById("cardContainer");
+      userCards.forEach(cardId => {
+        if (cardData[cardId]) {
+          const card = document.createElement("div");
+          card.className = "card";
+          card.innerHTML = `
+            <img src="${cardData[cardId].image}" alt="${cardId}">
+            <p><strong>${cardData[cardId].name}</strong></p>
+          `;
+          container.appendChild(card);
+        }
       });
-    };
+    }
   </script>
 </body>
 </html>
