@@ -20,12 +20,19 @@
     }
   </style>
 
-  <!-- Firebase via CDN -->
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+</head>
+<body>
+  <h2>Log in</h2>
+  <input type="email" id="email" placeholder="Email"><br>
+  <input type="password" id="password" placeholder="Password"><br>
+  <button id="loginBtn">Login</button>
+
   <script>
     const firebaseConfig = {
-      apiKey: "AIzaSyDyvWRTf8T01x8n2Sm_rOofPfkwt9u_mtk",
+      apiKey: "AIzaSyDyvWRTf8T01x8n2Sm_rOoffpkwt9u_mtk",
       authDomain: "oniricboy-cards.firebaseapp.com",
       projectId: "oniricboy-cards",
       storageBucket: "oniricboy-cards.appspot.com",
@@ -33,11 +40,15 @@
       appId: "1:206699659339:web:78b2b5d5ed4d642c4bcdce"
     };
 
-    firebase.initializeApp(firebaseConfig);
+    // Evita que Firebase se inicialice dos veces
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+
     const auth = firebase.auth();
 
-    function login() {
-      const email = document.getElementById("email").value;
+    document.getElementById("loginBtn").addEventListener("click", function () {
+      const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
 
       auth.signInWithEmailAndPassword(email, password)
@@ -47,13 +58,7 @@
         .catch((error) => {
           alert("Login failed: " + error.message);
         });
-    }
+    });
   </script>
-</head>
-<body>
-  <h2>Log in</h2>
-  <input type="email" id="email" placeholder="Email"><br>
-  <input type="password" id="password" placeholder="Password"><br>
-  <button onclick="login()">Login</button>
 </body>
 </html>
