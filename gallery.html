@@ -24,16 +24,16 @@
     }
   </style>
 
-  <!-- Firebase SDK Compat -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <!-- Firebase v9.22.2 compat (igual que en login) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
-  <h2>✨ Your Unlocked Cards ✨</h2>
+  <h2>✨ Tus cartas desbloqueadas ✨</h2>
   <p id="welcome"></p>
-  <input type="text" id="codeInput" placeholder="Enter unlock code">
-  <button onclick="unlockCard()">Unlock</button>
+  <input type="text" id="codeInput" placeholder="Introduce código">
+  <button onclick="unlockCard()">Desbloquear</button>
   <div id="cardContainer"></div>
 
   <script>
@@ -115,6 +115,7 @@
         const unlocked = userSnap.exists ? userSnap.data().unlockedCards || [] : [];
         displayCards(unlocked);
       } else {
+        // ⛔ Te saca si no hay sesión activa
         window.location.href = "login.html";
       }
     });
