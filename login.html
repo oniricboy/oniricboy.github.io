@@ -18,25 +18,18 @@
       padding: 10px 20px;
       cursor: pointer;
     }
-    a {
-      display: inline-block;
-      margin-top: 15px;
-      color: #3366cc;
-      text-decoration: none;
-    }
   </style>
 
-  <!-- Firebase SDK v9 compat -->
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
   <h2>Log in</h2>
   <input type="email" id="email" placeholder="Email"><br>
   <input type="password" id="password" placeholder="Password"><br>
-  <button id="loginBtn">Login</button>
-
-  <p>¿No tienes cuenta? <a href="register.html">Regístrate aquí</a></p>
+  <button id="loginBtn">Log In</button>
 
   <script>
     const firebaseConfig = {
@@ -53,18 +46,21 @@
     }
 
     const auth = firebase.auth();
+    const db = firebase.firestore();
 
-    document.getElementById("loginBtn").addEventListener("click", function () {
+    document.getElementById("loginBtn").addEventListener("click", () => {
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
 
       auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-        .then(() => auth.signInWithEmailAndPassword(email, password))
+        .then(() => {
+          return auth.signInWithEmailAndPassword(email, password);
+        })
         .then(() => {
           window.location.href = "gallery.html";
         })
         .catch((error) => {
-          alert("Login failed: " + error.message);
+          alert("Error: " + error.message);
         });
     });
   </script>
