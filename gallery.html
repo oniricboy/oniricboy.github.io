@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Galería</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>✨ Your Unlocked Cards ✨</title>
   <style>
     body {
       font-family: sans-serif;
@@ -9,13 +11,15 @@
       background: #fff;
       padding: 2rem;
     }
+    h1 {
+      font-size: 1.8rem;
+    }
     .card-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 20px;
       max-width: 900px;
-      margin: auto;
-      margin-top: 2rem;
+      margin: 2rem auto;
     }
     .card {
       border: 1px solid #ddd;
@@ -27,28 +31,40 @@
       width: 100%;
       border-radius: 6px;
     }
-    #unlockArea {
+    #unlockSection {
       margin-top: 2rem;
     }
+    input[type="text"] {
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      margin-left: 0.5rem;
+      cursor: pointer;
+    }
   </style>
-  <!-- Firebase CDN -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
   <h1>✨ Your Unlocked Cards ✨</h1>
   <div id="user-email"></div>
 
-  <div id="unlockArea">
-    <input type="password" id="code" placeholder="Ingresa la clave para ver las cartas" />
-    <button onclick="unlockCards()">Desbloquear</button>
+  <div id="unlockSection">
+    <input type="text" id="codeInput" placeholder="Enter unlock code" />
+    <button onclick="unlockCard()">Unlock</button>
+    <p id="unlockMsg"></p>
   </div>
 
-  <div class="card-grid" id="cardContainer" style="display:none;"></div>
+  <div class="card-grid" id="cardContainer"></div>
 
-  <script>
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
     const firebaseConfig = {
       apiKey: "AIzaSyDyvWRTf8T01x8n2Sm_rOoffpkwt9u_mtk",
       authDomain: "oniricboy-cards.firebaseapp.com",
@@ -58,48 +74,44 @@
       appId: "1:206699659339:web:78b2b5d5ed4d642c4bcdce"
     };
 
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
     const cardData = {
-      "card01": { name: "August – Perdido", image: "cards/card01.png" },
-      "card02": { name: "Toru – Vigilante", image: "cards/card02.png" },
-      "card03": { name: "June – Glitch", image: "cards/card03.png" }
+      "card01": { name: "August – Perdido", image: "cards/card01.png", code: "AUGUST23" },
+      "card02": { name: "Toru – Vigilante", image: "cards/card02.png", code: "TORU23" },
+      "card03": { name: "June – Glitch", image: "cards/card03.png", code: "JUNEGLITCH" }
     };
 
-    let currentUser = null;
+    const cardContainer = document.getElementById("cardContainer");
+    const userEmail = document.getElementById("user-email");
+    const unlockMsg = document.getElementById("unlockMsg");
+
+    let currentUser;
     let userCards = [];
 
-    auth.onAuthStateChanged(async (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (user) {
-        document.getElementById("user-email").innerText = `Welcome: ${user.email}`;
         currentUser = user;
+        userEmail.innerText = `Welcome: ${user.email}`;
 
-        const docRef = db.collection("users").doc(user.uid);
-        const docSnap = await docRef.get();
-        if (docSnap.exists) {
-          userCards = docSnap.data().unlockedCards;
+        const userRef = doc(db, "users", user.uid);
+        const snap = await getDoc(userRef);
+        if (snap.exists()) {
+          userCards = snap.data().unlockedCards || [];
+          showCards();
+        } else {
+          await setDoc(userRef, { unlockedCards: [] });
         }
       } else {
         window.location.href = "login.html";
       }
     });
 
-    function unlockCards() {
-      const input = document.getElementById("code").value.trim();
-      if (input === "inframundo23") {
-        renderCards();
-        document.getElementById("unlockArea").style.display = "none";
-        document.getElementById("cardContainer").style.display = "grid";
-      } else {
-        alert("Clave incorrecta.");
-      }
-    }
-
-    function renderCards() {
-      const container = document.getElementById("cardContainer");
-      userCards.forEach(cardId => {
+    function showCards() {
+      cardContainer.innerHTML = "";
+      userCards.forEach((cardId) => {
         if (cardData[cardId]) {
           const card = document.createElement("div");
           card.className = "card";
@@ -107,9 +119,46 @@
             <img src="${cardData[cardId].image}" alt="${cardId}">
             <p><strong>${cardData[cardId].name}</strong></p>
           `;
-          container.appendChild(card);
+          cardContainer.appendChild(card);
         }
       });
+    }
+
+    async function unlockCard() {
+      const code = document.getElementById("codeInput").value.trim().toUpperCase();
+      let found = false;
+      let cardId = null;
+
+      for (const id in cardData) {
+        if (cardData[id].code.toUpperCase() === code) {
+          found = true;
+          cardId = id;
+          break;
+        }
+      }
+
+      if (!found) {
+        unlockMsg.innerText = "❌ Código incorrecto.";
+        return;
+      }
+
+      if (userCards.includes(cardId)) {
+        unlockMsg.innerText = "⚠️ Ya tienes esta carta.";
+        return;
+      }
+
+      try {
+        const userRef = doc(db, "users", currentUser.uid);
+        await updateDoc(userRef, {
+          unlockedCards: arrayUnion(cardId)
+        });
+        userCards.push(cardId);
+        showCards();
+        unlockMsg.innerText = "✅ Carta desbloqueada!";
+      } catch (error) {
+        unlockMsg.innerText = "Error desbloqueando la carta.";
+        console.error(error);
+      }
     }
   </script>
 </body>
