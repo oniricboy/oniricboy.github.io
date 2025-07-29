@@ -1,38 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
   <title>Login</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin-top: 50px;
-    }
-    input {
-      margin: 10px;
-      padding: 8px;
-      width: 250px;
-    }
-    button {
-      padding: 10px 20px;
-      cursor: pointer;
-    }
-  </style>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { 
+      getAuth, 
+      signInWithEmailAndPassword, 
+      setPersistence, 
+      browserLocalPersistence 
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-</head>
-<body>
-  <h2>Log in</h2>
-  <input type="email" id="email" placeholder="Email"><br>
-  <input type="password" id="password" placeholder="Password"><br>
-  <button id="loginBtn">Login</button>
-
-  <script>
     const firebaseConfig = {
-      apiKey: "AIzaSyDyvWRTf8T01x8n2Sm_rOoffpkwt9u_mtk",
+      apiKey: "AIzaSyDyvWRTf8T01x8n2Sm_rOofPfkwt9u_mtk",
       authDomain: "oniricboy-cards.firebaseapp.com",
       projectId: "oniricboy-cards",
       storageBucket: "oniricboy-cards.appspot.com",
@@ -40,25 +20,31 @@
       appId: "1:206699659339:web:78b2b5d5ed4d642c4bcdce"
     };
 
-    // Evita que Firebase se inicialice dos veces
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-    }
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-    const auth = firebase.auth();
+    // ✅ Persistencia de sesión para que gallery.html no se cierre
+    setPersistence(auth, browserLocalPersistence).then(() => {
+      window.login = async function () {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
 
-    document.getElementById("loginBtn").addEventListener("click", function () {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
-
-      auth.signInWithEmailAndPassword(email, password)
-        .then(() => {
+        try {
+          await signInWithEmailAndPassword(auth, email, password);
           window.location.href = "gallery.html";
-        })
-        .catch((error) => {
+        } catch (error) {
           alert("Login failed: " + error.message);
-        });
+        }
+      }
+    }).catch((error) => {
+      alert("Error en persistencia: " + error.message);
     });
   </script>
+</head>
+<body>
+  <h2>Log in</h2>
+  <input type="email" id="email" placeholder="Email"><br>
+  <input type="password" id="password" placeholder="Password"><br>
+  <button onclick="login()">Login</button>
 </body>
 </html>
