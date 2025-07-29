@@ -2,13 +2,21 @@
 <html>
 <head>
   <title>Register</title>
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  <!-- SDKs de Firebase en versión CDN (para HTML puro sin empaquetador) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <h2>Create an account</h2>
+  <input type="email" id="email" placeholder="Email"><br>
+  <input type="password" id="password" placeholder="Password"><br>
+  <button onclick="register()">Register</button>
 
+  <script>
+    // ✅ Configuración correcta con tu API key y datos reales
     const firebaseConfig = {
-      apiKey: "AIzaSyDyvWRTf8T01x8n2Sm_rOofPfkwt9u_mtk",
+      apiKey: "AIzaSyDyvWRTf8T01x8n2Sm_rOoffpkwt9u_mtk",
       authDomain: "oniricboy-cards.firebaseapp.com",
       projectId: "oniricboy-cards",
       storageBucket: "oniricboy-cards.appspot.com",
@@ -16,34 +24,29 @@
       appId: "1:206699659339:web:78b2b5d5ed4d642c4bcdce"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
 
-    window.register = async function () {
+    function register() {
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
 
-      try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const uid = userCredential.user.uid;
-
-        await setDoc(doc(db, "users", uid), {
-          unlockedCards: ["card01"]
+      auth.createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          const uid = userCredential.user.uid;
+          return db.collection("users").doc(uid).set({
+            unlockedCards: ["card01"]
+          });
+        })
+        .then(() => {
+          alert("Cuenta creada con éxito");
+          window.location.href = "gallery.html";
+        })
+        .catch((error) => {
+          alert("Error: " + error.message);
         });
-
-        alert("¡Cuenta creada!");
-        window.location.href = "gallery.html";
-      } catch (error) {
-        alert("Error: " + error.message);
-      }
     }
   </script>
-</head>
-<body>
-  <h2>Create an account</h2>
-  <input type="email" id="email" placeholder="Email"><br>
-  <input type="password" id="password" placeholder="Password"><br>
-  <button onclick="register()">Register</button>
 </body>
 </html>
