@@ -3,7 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <title>Login</title>
-  <script type="module">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    input {
+      margin: 10px;
+      padding: 8px;
+      width: 250px;
+    }
+    button {
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+  </style>
+  <script type="module" defer>
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
@@ -20,7 +36,7 @@
     const auth = getAuth(app);
 
     window.login = async function () {
-      const email = document.getElementById("email").value.trim();
+      const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
 
       try {
@@ -29,27 +45,11 @@
       } catch (error) {
         alert("Login failed: " + error.message);
       }
-    };
+    }
   </script>
-  <style>
-    body {
-      font-family: sans-serif;
-      text-align: center;
-      padding: 50px;
-    }
-    input {
-      padding: 10px;
-      margin: 10px;
-      width: 250px;
-    }
-    button {
-      padding: 10px 20px;
-      cursor: pointer;
-    }
-  </style>
 </head>
 <body>
-  <h2>✨ Log in to unlock your cards ✨</h2>
+  <h2>Log in</h2>
   <input type="email" id="email" placeholder="Email"><br>
   <input type="password" id="password" placeholder="Password"><br>
   <button onclick="login()">Login</button>
