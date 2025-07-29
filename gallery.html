@@ -32,34 +32,24 @@
 </head>
 <body>
 
-  <h1>✨ Tus cartas desbloqueadas ✨</h1>
+  <h1>✨ Your Unlocked Cards ✨</h1>
   <div id="user-email"></div>
   <div class="card-grid" id="cardContainer"></div>
+  <button onclick="logout()">Log out</button>
 
-  <!-- Firebase SDK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
     import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    // 🔧 TU CONFIGURACIÓN AQUÍ
- // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyDyvWRTf8T01x8n2Sm_rOoffpkwt9u_mtk",
-  authDomain: "oniricboy-cards.firebaseapp.com",
-  projectId: "oniricboy-cards",
-  storageBucket: "oniricboy-cards.firebasestorage.app",
-  messagingSenderId: "206699659339",
-  appId: "1:206699659339:web:78b2b5d5ed4d642c4bcdce"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+    const firebaseConfig = {
+      apiKey: "AIzaSyDyvWRTf8T01x8n2Sm_rOoffpkwt9u_mtk",
+      authDomain: "oniricboy-cards.firebaseapp.com",
+      projectId: "oniricboy-cards",
+      storageBucket: "oniricboy-cards.appspot.com",
+      messagingSenderId: "206699659339",
+      appId: "1:206699659339:web:78b2b5d5ed4d642c4bcdce"
+    };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
@@ -76,7 +66,7 @@ const app = initializeApp(firebaseConfig);
 
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        userEmail.innerText = `Bienvenido: ${user.email}`;
+        userEmail.innerText = `Welcome: ${user.email}`;
         const ref = doc(db, "users", user.uid);
         const snap = await getDoc(ref);
         if (snap.exists()) {
@@ -93,12 +83,19 @@ const app = initializeApp(firebaseConfig);
             }
           });
         } else {
-          cardContainer.innerHTML = "<p>No tienes cartas desbloqueadas aún.</p>";
+          cardContainer.innerHTML = "<p>You haven't unlocked any cards yet.</p>";
         }
       } else {
-        window.location.href = "login.html"; // redirige si no hay sesión
+        window.location.href = "login.html";
       }
     });
+
+    // Botón para cerrar sesión
+    window.logout = () => {
+      signOut(auth).then(() => {
+        window.location.href = "login.html";
+      });
+    };
   </script>
 </body>
 </html>
