@@ -233,26 +233,39 @@
       });
     }
 
-  async function unlockCard() {
-      const input = document.getElementById("codeInput").value.trim().toUpperCase();
-      const match = Object.entries(cardData).find(([id, data]) => data.code === input);
+async function unlockCard() {
+  const input = document.getElementById("codeInput").value.trim().toUpperCase();
 
-      if (match && currentUserUID) {
-        const [cardId] = match;
+  if (!currentUserUID) {
+    alert("⚠️ No se ha iniciado sesión correctamente.");
+    return;
+  }
 
-        if (!unlockedCards.includes(cardId)) {
-          await db.collection("users").doc(currentUserUID).update({
-            unlockedCards: firebase.firestore.FieldValue.arrayUnion(cardId)
-          });
-          unlockedCards.push(cardId);
-          renderCards();
-          alert("✅ Carta desbloqueada.");
-        } else {
-          alert("⚠️ Ya tienes esta carta.");
-        }
-      } else {
-        alert("Código inválido.");
-      }
+  const match = Object.entries(cardData).find(([id, data]) => data.code === input);
+
+  if (!match) {
+    alert("❌ Código inválido.");
+    return;
+  }
+
+  const [cardId] = match;
+
+  if (unlockedCards.includes(cardId)) {
+    alert("⚠️ Ya tienes esta carta.");
+    return;
+  }
+
+  try {
+    await db.collection("users").doc(currentUserUID).update({
+      unlockedCards: firebase.firestore.FieldValue.arrayUnion(cardId)
+    });
+    unlockedCards.push(cardId);
+    renderCards();
+    alert("✅ Carta desbloqueada.");
+  } catch (error) {
+    console.error("❌ Error al desbloquear carta:", error);
+    alert("Hubo un error al intentar desbloquear la carta.");
+  }
     }
   </script>
 </body>
