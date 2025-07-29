@@ -170,29 +170,31 @@
         auth.signOut().then(() => window.location.href = "login.html");
       });
 
-      auth.onAuthStateChanged(async user => {
-        try {
-          if (user) {
-            currentUserUID = user.uid;
-            document.getElementById("welcome").textContent = "Bienvenido: " + user.email;
+    auth.onAuthStateChanged(async user => {
+  try {
+    if (user) {
+      currentUserUID = user.uid;
+      document.getElementById("welcome").textContent = "Bienvenido: " + user.email;
+      document.getElementById("unlockBtn").disabled = false; // ✅ Habilita el botón
 
-            const doc = await db.collection("users").doc(currentUserUID).get();
-            unlockedCards = doc.exists ? doc.data().unlockedCards || [] : [];
-            renderCards();
-          } else {
-            console.log("🔁 No hay sesión. Redirigiendo en 1s...");
-            setTimeout(() => {
-              if (!auth.currentUser) {
-                window.location.href = "login.html";
-              }
-            }, 1000);
-          }
-        } catch (e) {
-          console.error("❌ Error verificando sesión:", e);
-          alert("Error al cargar la sesión.");
+      const doc = await db.collection("users").doc(currentUserUID).get();
+      unlockedCards = doc.exists ? doc.data().unlockedCards || [] : [];
+      renderCards();
+    } else {
+      document.getElementById("unlockBtn").disabled = true; // ✅ Bloquea el botón si no hay sesión
+      console.log("🔁 No hay sesión. Redirigiendo en 1s...");
+      setTimeout(() => {
+        if (!auth.currentUser) {
           window.location.href = "login.html";
         }
-      });
+      }, 1000);
+    }
+  } catch (e) {
+    console.error("❌ Error verificando sesión:", e);
+    alert("Error al cargar la sesión.");
+    window.location.href = "login.html";
+  }
+});
     });
 
     function renderCards() {
