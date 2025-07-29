@@ -38,6 +38,11 @@
       cursor: pointer;
     }
 
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
     #cardGrid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -127,7 +132,7 @@
     <img id="logo" src="logo.png" alt="Logo" />
     <h1>The Inside and the Boy – Cards</h1>
     <input type="text" id="codeInput" placeholder="Ingresa código">
-    <button id="unlockBtn">Desbloquear</button>
+    <button id="unlockBtn" disabled>Desbloquear</button>
     <button id="logoutBtn">Cerrar sesión</button>
     <p id="welcome"></p>
   </header>
@@ -165,36 +170,41 @@
     let unlockedCards = [];
 
     window.addEventListener("DOMContentLoaded", () => {
-      document.getElementById("unlockBtn").addEventListener("click", unlockCard);
-      document.getElementById("logoutBtn").addEventListener("click", () => {
+      const unlockBtn = document.getElementById("unlockBtn");
+      const logoutBtn = document.getElementById("logoutBtn");
+
+      unlockBtn.disabled = true;
+
+      unlockBtn.addEventListener("click", unlockCard);
+      logoutBtn.addEventListener("click", () => {
         auth.signOut().then(() => window.location.href = "login.html");
       });
 
-    auth.onAuthStateChanged(async user => {
-  try {
-    if (user) {
-      currentUserUID = user.uid;
-      document.getElementById("welcome").textContent = "Bienvenido: " + user.email;
-      document.getElementById("unlockBtn").disabled = false; // ✅ Habilita el botón
+      auth.onAuthStateChanged(async user => {
+        try {
+          if (user) {
+            currentUserUID = user.uid;
+            document.getElementById("welcome").textContent = "Bienvenido: " + user.email;
+            unlockBtn.disabled = false;
 
-      const doc = await db.collection("users").doc(currentUserUID).get();
-      unlockedCards = doc.exists ? doc.data().unlockedCards || [] : [];
-      renderCards();
-    } else {
-      document.getElementById("unlockBtn").disabled = true; // ✅ Bloquea el botón si no hay sesión
-      console.log("🔁 No hay sesión. Redirigiendo en 1s...");
-      setTimeout(() => {
-        if (!auth.currentUser) {
+            const doc = await db.collection("users").doc(currentUserUID).get();
+            unlockedCards = doc.exists ? doc.data().unlockedCards || [] : [];
+            renderCards();
+          } else {
+            unlockBtn.disabled = true;
+            console.log("🔁 No hay sesión. Redirigiendo en 1s...");
+            setTimeout(() => {
+              if (!auth.currentUser) {
+                window.location.href = "login.html";
+              }
+            }, 1000);
+          }
+        } catch (e) {
+          console.error("❌ Error verificando sesión:", e);
+          alert("Error al cargar la sesión.");
           window.location.href = "login.html";
         }
-      }, 1000);
-    }
-  } catch (e) {
-    console.error("❌ Error verificando sesión:", e);
-    alert("Error al cargar la sesión.");
-    window.location.href = "login.html";
-  }
-});
+      });
     });
 
     function renderCards() {
@@ -235,39 +245,39 @@
       });
     }
 
-async function unlockCard() {
-  const input = document.getElementById("codeInput").value.trim().toUpperCase();
+    async function unlockCard() {
+      const input = document.getElementById("codeInput").value.trim().toUpperCase();
 
-  if (!currentUserUID) {
-    alert("⚠️ No se ha iniciado sesión correctamente.");
-    return;
-  }
+      if (!currentUserUID) {
+        alert("⚠️ No se ha iniciado sesión correctamente.");
+        return;
+      }
 
-  const match = Object.entries(cardData).find(([id, data]) => data.code === input);
+      const match = Object.entries(cardData).find(([id, data]) => data.code === input);
 
-  if (!match) {
-    alert("❌ Código inválido.");
-    return;
-  }
+      if (!match) {
+        alert("❌ Código inválido.");
+        return;
+      }
 
-  const [cardId] = match;
+      const [cardId] = match;
 
-  if (unlockedCards.includes(cardId)) {
-    alert("⚠️ Ya tienes esta carta.");
-    return;
-  }
+      if (unlockedCards.includes(cardId)) {
+        alert("⚠️ Ya tienes esta carta.");
+        return;
+      }
 
-  try {
-    await db.collection("users").doc(currentUserUID).update({
-      unlockedCards: firebase.firestore.FieldValue.arrayUnion(cardId)
-    });
-    unlockedCards.push(cardId);
-    renderCards();
-    alert("✅ Carta desbloqueada.");
-  } catch (error) {
-    console.error("❌ Error al desbloquear carta:", error);
-    alert("Hubo un error al intentar desbloquear la carta.");
-  }
+      try {
+        await db.collection("users").doc(currentUserUID).update({
+          unlockedCards: firebase.firestore.FieldValue.arrayUnion(cardId)
+        });
+        unlockedCards.push(cardId);
+        renderCards();
+        alert("✅ Carta desbloqueada.");
+      } catch (error) {
+        console.error("❌ Error al desbloquear carta:", error);
+        alert("Hubo un error al intentar desbloquear la carta.");
+      }
     }
   </script>
 </body>
