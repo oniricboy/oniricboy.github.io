@@ -20,9 +20,9 @@
     }
   </style>
 
-  <!-- Firebase SDK (v10 compat) -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <!-- Firebase v9.22 compat (clásico, sin módulos) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 </head>
 <body>
   <h2>Log in</h2>
@@ -50,10 +50,10 @@
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
 
-      // 🔒 Establecer persistencia local
       auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
         .then(() => auth.signInWithEmailAndPassword(email, password))
         .then(() => {
+          console.log("✅ Login correcto");
           window.location.href = "gallery.html";
         })
         .catch((error) => {
@@ -63,4 +63,3 @@
   </script>
 </body>
 </html>
-
