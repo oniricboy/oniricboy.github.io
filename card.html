@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title> Cards</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'DM Sans', sans-serif;
+      background-color: #fff;
+      color: #000;
+      text-align: center;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .logo img {
+      height: 60px;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+      margin: 0;
+      padding: 0;
+      position: relative;
+    }
+
+    nav li {
+      position: relative;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #000;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    nav ul li:hover .dropdown {
+      display: block;
+    }
+
+    .dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 0.5rem 0;
+      z-index: 10;
+    }
+
+    .dropdown a {
+      display: block;
+      padding: 0.5rem 1rem;
+      white-space: nowrap;
+    }
+
+    .dropdown a:hover {
+      background-color: #f3f3f3;
+    }
+
+    .socials a {
+      color: #000;
+      font-size: 1.1rem;
+      margin-left: 1.2rem;
+      transition: opacity 0.3s ease;
+    }
+
+    .socials a:hover {
+      opacity: 0.6;
+    }
+
+    #codeInput {
+      padding: 10px;
+      width: 250px;
+      margin: 20px 5px 0 0;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 20px 5px 0 0;
+      cursor: pointer;
+    }
+
+    #logoutBtn {
+      background-color: #f44336;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+    }
+
+    #cardGrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+      padding: 30px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .card {
+      perspective: 1000px;
+    }
+
+    .card-inner {
+      position: relative;
+      width: 150px;
+      height: 210px;
+      transform-style: preserve-3d;
+      transition: transform 0.6s;
+    }
+
+    .card-inner.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+      backface-visibility: hidden;
+    }
+
+    .card-back {
+      transform: rotateY(0deg);
+    }
+
+    .card-front {
+      transform: rotateY(180deg);
+    }
+
+    #modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+
+    #modal img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
+    }
+
+    #closeModal {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 24px;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="img/logo.png" alt="oniricboy logo">
+    </div>
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li>
+          <a href="#">Work ▾</a>
+          <ul class="dropdown">
+            <li><a href="/work/2023-2024/">2023–2024</a></li>
+            <li><a href="/work/2019-2021/">2019–2021</a></li>
+            <li><a href="/work/2017-2018/">2017–2018</a></li>
+            <li><a href="/work/2015-2016/">2015–2016</a></li>   
+          </ul>
+        </li>
+        <li>
+          <a href="#">Project ▾</a>
+          <ul class="dropdown">
+            <li><a href="/project/inside/">The Inside and the Boy</a></li>
+          </ul>
+        </li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="register.html">Card</a></li>
+      </ul>
+    </nav>
+    <div class="socials">
+      <a href="https://instagram.com/_oniricboy" target="_blank"><i class="fab fa-instagram"></i></a>
+      <a href="https://twitter.com/_oniricboy" target="_blank"><i class="fab fa-twitter"></i></a>
+    </div>
+  </header>
+
+  <div>
+    <input type="text" id="codeInput" placeholder="Enter unlock code">
+    <button id="unlockBtn">Unlock</button>
+    <button id="logoutBtn">Logout</button>
+  </div>
+
+  <div id="cardGrid">
+    <!-- Dynamic card container -->
+    <div class="card" data-cardid="card01">
+      <div class="card-inner" id="card01-inner">
+        <img src="cards/back.png" class="card-back" alt="Back">
+        <img src="cards/card01.png" class="card-front" alt="Card 01">
+      </div>
+    </div>
+    <div class="card" data-cardid="card02">
+      <div class="card-inner" id="card02-inner">
+        <img src="cards/back.png" class="card-back" alt="Back">
+        <img src="cards/card02.png" class="card-front" alt="Card 02">
+      </div>
+    </div>
+    <div class="card" data-cardid="card03">
+      <div class="card-inner" id="card03-inner">
+        <img src="cards/back.png" class="card-back" alt="Back">
+        <img src="cards/card03.png" class="card-front" alt="Card 03">
+      </div>
+    </div>
+  </div>
+
+  <div id="modal">
+    <span id="closeModal">×</span>
+    <img id="modalImage" src="" alt="Zoomed Card">
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDyvWRTf8T01x8n2Sm_rOofPfkwt9u_mtk",
+      authDomain: "oniricboy-cards.firebaseapp.com",
+      projectId: "oniricboy-cards",
+      storageBucket: "oniricboy-cards.appspot.com",
+      messagingSenderId: "206699659339",
+      appId: "1:206699659339:web:78b2b5d5ed4d642c4bcdce"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+
+    auth.onAuthStateChanged(async user => {
+      if (!user) return (window.location.href = "login.html");
+      const doc = await db.collection("users").doc(user.uid).get();
+      const unlocked = doc.exists ? doc.data().unlockedCards || [] : [];
+
+      unlocked.forEach(id => {
+        const el = document.getElementById(id + "-inner");
+        if (el) el.classList.add("flipped");
+      });
+    });
+
+    document.getElementById("unlockBtn").onclick = async () => {
+      const code = document.getElementById("codeInput").value.trim().toLowerCase();
+      const map = { card01: "card01", card02: "card02", card03: "card03" };
+      const cardId = map[code];
+      if (!cardId) return alert("❌ Invalid code.");
+
+      const user = auth.currentUser;
+      if (!user) return window.location.href = "login.html";
+
+      const cardEl = document.getElementById(cardId + "-inner");
+      if (cardEl && cardEl.classList.contains("flipped")) return alert("⚠️ Already unlocked.");
+
+      await db.collection("users").doc(user.uid).update({
+        unlockedCards: firebase.firestore.FieldValue.arrayUnion(cardId)
+      });
+      if (cardEl) cardEl.classList.add("flipped");
+      alert("✅ Card unlocked!");
+    };
+
+    document.getElementById("logoutBtn").onclick = () => {
+      auth.signOut().then(() => (window.location.href = "login.html"));
+    };
+
+    document.querySelectorAll(".card").forEach(card => {
+      card.onclick = () => {
+        const id = card.dataset.cardid;
+        const el = document.getElementById(id + "-inner");
+        if (el && el.classList.contains("flipped")) {
+          document.getElementById("modalImage").src = "cards/" + id + ".png";
+          document.getElementById("modal").style.display = "flex";
+        }
+      };
+    });
+
+    document.getElementById("closeModal").onclick = () => {
+      document.getElementById("modal").style.display = "none";
+    };
+    document.getElementById("modal").onclick = e => {
+      if (e.target.id === "modal") document.getElementById("modal").style.display = "none";
+    };
+  </script>
+</body>
+</html>
