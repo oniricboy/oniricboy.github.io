@@ -3,272 +3,186 @@
 <head>
   <meta charset="UTF-8" />
   <title>Card</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
   <style>
     body {
-      margin: 0;
-      font-family: 'DM Sans', sans-serif;
-      background-color: #fff;
-      color: #000;
-      text-align: center;
+      font-family: Arial, sans-serif;
+      margin: 20px;
     }
-
-    header {
+    .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1.5rem 2rem;
-      border-bottom: 1px solid #eee;
+      margin-bottom: 20px;
     }
-
-    .logo img {
-      height: 60px;
-    }
-
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 2rem;
+    .header h2 {
       margin: 0;
-      padding: 0;
-      position: relative;
     }
-
-    nav li {
-      position: relative;
-    }
-
-    nav a {
-      text-decoration: none;
-      color: #000;
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-
-    nav ul li:hover .dropdown {
-      display: block;
-    }
-
-    .dropdown {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background: #fff;
-      border: 1px solid #ddd;
-      padding: 0.5rem 0;
-      z-index: 10;
-    }
-
-    .dropdown a {
-      display: block;
-      padding: 0.5rem 1rem;
-      white-space: nowrap;
-    }
-
-    .dropdown a:hover {
-      background-color: #f3f3f3;
-    }
-
-    .socials a {
-      color: #000;
-      font-size: 1.1rem;
-      margin-left: 1.2rem;
-      transition: opacity 0.3s ease;
-    }
-
-    .socials a:hover {
-      opacity: 0.6;
-    }
-
-    #codeInput {
-      padding: 10px;
-      width: 250px;
-      margin: 20px 5px 0 0;
-    }
-
-    button {
-      padding: 10px 20px;
-      margin: 20px 5px 0 0;
-      cursor: pointer;
-    }
-
     #logoutBtn {
       background-color: #f44336;
       color: #fff;
       border: none;
+      padding: 10px 20px;
+      cursor: pointer;
       border-radius: 4px;
     }
-
-    #cardGrid {
+    #logoutBtn:hover {
+      background-color: #d32f2f;
+    }
+    #codeInput {
+      padding: 8px;
+      width: 200px;
+      max-width: 80%;
+      margin-right: 5px;
+    }
+    #unlockBtn {
+      padding: 8px 16px;
+      cursor: pointer;
+    }
+    .card-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 20px;
-      padding: 30px;
-      max-width: 1000px;
-      margin: auto;
+      gap: 15px;
+      justify-items: center;
     }
-
     .card {
       perspective: 1000px;
     }
-
     .card-inner {
       position: relative;
       width: 150px;
-      height: 210px;
+      /* If cards are not square, omit fixed height to maintain aspect ratio */
       transform-style: preserve-3d;
       transition: transform 0.6s;
     }
-
     .card-inner.flipped {
       transform: rotateY(180deg);
     }
-
     .card-front, .card-back {
-      position: absolute;
       width: 100%;
-      height: 100%;
-      border-radius: 10px;
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
       backface-visibility: hidden;
     }
-
-    .card-back {
-      transform: rotateY(0deg);
-    }
-
     .card-front {
       transform: rotateY(180deg);
     }
-
+    .card-back {
+      transform: rotateY(0deg);
+    }
+    /* Modal styles */
     #modal {
       display: none;
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background: rgba(0,0,0,0.8);
-      justify-content: center;
+      background: rgba(0, 0, 0, 0.8);
       align-items: center;
-      z-index: 10;
+      justify-content: center;
+      z-index: 100;
     }
-
-    #modal img {
+    #modalContent {
+      position: relative;
       max-width: 90%;
       max-height: 90%;
-      border-radius: 10px;
     }
-
+    #modalImage {
+      max-width: 100%;
+      max-height: 100%;
+      display: block;
+    }
     #closeModal {
       position: absolute;
-      top: 10px;
-      right: 20px;
-      font-size: 24px;
-      color: white;
+      top: -30px;
+      right: 0;
+      background: #fff;
+      color: #000;
+      padding: 5px 10px;
       cursor: pointer;
+      font-weight: bold;
+      border-radius: 3px;
     }
   </style>
+  <!-- Firebase SDKs (v10 compat mode) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
-  <header>
-    <div class="logo">
-      <img src="img/logo.png" alt="oniricboy logo">
-    </div>
-    <nav>
-      <ul>
-        <li><a href="/">Home</a></li>
-        <li>
-          <a href="#">Work ▾</a>
-          <ul class="dropdown">
-            <li><a href="/work/2023-2024/">2023–2024</a></li>
-            <li><a href="/work/2019-2021/">2019–2021</a></li>
-            <li><a href="/work/2017-2018/">2017–2018</a></li>
-            <li><a href="/work/2015-2016/">2015–2016</a></li>
-          </ul>
-        </li>
-        <li>
-          <a href="#">Project ▾</a>
-          <ul class="dropdown">
-            <li><a href="/project/inside/">The Inside and the Boy</a></li>
-          </ul>
-        </li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="shop.html">Shop</a></li>
-        <li><a href="register.html">Card</a></li>
-      </ul>
-    </nav>
-    <div class="socials">
-      <a href="https://instagram.com/_oniricboy" target="_blank"><i class="fab fa-instagram"></i></a>
-      <a href="https://twitter.com/_oniricboy" target="_blank"><i class="fab fa-twitter"></i></a>
-    </div>
-  </header>
-
-  <div>
-    <input type="text" id="codeInput" placeholder="Enter unlock code">
-    <button id="unlockBtn">Unlock</button>
+  <div class="header">
+    <h2>Your Digital Cards</h2>
     <button id="logoutBtn">Logout</button>
   </div>
-
-  <div id="cardGrid">
-    <!-- Dynamic card container -->
+  <div>
+    <input type="text" id="codeInput" placeholder="Enter unlock code" />
+    <button id="unlockBtn">Unlock</button>
+  </div>
+  <div class="card-grid" id="cardGrid">
+    <!-- Card elements (initially showing back face) -->
     <div class="card" data-cardid="card01">
       <div class="card-inner" id="card01-inner">
-        <img src="cards/back.png" class="card-back" alt="Back">
-        <img src="cards/card01.png" class="card-front" alt="Card 01">
+        <img src="cards/back.png" alt="Card Back" class="card-back" />
+        <img src="cards/card01.png" alt="Card 01" class="card-front" />
       </div>
     </div>
     <div class="card" data-cardid="card02">
       <div class="card-inner" id="card02-inner">
-        <img src="cards/back.png" class="card-back" alt="Back">
-        <img src="cards/card02.png" class="card-front" alt="Card 02">
+        <img src="cards/back.png" alt="Card Back" class="card-back" />
+        <img src="cards/card02.png" alt="Card 02" class="card-front" />
       </div>
     </div>
     <div class="card" data-cardid="card03">
       <div class="card-inner" id="card03-inner">
-        <img src="cards/back.png" class="card-back" alt="Back">
-        <img src="cards/card03.png" class="card-front" alt="Card 03">
+        <img src="cards/back.png" alt="Card Back" class="card-back" />
+        <img src="cards/card03.png" alt="Card 03" class="card-front" />
       </div>
+    </div>
+    <!-- Add more cards as needed, following the same structure -->
+  </div>
+  <!-- Modal for zoomed-in card view -->
+  <div id="modal">
+    <div id="modalContent">
+      <span id="closeModal">X</span>
+      <img id="modalImage" src="" alt="Card zoom view" />
     </div>
   </div>
 
-  <div id="modal">
-    <span id="closeModal">×</span>
-    <img id="modalImage" src="" alt="Zoomed Card">
-  </div>
-
   <script>
-    // Configuración de Firebase
+    // Firebase configuration (replace with your actual config if different)
     const firebaseConfig = {
-      apiKey: "AIzaSyDyvWRTf8T01x8n2Sm_rOofPfkwt9u_mtk",
+      apiKey: "AIzaSyDyvWRTf8T01x8n2Sm_rOoffpkwt9u_mtk",
       authDomain: "oniricboy-cards.firebaseapp.com",
       projectId: "oniricboy-cards",
       storageBucket: "oniricboy-cards.appspot.com",
       messagingSenderId: "206699659339",
       appId: "1:206699659339:web:78b2b5d5ed4d642c4bcdce"
     };
-
-    // Inicializar Firebase si aún no se ha inicializado
+    // Initialize Firebase app if not already initialized
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
     }
     const auth = firebase.auth();
     const db = firebase.firestore();
-
-    // Mantener la sesión activa con persistencia LOCAL
-    auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch((error) => {
-      console.error("Error al establecer persistencia:", error);
+    // Use local persistence for auth sessions
+    auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch((err) => {
+      console.error("Failed to set persistence:", err);
     });
-
-    // Verificar el estado de autenticación al cargar la página
+    // Logout button handler
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      auth.signOut().then(() => {
+        // Sign-out successful: redirect to login page
+        window.location.href = "login.html";
+      }).catch((error) => {
+        alert("Error logging out: " + error.message);
+      });
+    });
+    // Check authentication state on page load
     auth.onAuthStateChanged(async (user) => {
       if (user) {
-        // Usuario autenticado: mostrar sus tarjetas desbloqueadas
+        const uid = user.uid;
         try {
-          const userDoc = await db.collection("users").doc(user.uid).get();
+          const userDoc = await db.collection("users").doc(uid).get();
           let unlockedCards = [];
           if (userDoc.exists) {
             const data = userDoc.data();
@@ -276,96 +190,93 @@
               unlockedCards = data.unlockedCards;
             }
           } else {
-            // Si no existe documento del usuario, inicializar con tarjeta básica desbloqueada
+            // If no user document exists, create one with default unlocked card01
             unlockedCards = ["card01"];
-            await db.collection("users").doc(user.uid).set({ unlockedCards });
+            await db.collection("users").doc(uid).set({ unlockedCards: unlockedCards });
           }
-          // Marcar como volteadas las tarjetas ya desbloqueadas en la interfaz
+          // Reveal any cards that are already unlocked
           unlockedCards.forEach(cardId => {
-            const cardEl = document.getElementById(cardId + "-inner");
-            if (cardEl) {
-              cardEl.classList.add("flipped");
+            const cardInner = document.getElementById(cardId + "-inner");
+            if (cardInner) {
+              cardInner.classList.add("flipped");
             }
           });
         } catch (err) {
-          console.error("Error al obtener datos del usuario:", err);
-          alert("⚠️ Error al cargar tus tarjetas. Por favor, intenta de nuevo.");
+          console.error("Error fetching user data:", err);
+          alert("⚠️ Failed to load your cards. Please try again.");
         }
       } else {
-        // Usuario no autenticado: redirigir a la página de inicio de sesión
+        // No user is signed in – redirect to login page
+        alert("⚠️ You are not logged in.");
         window.location.href = "login.html";
       }
     });
-
-    // Evento para desbloquear una tarjeta con un código
+    // Valid unlock codes mapped to card IDs (example: code "card02" unlocks card02)
+    const codeToCardMap = {
+      "card01": "card01",
+      "card02": "card02",
+      "card03": "card03"
+      // Add more codes and corresponding cardIDs as needed
+    };
+    // Unlock button handler
     document.getElementById("unlockBtn").addEventListener("click", async () => {
-      const codeInput = document.getElementById("codeInput");
-      let code = codeInput.value.trim().toLowerCase();
+      const codeInputElem = document.getElementById("codeInput");
+      let code = codeInputElem.value.trim();
       if (!code) {
-        alert("Por favor ingresa un código.");
+        alert("Please enter a code.");
         return;
       }
-      const codeMap = { card01: "card01", card02: "card02", card03: "card03" };
-      if (!codeMap.hasOwnProperty(code)) {
-        alert("❌ Código inválido.");
+      code = code.toLowerCase();
+      if (!codeToCardMap.hasOwnProperty(code)) {
+        alert("❌ Invalid code.");
         return;
       }
-      const cardId = codeMap[code];
-      const cardEl = document.getElementById(cardId + "-inner");
-      // Si la tarjeta ya está desbloqueada, no permitir duplicados
-      if (cardEl && cardEl.classList.contains("flipped")) {
-        alert("⚠️ Esta tarjeta ya está desbloqueada.");
+      const cardId = codeToCardMap[code];
+      const cardInnerElem = document.getElementById(cardId + "-inner");
+      // If card is already unlocked, prevent duplicate unlocking
+      if (cardInnerElem && cardInnerElem.classList.contains("flipped")) {
+        alert("⚠️ This card is already unlocked.");
         return;
       }
       try {
+        // Add the card to unlockedCards array in Firestore
         const currentUser = auth.currentUser;
         if (!currentUser) {
-          // Si no hay usuario (sesión expirada), redirigir a login
+          alert("⚠️ You are not logged in.");
           window.location.href = "login.html";
           return;
         }
-        // Añadir la tarjeta desbloqueada a la lista en Firestore
         await db.collection("users").doc(currentUser.uid).update({
           unlockedCards: firebase.firestore.FieldValue.arrayUnion(cardId)
         });
-        // Voltear la tarjeta en la interfaz si existe
-        if (cardEl) {
-          cardEl.classList.add("flipped");
+        // Flip the card in the UI
+        if (cardInnerElem) {
+          cardInnerElem.classList.add("flipped");
         }
-        alert("✅ Tarjeta desbloqueada!");
-        codeInput.value = "";
+        alert("✅ Card unlocked!");
+        codeInputElem.value = "";  // clear the input
       } catch (error) {
-        console.error("Error al desbloquear la tarjeta:", error);
-        alert("Error: no se pudo desbloquear la tarjeta. Intenta nuevamente.");
+        console.error("Error unlocking card:", error);
+        alert("Error: Could not unlock the card. Please try again.");
       }
     });
-
-    // Evento para cerrar sesión (logout)
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      auth.signOut().then(() => {
-        window.location.href = "login.html";
-      }).catch((error) => {
-        alert("Error al cerrar sesión: " + error.message);
-      });
-    });
-
-    // Evento para mostrar la tarjeta en grande si está desbloqueada
-    document.querySelectorAll(".card").forEach(card => {
-      card.addEventListener("click", () => {
-        const cardId = card.getAttribute("data-cardid");
+    // Card click event (show zoomed image if card is unlocked)
+    document.querySelectorAll(".card").forEach(cardElem => {
+      cardElem.addEventListener("click", () => {
+        const cardId = cardElem.getAttribute("data-cardid");
         const cardInner = document.getElementById(cardId + "-inner");
         if (cardInner && cardInner.classList.contains("flipped")) {
-          // Mostrar la imagen de la tarjeta desbloqueada en el modal
+          // Card is revealed – show it in the modal
           document.getElementById("modalImage").src = "cards/" + cardId + ".png";
           document.getElementById("modal").style.display = "flex";
         }
       });
     });
-
-    // Eventos para cerrar el modal
+    // Modal close functionality
     document.getElementById("closeModal").addEventListener("click", () => {
       document.getElementById("modal").style.display = "none";
     });
+    // Close modal when clicking outside the image
     document.getElementById("modal").addEventListener("click", (e) => {
       if (e.target.id === "modal") {
         document.getElementById("modal").style.display = "none";
