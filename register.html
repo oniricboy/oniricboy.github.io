@@ -16,7 +16,7 @@
       background-color: #fff;
       color: #000;
       text-align: center;
-      padding-top: 100px;
+      padding-top: 0;
     }
 
     header {
@@ -25,11 +25,8 @@
       align-items: center;
       padding: 1.5rem 2rem;
       border-bottom: 1px solid #eee;
-      position: fixed;
-      top: 0;
-      width: 100%;
       background-color: #fff;
-      z-index: 100;
+      margin-bottom: 20px;
     }
 
     .logo img {
@@ -238,7 +235,7 @@
           });
         })
         .then(() => {
-          alert("✅ Cuenta creada con éxito.");
+          alert("✅ Account created successfully.");
           window.location.href = "gallery.html";
         })
         .catch((error) => {
