@@ -103,6 +103,12 @@
       cursor: pointer;
     }
 
+    .login-link {
+      display: block;
+      margin-top: 15px;
+      font-size: 0.9rem;
+    }
+
     @media screen and (max-width: 768px) {
       nav ul {
         flex-wrap: wrap;
@@ -169,6 +175,7 @@
   <input type="email" id="email" placeholder="Email"><br>
   <input type="password" id="password" placeholder="Password"><br>
   <button onclick="register()">Register</button>
+  <a href="login.html" class="login-link">Already have an account? Log in</a>
 
   <script>
     const firebaseConfig = {
@@ -212,3 +219,4 @@
   </script>
 </body>
 </html>
+
