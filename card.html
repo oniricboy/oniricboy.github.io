@@ -105,36 +105,47 @@
       }
     }
 
-    /* estilos originales de card.html */
     .header {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
-      margin: 20px;
+      margin: 30px 0;
     }
 
     .header h2 {
       margin: 0;
+      font-size: 1.8rem;
     }
 
     #logoutBtn {
-      background-color: #f44336;
+      background-color: #000;
       color: #fff;
       border: none;
-      padding: 10px 20px;
+      padding: 10px 24px;
       cursor: pointer;
       border-radius: 4px;
+      margin-top: 15px;
+      font-size: 0.9rem;
     }
 
     #logoutBtn:hover {
-      background-color: #d32f2f;
+      opacity: 0.7;
+    }
+
+    .code-entry {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .code-entry input,
+    .code-entry button {
+      margin: 5px;
     }
 
     #codeInput {
       padding: 8px;
       width: 200px;
       max-width: 80%;
-      margin: 20px 5px;
     }
 
     #unlockBtn {
@@ -254,18 +265,23 @@
         <li><a href="card.html">Card</a></li>
       </ul>
     </nav>
+
+    <div class="socials">
+      <a href="https://instagram.com/_oniricboy" target="_blank"><i class="fab fa-instagram"></i></a>
+      <a href="https://twitter.com/_oniricboy" target="_blank"><i class="fab fa-twitter"></i></a>
+    </div>
   </header>
 
-  <!-- Aquí empieza el contenido original de la página de cards -->
-<div class="header" style="justify-content: center; gap: 1rem;">
-  <i class="fas fa-user"></i>
-  <h2 style="margin: 0;">Your Cards</h2>
-  <button id="logoutBtn" style="background: none; border: none; cursor: pointer; font-size: 1rem;"><i class="fas fa-sign-out-alt"></i></button>
-</div>
-  <div>
+  <div class="header">
+    <h2>Your Cards</h2>
+    <button id="logoutBtn">Logout</button>
+  </div>
+
+  <div class="code-entry">
     <input type="text" id="codeInput" placeholder="Enter unlock code" />
     <button id="unlockBtn">Unlock</button>
   </div>
+
   <div class="card-grid" id="cardGrid">
     <div class="card" data-cardid="card01">
       <div class="card-inner" id="card01-inner">
@@ -295,7 +311,6 @@
   </div>
 
   <script>
-    // Firebase configuration (replace with your actual config if different)
     const firebaseConfig = {
       apiKey: "AIzaSyDyvWRTf8T01x8n2Sm_rOoffpkwt9u_mtk",
       authDomain: "oniricboy-cards.firebaseapp.com",
@@ -304,26 +319,26 @@
       messagingSenderId: "206699659339",
       appId: "1:206699659339:web:78b2b5d5ed4d642c4bcdce"
     };
-    // Initialize Firebase app if not already initialized
+
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
     }
+
     const auth = firebase.auth();
     const db = firebase.firestore();
-    // Use local persistence for auth sessions
+
     auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch((err) => {
       console.error("Failed to set persistence:", err);
     });
-    // Logout button handler
+
     document.getElementById("logoutBtn").addEventListener("click", () => {
       auth.signOut().then(() => {
-        // Sign-out successful: redirect to login page
         window.location.href = "login.html";
       }).catch((error) => {
         alert("Error logging out: " + error.message);
       });
     });
-    // Check authentication state on page load
+
     auth.onAuthStateChanged(async (user) => {
       if (user) {
         const uid = user.uid;
@@ -336,11 +351,10 @@
               unlockedCards = data.unlockedCards;
             }
           } else {
-            // If no user document exists, create one with default unlocked card01
             unlockedCards = ["card01"];
-            await db.collection("users").doc(uid).set({ unlockedCards: unlockedCards });
+            await db.collection("users").doc(uid).set({ unlockedCards });
           }
-          // Reveal any cards that are already unlocked
+
           unlockedCards.forEach(cardId => {
             const cardInner = document.getElementById(cardId + "-inner");
             if (cardInner) {
@@ -352,19 +366,17 @@
           alert("⚠️ Failed to load your cards. Please try again.");
         }
       } else {
-        // No user is signed in – redirect to login page
         alert("⚠️ You are not logged in.");
         window.location.href = "login.html";
       }
     });
-    // Valid unlock codes mapped to card IDs (example: code "card02" unlocks card02)
+
     const codeToCardMap = {
       "card01": "card01",
       "card02": "card02",
       "card03": "card03"
-      // Add more codes and corresponding cardIDs as needed
     };
-    // Unlock button handler
+
     document.getElementById("unlockBtn").addEventListener("click", async () => {
       const codeInputElem = document.getElementById("codeInput");
       let code = codeInputElem.value.trim();
@@ -379,60 +391,53 @@
       }
       const cardId = codeToCardMap[code];
       const cardInnerElem = document.getElementById(cardId + "-inner");
-      // If card is already unlocked, prevent duplicate unlocking
       if (cardInnerElem && cardInnerElem.classList.contains("flipped")) {
         alert("⚠️ This card is already unlocked.");
         return;
       }
+
       try {
-        // Add the card to unlockedCards array in Firestore
         const currentUser = auth.currentUser;
         if (!currentUser) {
-          alert("⚠️ You are not logged in.");
           window.location.href = "login.html";
           return;
         }
+
         await db.collection("users").doc(currentUser.uid).update({
           unlockedCards: firebase.firestore.FieldValue.arrayUnion(cardId)
         });
-        // Flip the card in the UI
+
         if (cardInnerElem) {
           cardInnerElem.classList.add("flipped");
         }
         alert("✅ Card unlocked!");
-        codeInputElem.value = "";  // clear the input
+        codeInputElem.value = "";
       } catch (error) {
         console.error("Error unlocking card:", error);
         alert("Error: Could not unlock the card. Please try again.");
       }
     });
-    // Card click event (show zoomed image if card is unlocked)
+
     document.querySelectorAll(".card").forEach(cardElem => {
       cardElem.addEventListener("click", () => {
         const cardId = cardElem.getAttribute("data-cardid");
         const cardInner = document.getElementById(cardId + "-inner");
         if (cardInner && cardInner.classList.contains("flipped")) {
-          // Card is revealed – show it in the modal
           document.getElementById("modalImage").src = "cards/" + cardId + ".png";
           document.getElementById("modal").style.display = "flex";
         }
       });
     });
-    // Modal close functionality
+
     document.getElementById("closeModal").addEventListener("click", () => {
       document.getElementById("modal").style.display = "none";
     });
-    // Close modal when clicking outside the image
+
     document.getElementById("modal").addEventListener("click", (e) => {
       if (e.target.id === "modal") {
         document.getElementById("modal").style.display = "none";
       }
     });
   </script>
-  
-   <div class="socials">
-      <a href="https://instagram.com/_oniricboy" target="_blank"><i class="fab fa-instagram"></i></a>
-      <a href="https://twitter.com/_oniricboy" target="_blank"><i class="fab fa-twitter"></i></a>
-    </div>
 </body>
 </html>
