@@ -16,7 +16,7 @@
       background-color: #fff;
       color: #000;
       text-align: center;
-      padding-top: 150px;
+      padding-top: 100px;
     }
 
     header {
@@ -109,6 +109,30 @@
       font-size: 0.9rem;
     }
 
+    .patreon-note {
+      margin-top: 40px;
+      font-size: 0.95rem;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 1rem;
+      border: 1px solid #eee;
+      border-radius: 6px;
+    }
+
+    .patreon-note a {
+      color: #000;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      margin-top: 8px;
+    }
+
+    .patreon-note i {
+      margin-right: 6px;
+    }
+
     @media screen and (max-width: 768px) {
       nav ul {
         flex-wrap: wrap;
@@ -176,6 +200,11 @@
   <input type="password" id="password" placeholder="Password"><br>
   <button onclick="register()">Register</button>
   <a href="login.html" class="login-link">Already have an account? Log in</a>
+
+  <div class="patreon-note">
+    <p><i class="fas fa-gift"></i> Some cards are exclusive to <strong>Patreon</strong> supporters. If you support me on Patreon, you can unlock special cards each month using secret codes!</p>
+    <a href="https://patreon.com/oniricboy" target="_blank"><i class="fab fa-patreon"></i> patreon.com/oniricboy</a>
+  </div>
 
   <script>
     const firebaseConfig = {
