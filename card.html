@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title> Cards</title>
+  <title>Card</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
   <style>
@@ -186,7 +186,7 @@
             <li><a href="/work/2023-2024/">2023–2024</a></li>
             <li><a href="/work/2019-2021/">2019–2021</a></li>
             <li><a href="/work/2017-2018/">2017–2018</a></li>
-            <li><a href="/work/2015-2016/">2015–2016</a></li>   
+            <li><a href="/work/2015-2016/">2015–2016</a></li>
           </ul>
         </li>
         <li>
@@ -241,6 +241,7 @@
   </div>
 
   <script>
+    // Configuración de Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyDyvWRTf8T01x8n2Sm_rOofPfkwt9u_mtk",
       authDomain: "oniricboy-cards.firebaseapp.com",
@@ -250,63 +251,126 @@
       appId: "1:206699659339:web:78b2b5d5ed4d642c4bcdce"
     };
 
-    firebase.initializeApp(firebaseConfig);
+    // Inicializar Firebase si aún no se ha inicializado
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+    // Mantener la sesión activa con persistencia LOCAL
+    auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch((error) => {
+      console.error("Error al establecer persistencia:", error);
+    });
 
-    auth.onAuthStateChanged(async user => {
-      if (!user) return (window.location.href = "login.html");
-      const doc = await db.collection("users").doc(user.uid).get();
-      const unlocked = doc.exists ? doc.data().unlockedCards || [] : [];
+    // Verificar el estado de autenticación al cargar la página
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        // Usuario autenticado: mostrar sus tarjetas desbloqueadas
+        try {
+          const userDoc = await db.collection("users").doc(user.uid).get();
+          let unlockedCards = [];
+          if (userDoc.exists) {
+            const data = userDoc.data();
+            if (data.unlockedCards) {
+              unlockedCards = data.unlockedCards;
+            }
+          } else {
+            // Si no existe documento del usuario, inicializar con tarjeta básica desbloqueada
+            unlockedCards = ["card01"];
+            await db.collection("users").doc(user.uid).set({ unlockedCards });
+          }
+          // Marcar como volteadas las tarjetas ya desbloqueadas en la interfaz
+          unlockedCards.forEach(cardId => {
+            const cardEl = document.getElementById(cardId + "-inner");
+            if (cardEl) {
+              cardEl.classList.add("flipped");
+            }
+          });
+        } catch (err) {
+          console.error("Error al obtener datos del usuario:", err);
+          alert("⚠️ Error al cargar tus tarjetas. Por favor, intenta de nuevo.");
+        }
+      } else {
+        // Usuario no autenticado: redirigir a la página de inicio de sesión
+        window.location.href = "login.html";
+      }
+    });
 
-      unlocked.forEach(id => {
-        const el = document.getElementById(id + "-inner");
-        if (el) el.classList.add("flipped");
+    // Evento para desbloquear una tarjeta con un código
+    document.getElementById("unlockBtn").addEventListener("click", async () => {
+      const codeInput = document.getElementById("codeInput");
+      let code = codeInput.value.trim().toLowerCase();
+      if (!code) {
+        alert("Por favor ingresa un código.");
+        return;
+      }
+      const codeMap = { card01: "card01", card02: "card02", card03: "card03" };
+      if (!codeMap.hasOwnProperty(code)) {
+        alert("❌ Código inválido.");
+        return;
+      }
+      const cardId = codeMap[code];
+      const cardEl = document.getElementById(cardId + "-inner");
+      // Si la tarjeta ya está desbloqueada, no permitir duplicados
+      if (cardEl && cardEl.classList.contains("flipped")) {
+        alert("⚠️ Esta tarjeta ya está desbloqueada.");
+        return;
+      }
+      try {
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+          // Si no hay usuario (sesión expirada), redirigir a login
+          window.location.href = "login.html";
+          return;
+        }
+        // Añadir la tarjeta desbloqueada a la lista en Firestore
+        await db.collection("users").doc(currentUser.uid).update({
+          unlockedCards: firebase.firestore.FieldValue.arrayUnion(cardId)
+        });
+        // Voltear la tarjeta en la interfaz si existe
+        if (cardEl) {
+          cardEl.classList.add("flipped");
+        }
+        alert("✅ Tarjeta desbloqueada!");
+        codeInput.value = "";
+      } catch (error) {
+        console.error("Error al desbloquear la tarjeta:", error);
+        alert("Error: no se pudo desbloquear la tarjeta. Intenta nuevamente.");
+      }
+    });
+
+    // Evento para cerrar sesión (logout)
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      auth.signOut().then(() => {
+        window.location.href = "login.html";
+      }).catch((error) => {
+        alert("Error al cerrar sesión: " + error.message);
       });
     });
 
-    document.getElementById("unlockBtn").onclick = async () => {
-      const code = document.getElementById("codeInput").value.trim().toLowerCase();
-      const map = { card01: "card01", card02: "card02", card03: "card03" };
-      const cardId = map[code];
-      if (!cardId) return alert("❌ Invalid code.");
-
-      const user = auth.currentUser;
-      if (!user) return window.location.href = "login.html";
-
-      const cardEl = document.getElementById(cardId + "-inner");
-      if (cardEl && cardEl.classList.contains("flipped")) return alert("⚠️ Already unlocked.");
-
-      await db.collection("users").doc(user.uid).update({
-        unlockedCards: firebase.firestore.FieldValue.arrayUnion(cardId)
-      });
-      if (cardEl) cardEl.classList.add("flipped");
-      alert("✅ Card unlocked!");
-    };
-
-    document.getElementById("logoutBtn").onclick = () => {
-      auth.signOut().then(() => (window.location.href = "login.html"));
-    };
-
+    // Evento para mostrar la tarjeta en grande si está desbloqueada
     document.querySelectorAll(".card").forEach(card => {
-      card.onclick = () => {
-        const id = card.dataset.cardid;
-        const el = document.getElementById(id + "-inner");
-        if (el && el.classList.contains("flipped")) {
-          document.getElementById("modalImage").src = "cards/" + id + ".png";
+      card.addEventListener("click", () => {
+        const cardId = card.getAttribute("data-cardid");
+        const cardInner = document.getElementById(cardId + "-inner");
+        if (cardInner && cardInner.classList.contains("flipped")) {
+          // Mostrar la imagen de la tarjeta desbloqueada en el modal
+          document.getElementById("modalImage").src = "cards/" + cardId + ".png";
           document.getElementById("modal").style.display = "flex";
         }
-      };
+      });
     });
 
-    document.getElementById("closeModal").onclick = () => {
+    // Eventos para cerrar el modal
+    document.getElementById("closeModal").addEventListener("click", () => {
       document.getElementById("modal").style.display = "none";
-    };
-    document.getElementById("modal").onclick = e => {
-      if (e.target.id === "modal") document.getElementById("modal").style.display = "none";
-    };
+    });
+    document.getElementById("modal").addEventListener("click", (e) => {
+      if (e.target.id === "modal") {
+        document.getElementById("modal").style.display = "none";
+      }
+    });
   </script>
 </body>
 </html>
