@@ -366,7 +366,6 @@
           alert("⚠️ Failed to load your cards. Please try again.");
         }
       } else {
-        alert("⚠️ You are not logged in.");
         window.location.href = "login.html";
       }
     });
@@ -399,6 +398,7 @@
       try {
         const currentUser = auth.currentUser;
         if (!currentUser) {
+          alert("⚠️ You are not logged in.");
           window.location.href = "login.html";
           return;
         }
