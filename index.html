@@ -4,6 +4,29 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>oniricboy</title>
+
+  <!-- Favicon -->
+  <link rel="icon" href="img/favicon.png" type="image/png">
+
+  <!-- Web Manifest -->
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="oniricboy">
+  <meta property="og:image" content="https://oniricboy.com/img/favicon.png">
+  <meta property="og:url" content="https://oniricboy.com">
+  <meta property="og:type" content="website">
+
+  <!-- Schema Logo -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "url": "https://oniricboy.com",
+    "logo": "https://oniricboy.com/img/favicon.png"
+  }
+  </script>
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
   <style>
@@ -98,41 +121,41 @@
     }
 
     @media screen and (max-width: 768px) {
-nav ul {
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.6rem;
-}
+      nav ul {
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.6rem;
+      }
 
-  header {
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-  }
+      header {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
 
-  .socials {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 0;
-    margin-bottom: 0;
-    gap: 0rem;
-  }
-      
-.hero img {
-    width: 100%;
-    height: 55vh;
-    object-fit: cover;
-    object-position: center;
-  }
-}
+      .socials {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 0;
+        margin-bottom: 0;
+        gap: 0rem;
+      }
+
+      .hero img {
+        width: 100%;
+        height: 55vh;
+        object-fit: cover;
+        object-position: center;
+      }
+    }
   </style>
 </head>
 <body>
   
   <header>
     <div class="logo">
-      <img src="img/logo.png" alt="oniricboy logo">
+      <img src="img/logo.png" alt="">
     </div>
 
     <nav>
@@ -141,17 +164,18 @@ nav ul {
         <li>
           <a href="#">Work ▾</a>
           <ul class="dropdown">
-          <li><a href="/work/2023-2024/">2023–2024</a></li>
-          <li><a href="/work/2019-2021/">2019–2021</a></li>
-          <li><a href="/work/2017-2018/">2017–2018</a></li>
-          <li><a href="/work/2015-2016/">2015–2016</a></li>   
+            <li><a href="/work/2023-2024/">2023–2024</a></li>
+            <li><a href="/work/2019-2021/">2019–2021</a></li>
+            <li><a href="/work/2017-2018/">2017–2018</a></li>
+            <li><a href="/work/2015-2016/">2015–2016</a></li>   
           </ul>
-       <li>
+        </li>
+        <li>
           <a href="#">Project ▾</a>
           <ul class="dropdown">
-          <li><a href="/project/inside/">The Inside and the Boy</a></li>
+            <li><a href="/project/inside/">The Inside and the Boy</a></li>
           </ul>
-      </li>
+        </li>
         <li><a href="about.html">About</a></li>
         <li><a href="contact.html">Contact</a></li>
         <li><a href="shop.html">Shop</a></li>
