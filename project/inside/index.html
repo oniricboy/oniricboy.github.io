@@ -13,6 +13,7 @@
       --muted: #6b6b6b;
       --line: #eee;
       --bg: #fff;
+      --gap: 14px;
     }
 
     * { box-sizing: border-box; }
@@ -240,9 +241,11 @@
       letter-spacing: -0.01em;
     }
 
-    .period .image-grid { column-count: initial; display: flex; gap: 1.25rem; align-items: flex-start; }
-    .period .image-grid .col { flex: 1; min-width: 0; }
-    .period .image-grid button { margin-bottom: 1.25rem; }
+    /* Justified rows: every image in a row shares the same height, no cropping */
+    .period .image-grid { column-count: initial; display: flex; flex-direction: column; gap: var(--gap); }
+    .period .image-grid .row { display: flex; gap: var(--gap); }
+    .period .image-grid button { margin: 0; flex: none; border-radius: 4px; }
+    .period .image-grid img { width: 100%; height: 100%; object-fit: cover; }
 
     /* ---------- Lightbox ---------- */
     .lightbox {
@@ -295,6 +298,8 @@
     /* ---------- Responsive ---------- */
     @media screen and (max-width: 1024px) {
       .image-grid { column-count: 2; }
+      .period { grid-template-columns: 180px 1fr; gap: 2rem; }
+      .period-head h2 { font-size: 2.3rem; }
     }
 
     @media screen and (max-width: 768px) {
@@ -398,7 +403,7 @@
       <span class="period-count"></span>
     </div>
     <div class="image-grid">
-      <!-- Add images here, e.g. <button><img src="/project/inside/inside_29.jpg" alt="The Inside and the Boy — 2026" loading="lazy"></button> -->
+      <!-- Add images here, e.g. <button><img src="/project/inside/inside_29.jpg" alt="The Inside and the Boy — 2026" decoding="async"></button> -->
     </div>
   </section>
 
@@ -410,14 +415,14 @@
       <span class="period-count"></span>
     </div>
     <div class="image-grid">
-      <button><img src="/project/inside/inside_28.jpg" alt="The Inside and the Boy — 2023–2024" loading="lazy"></button>
-      <button><img src="/project/inside/inside_27.jpg" alt="The Inside and the Boy — 2023–2024" loading="lazy"></button>
-      <button><img src="/project/inside/inside_26.jpg" alt="The Inside and the Boy — 2023–2024" loading="lazy"></button>
-      <button><img src="/project/inside/inside_25.jpg" alt="The Inside and the Boy — 2023–2024" loading="lazy"></button>
-      <button><img src="/project/inside/inside_24.jpg" alt="The Inside and the Boy — 2023–2024" loading="lazy"></button>
-      <button><img src="/project/inside/inside_23.jpg" alt="The Inside and the Boy — 2023–2024" loading="lazy"></button>
-      <button><img src="/project/inside/inside_22.jpg" alt="The Inside and the Boy — 2023–2024" loading="lazy"></button>
-      <button><img src="/project/inside/inside_21.jpg" alt="The Inside and the Boy — 2023–2024" loading="lazy"></button>
+      <button><img src="/project/inside/inside_28.jpg" alt="The Inside and the Boy — 2023–2024" decoding="async"></button>
+      <button><img src="/project/inside/inside_27.jpg" alt="The Inside and the Boy — 2023–2024" decoding="async"></button>
+      <button><img src="/project/inside/inside_26.jpg" alt="The Inside and the Boy — 2023–2024" decoding="async"></button>
+      <button><img src="/project/inside/inside_25.jpg" alt="The Inside and the Boy — 2023–2024" decoding="async"></button>
+      <button><img src="/project/inside/inside_24.jpg" alt="The Inside and the Boy — 2023–2024" decoding="async"></button>
+      <button><img src="/project/inside/inside_23.jpg" alt="The Inside and the Boy — 2023–2024" decoding="async"></button>
+      <button><img src="/project/inside/inside_22.jpg" alt="The Inside and the Boy — 2023–2024" decoding="async"></button>
+      <button><img src="/project/inside/inside_21.jpg" alt="The Inside and the Boy — 2023–2024" decoding="async"></button>
     </div>
   </section>
 
@@ -429,10 +434,10 @@
       <span class="period-count"></span>
     </div>
     <div class="image-grid">
-      <button><img src="/project/inside/inside_20.jpg" alt="The Inside and the Boy — 2022" loading="lazy"></button>
-      <button><img src="/project/inside/inside_19.jpg" alt="The Inside and the Boy — 2022" loading="lazy"></button>
-      <button><img src="/project/inside/inside_18.jpg" alt="The Inside and the Boy — 2022" loading="lazy"></button>
-      <button><img src="/project/inside/inside_17.jpg" alt="The Inside and the Boy — 2022" loading="lazy"></button>
+      <button><img src="/project/inside/inside_20.jpg" alt="The Inside and the Boy — 2022" decoding="async"></button>
+      <button><img src="/project/inside/inside_19.jpg" alt="The Inside and the Boy — 2022" decoding="async"></button>
+      <button><img src="/project/inside/inside_18.jpg" alt="The Inside and the Boy — 2022" decoding="async"></button>
+      <button><img src="/project/inside/inside_17.jpg" alt="The Inside and the Boy — 2022" decoding="async"></button>
     </div>
   </section>
 
@@ -444,12 +449,12 @@
       <span class="period-count"></span>
     </div>
     <div class="image-grid">
-      <button><img src="/project/inside/inside_16.jpg" alt="The Inside and the Boy — 2019–2021" loading="lazy"></button>
-      <button><img src="/project/inside/inside_15.jpg" alt="The Inside and the Boy — 2019–2021" loading="lazy"></button>
-      <button><img src="/project/inside/inside_14.jpg" alt="The Inside and the Boy — 2019–2021" loading="lazy"></button>
-      <button><img src="/project/inside/inside_13.jpg" alt="The Inside and the Boy — 2019–2021" loading="lazy"></button>
-      <button><img src="/project/inside/inside_12.jpg" alt="The Inside and the Boy — 2019–2021" loading="lazy"></button>
-      <button><img src="/project/inside/inside_11.jpg" alt="The Inside and the Boy — 2019–2021" loading="lazy"></button>
+      <button><img src="/project/inside/inside_16.jpg" alt="The Inside and the Boy — 2019–2021" decoding="async"></button>
+      <button><img src="/project/inside/inside_15.jpg" alt="The Inside and the Boy — 2019–2021" decoding="async"></button>
+      <button><img src="/project/inside/inside_14.jpg" alt="The Inside and the Boy — 2019–2021" decoding="async"></button>
+      <button><img src="/project/inside/inside_13.jpg" alt="The Inside and the Boy — 2019–2021" decoding="async"></button>
+      <button><img src="/project/inside/inside_12.jpg" alt="The Inside and the Boy — 2019–2021" decoding="async"></button>
+      <button><img src="/project/inside/inside_11.jpg" alt="The Inside and the Boy — 2019–2021" decoding="async"></button>
     </div>
   </section>
 
@@ -461,12 +466,12 @@
       <span class="period-count"></span>
     </div>
     <div class="image-grid">
-      <button><img src="/project/inside/inside_10.jpg" alt="The Inside and the Boy — 2018" loading="lazy"></button>
-      <button><img src="/project/inside/inside_09.jpg" alt="The Inside and the Boy — 2018" loading="lazy"></button>
-      <button><img src="/project/inside/inside_08.jpg" alt="The Inside and the Boy — 2018" loading="lazy"></button>
-      <button><img src="/project/inside/inside_07.jpg" alt="The Inside and the Boy — 2018" loading="lazy"></button>
-      <button><img src="/project/inside/inside_06.jpg" alt="The Inside and the Boy — 2018" loading="lazy"></button>
-      <button><img src="/project/inside/inside_05.jpg" alt="The Inside and the Boy — 2018" loading="lazy"></button>
+      <button><img src="/project/inside/inside_10.jpg" alt="The Inside and the Boy — 2018" decoding="async"></button>
+      <button><img src="/project/inside/inside_09.jpg" alt="The Inside and the Boy — 2018" decoding="async"></button>
+      <button><img src="/project/inside/inside_08.jpg" alt="The Inside and the Boy — 2018" decoding="async"></button>
+      <button><img src="/project/inside/inside_07.jpg" alt="The Inside and the Boy — 2018" decoding="async"></button>
+      <button><img src="/project/inside/inside_06.jpg" alt="The Inside and the Boy — 2018" decoding="async"></button>
+      <button><img src="/project/inside/inside_05.jpg" alt="The Inside and the Boy — 2018" decoding="async"></button>
     </div>
   </section>
 
@@ -478,10 +483,10 @@
       <span class="period-count"></span>
     </div>
     <div class="image-grid">
-      <button><img src="/project/inside/inside_04.jpg" alt="The Inside and the Boy — 2015–2017" loading="lazy"></button>
-      <button><img src="/project/inside/inside_03.jpg" alt="The Inside and the Boy — 2015–2017" loading="lazy"></button>
-      <button><img src="/project/inside/inside_02.jpg" alt="The Inside and the Boy — 2015–2017" loading="lazy"></button>
-      <button><img src="/project/inside/inside_01.jpg" alt="The Inside and the Boy — 2015–2017" loading="lazy"></button>
+      <button><img src="/project/inside/inside_04.jpg" alt="The Inside and the Boy — 2015–2017" decoding="async"></button>
+      <button><img src="/project/inside/inside_03.jpg" alt="The Inside and the Boy — 2015–2017" decoding="async"></button>
+      <button><img src="/project/inside/inside_02.jpg" alt="The Inside and the Boy — 2015–2017" decoding="async"></button>
+      <button><img src="/project/inside/inside_01.jpg" alt="The Inside and the Boy — 2015–2017" decoding="async"></button>
     </div>
   </section>
   </div>
@@ -580,27 +585,64 @@
     startX = null;
   });
 
-  // Masonry that keeps left-to-right order (highest number first)
-  const grids = [...document.querySelectorAll('.period .image-grid')].map(g => ({ g, btns: [...g.querySelectorAll('button')] }));
-  let lastCols = 0;
+  // Justified gallery: same height per row, rows fill the full width,
+  // order runs left to right (highest number first)
+  const grids = [...document.querySelectorAll('.period .image-grid')]
+    .map(g => ({ g, btns: [...g.querySelectorAll('button')] }))
+    .filter(x => x.btns.length);
+
+  function ratio(btn) {
+    const img = btn.querySelector('img');
+    return img.naturalWidth && img.naturalHeight ? img.naturalWidth / img.naturalHeight : 0.8;
+  }
+
+  function targetHeight() {
+    const w = window.innerWidth;
+    if (w <= 600) return 220;
+    if (w <= 1024) return 280;
+    return 340;
+  }
+
   function layout() {
-    const cols = window.innerWidth <= 600 ? 1 : 2;
-    if (cols === lastCols) return;
-    lastCols = cols;
+    const gap = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gap')) || 14;
+    const target = targetHeight();
     grids.forEach(({ g, btns }) => {
-      if (!btns.length) return;
-      g.innerHTML = '';
-      const columns = Array.from({ length: cols }, () => {
-        const c = document.createElement('div');
-        c.className = 'col';
-        g.appendChild(c);
-        return c;
+      const cs = getComputedStyle(g);
+      const W = g.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) - 1; // measure before clearing (an empty period gets hidden)
+      if (W <= 0) return;
+      const rows = [];
+      let row = [], sum = 0;
+      const flush = (last) => {
+        if (!row.length) return;
+        const free = W - gap * (row.length - 1);
+        let h = free / sum;
+        if (last && h > target * 1.15) h = target; // don't blow up an unfinished last row
+        const el = document.createElement('div');
+        el.className = 'row';
+        row.forEach(b => {
+          b.style.height = h + 'px';
+          b.style.width = (ratio(b) * h) + 'px';
+          el.appendChild(b);
+        });
+        rows.push(el);
+        row = []; sum = 0;
+      };
+      btns.forEach(b => {
+        row.push(b);
+        sum += ratio(b);
+        if (sum * target + gap * (row.length - 1) >= W) flush(false);
       });
-      btns.forEach((b, i) => columns[i % cols].appendChild(b));
+      flush(true);
+      g.replaceChildren(...rows);
     });
   }
+
   layout();
-  window.addEventListener('resize', layout);
+  document.querySelectorAll('.period .image-grid img').forEach(img => {
+    if (!img.complete) img.addEventListener('load', layout, { once: true });
+  });
+  let rt;
+  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(layout, 120); });
 </script>
 
 </body>
