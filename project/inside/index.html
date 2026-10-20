@@ -288,65 +288,143 @@
     .period-label { transition: color .5s; }
     .period.active .period-label { color: var(--text); }
 
-    /* focus: the chapter you are in lights up, the rest rests in the background */
-    .period .image-grid { opacity: .3; filter: grayscale(.5); transition: opacity .7s var(--ease), filter .7s var(--ease); }
-    .period.active .image-grid { opacity: 1; filter: none; }
+    /* ---------- Carousel per chapter ---------- */
+    .image-grid { min-width: 0; }
 
-    /* ---------- Justified gallery ---------- */
-    .image-grid {
-      display: flex;
-      flex-direction: column;
-      gap: var(--gap);
-    }
-
-    .image-grid .row { display: flex; gap: var(--gap); }
-
-    .image-grid button {
-      all: unset;
+    .carousel {
       position: relative;
-      display: block;
-      flex: none;
-      border-radius: 4px;
+      min-width: 0;
+      transition: opacity .7s var(--ease), filter .7s var(--ease);
+    }
+
+    /* focus: the chapter you are in lights up, the rest rests in the background */
+    .period .carousel { opacity: .3; filter: grayscale(.5); }
+    .period.active .carousel { opacity: 1; filter: none; }
+
+    .carousel-viewport {
+      position: relative;
       overflow: hidden;
-      cursor: zoom-in;
-      background: var(--soft);
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity .8s var(--ease), transform .8s var(--ease);
-      transition-delay: var(--d, 0ms);
+      outline: none;
+      -webkit-mask-image: linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%);
+              mask-image: linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%);
     }
 
-    .image-grid button.in { opacity: 1; transform: none; }
+    .carousel.single .carousel-viewport { -webkit-mask-image: none; mask-image: none; }
 
-    .image-grid button:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+    .carousel-track {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      transition: transform .65s cubic-bezier(.22, .61, .36, 1);
+      will-change: transform;
+      touch-action: pan-y;
+      user-select: none;
+    }
 
-    .image-grid img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    .carousel-track.no-anim,
+    .carousel-track.no-anim .carousel-slide { transition: none !important; }
+
+    .image-grid button.carousel-slide {
+      all: unset;
+      flex: none;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 0.6rem;
+      cursor: pointer;
+      opacity: .28;
+      transform: scale(.86);
+      transition: opacity .65s ease, transform .65s cubic-bezier(.22, .61, .36, 1);
+    }
+
+    .image-grid button.carousel-slide.is-active { opacity: 1; transform: none; cursor: zoom-in; }
+
+    .carousel-slide img {
       display: block;
-      transition: transform .7s var(--ease), filter .5s;
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border-radius: 4px;
+      pointer-events: none;
+      -webkit-user-drag: none;
     }
 
-    .image-grid button:hover img { transform: scale(1.035); }
+    .carousel-slide:focus-visible img { outline: 2px solid var(--text); outline-offset: 3px; }
 
-    /* piece number on hover */
-    .image-grid button::after {
-      content: attr(data-n);
+    .carousel-btn {
       position: absolute;
-      left: 0.75rem;
-      bottom: 0.7rem;
-      padding: 0.25rem 0.6rem;
-      border-radius: 999px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
       background: rgba(255, 255, 255, .92);
-      font-size: 0.72rem;
-      letter-spacing: .06em;
-      opacity: 0;
-      transform: translateY(6px);
-      transition: opacity .3s, transform .3s var(--ease);
+      color: var(--text);
+      font-size: 0.85rem;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      z-index: 2;
+      transition: background .2s, color .2s, opacity .3s;
     }
 
-    .image-grid button:hover::after { opacity: 1; transform: none; }
+    .carousel-btn:hover { background: var(--text); color: #fff; }
+    .carousel-btn:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+    .carousel-btn.prev { left: 0.5rem; }
+    .carousel-btn.next { right: 0.5rem; }
+    .period:not(.active) .carousel-btn { opacity: 0; pointer-events: none; }
+
+    .carousel-foot {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.25rem;
+      margin-top: 1.4rem;
+    }
+
+    .carousel-dots { display: flex; gap: 0.5rem; }
+
+    .carousel-dots button {
+      width: 8px;
+      height: 8px;
+      padding: 0;
+      border: 0;
+      border-radius: 999px;
+      background: #d4d4d4;
+      cursor: pointer;
+      transition: width .35s var(--ease), background .35s;
+    }
+
+    .carousel-dots button[aria-current="true"] { width: 26px; background: var(--text); }
+
+    .carousel-count {
+      font-size: 0.72rem;
+      letter-spacing: .14em;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* autoplay progress under the active slide */
+    .carousel-timer {
+      height: 2px;
+      width: 60px;
+      background: var(--line);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .carousel-timer span {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: var(--text);
+    }
+
+    .carousel-timer.run span { width: 100%; transition: width var(--autoplay, 5s) linear; }
 
     /* ================= Lightbox ================= */
     .lightbox {
@@ -478,9 +556,15 @@
       .period-head { position: static; display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; }
       .period-head h2 { font-size: 3rem; margin: 0; order: -1; width: 100%; }
       .period-head::before { top: 1.1rem; }
-      .image-grid { padding-left: 2.4rem; }
-
-      .image-grid button::after { opacity: 1; transform: none; font-size: 0.62rem; }
+      .carousel { margin-left: 2.4rem; }
+      .carousel-viewport {
+        -webkit-mask-image: linear-gradient(to right, transparent 0, #000 4%, #000 96%, transparent 100%);
+                mask-image: linear-gradient(to right, transparent 0, #000 4%, #000 96%, transparent 100%);
+      }
+      .carousel-btn { width: 36px; height: 36px; font-size: 0.75rem; }
+      .carousel-btn.prev { left: 0.25rem; }
+      .carousel-btn.next { right: 0.25rem; }
+      .image-grid button.carousel-slide { padding: 0 0.35rem; }
       .lb-prev, .lb-next { display: none; } /* swipe on mobile */
     }
 
@@ -490,10 +574,9 @@
 
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
-      .image-grid button { opacity: 1; transform: none; transition: none; }
+      .carousel-track, .carousel-slide, .carousel { transition: none !important; }
       .rail-fill, .timeline-progress { transition: none; }
       .period.active .period-head::before, .rail-stop.active .rail-dot { animation: none; }
-      .period .image-grid { transition: none; }
     }
   </style>
 </head>
@@ -554,7 +637,7 @@
 
   <!--
     HOW TO EDIT
-    Each year is a <section class="period">. Put the newest image first.
+    Each year is a <section class="period">. Images play in the order written (lowest number first).
     Empty sections stay hidden. Chapters, counts, the year rail and
     the then & now slider update on their own.
   -->
@@ -580,10 +663,10 @@
         <h2>2024</h2>
       </div>
       <div class="image-grid">
-        <button><img src="/project/inside/inside_28.jpg" alt="The Inside and the Boy — 2024" decoding="async"></button>
-        <button><img src="/project/inside/inside_27.jpg" alt="The Inside and the Boy — 2024" decoding="async"></button>
-        <button><img src="/project/inside/inside_26.jpg" alt="The Inside and the Boy — 2024" decoding="async"></button>
         <button><img src="/project/inside/inside_25.jpg" alt="The Inside and the Boy — 2024" decoding="async"></button>
+        <button><img src="/project/inside/inside_26.jpg" alt="The Inside and the Boy — 2024" decoding="async"></button>
+        <button><img src="/project/inside/inside_27.jpg" alt="The Inside and the Boy — 2024" decoding="async"></button>
+        <button><img src="/project/inside/inside_28.jpg" alt="The Inside and the Boy — 2024" decoding="async"></button>
       </div>
     </section>
 
@@ -594,10 +677,10 @@
         <h2>2023</h2>
       </div>
       <div class="image-grid">
-        <button><img src="/project/inside/inside_24.jpg" alt="The Inside and the Boy — 2023" decoding="async"></button>
-        <button><img src="/project/inside/inside_23.jpg" alt="The Inside and the Boy — 2023" decoding="async"></button>
-        <button><img src="/project/inside/inside_22.jpg" alt="The Inside and the Boy — 2023" decoding="async"></button>
         <button><img src="/project/inside/inside_21.jpg" alt="The Inside and the Boy — 2023" decoding="async"></button>
+        <button><img src="/project/inside/inside_22.jpg" alt="The Inside and the Boy — 2023" decoding="async"></button>
+        <button><img src="/project/inside/inside_23.jpg" alt="The Inside and the Boy — 2023" decoding="async"></button>
+        <button><img src="/project/inside/inside_24.jpg" alt="The Inside and the Boy — 2023" decoding="async"></button>
       </div>
     </section>
 
@@ -608,10 +691,10 @@
         <h2>2022</h2>
       </div>
       <div class="image-grid">
-        <button><img src="/project/inside/inside_20.jpg" alt="The Inside and the Boy — 2022" decoding="async"></button>
-        <button><img src="/project/inside/inside_19.jpg" alt="The Inside and the Boy — 2022" decoding="async"></button>
-        <button><img src="/project/inside/inside_18.jpg" alt="The Inside and the Boy — 2022" decoding="async"></button>
         <button><img src="/project/inside/inside_17.jpg" alt="The Inside and the Boy — 2022" decoding="async"></button>
+        <button><img src="/project/inside/inside_18.jpg" alt="The Inside and the Boy — 2022" decoding="async"></button>
+        <button><img src="/project/inside/inside_19.jpg" alt="The Inside and the Boy — 2022" decoding="async"></button>
+        <button><img src="/project/inside/inside_20.jpg" alt="The Inside and the Boy — 2022" decoding="async"></button>
       </div>
     </section>
 
@@ -622,8 +705,8 @@
         <h2>2021</h2>
       </div>
       <div class="image-grid">
-        <button><img src="/project/inside/inside_16.jpg" alt="The Inside and the Boy — 2021" decoding="async"></button>
         <button><img src="/project/inside/inside_15.jpg" alt="The Inside and the Boy — 2021" decoding="async"></button>
+        <button><img src="/project/inside/inside_16.jpg" alt="The Inside and the Boy — 2021" decoding="async"></button>
       </div>
     </section>
 
@@ -634,10 +717,10 @@
         <h2>2019</h2>
       </div>
       <div class="image-grid">
-        <button><img src="/project/inside/inside_14.jpg" alt="The Inside and the Boy — 2019" decoding="async"></button>
-        <button><img src="/project/inside/inside_13.jpg" alt="The Inside and the Boy — 2019" decoding="async"></button>
-        <button><img src="/project/inside/inside_12.jpg" alt="The Inside and the Boy — 2019" decoding="async"></button>
         <button><img src="/project/inside/inside_11.jpg" alt="The Inside and the Boy — 2019" decoding="async"></button>
+        <button><img src="/project/inside/inside_12.jpg" alt="The Inside and the Boy — 2019" decoding="async"></button>
+        <button><img src="/project/inside/inside_13.jpg" alt="The Inside and the Boy — 2019" decoding="async"></button>
+        <button><img src="/project/inside/inside_14.jpg" alt="The Inside and the Boy — 2019" decoding="async"></button>
       </div>
     </section>
 
@@ -648,12 +731,12 @@
         <h2>2018</h2>
       </div>
       <div class="image-grid">
-        <button><img src="/project/inside/inside_10.jpg" alt="The Inside and the Boy — 2018" decoding="async"></button>
-        <button><img src="/project/inside/inside_09.jpg" alt="The Inside and the Boy — 2018" decoding="async"></button>
-        <button><img src="/project/inside/inside_08.jpg" alt="The Inside and the Boy — 2018" decoding="async"></button>
-        <button><img src="/project/inside/inside_07.jpg" alt="The Inside and the Boy — 2018" decoding="async"></button>
-        <button><img src="/project/inside/inside_06.jpg" alt="The Inside and the Boy — 2018" decoding="async"></button>
         <button><img src="/project/inside/inside_05.jpg" alt="The Inside and the Boy — 2018" decoding="async"></button>
+        <button><img src="/project/inside/inside_06.jpg" alt="The Inside and the Boy — 2018" decoding="async"></button>
+        <button><img src="/project/inside/inside_07.jpg" alt="The Inside and the Boy — 2018" decoding="async"></button>
+        <button><img src="/project/inside/inside_08.jpg" alt="The Inside and the Boy — 2018" decoding="async"></button>
+        <button><img src="/project/inside/inside_09.jpg" alt="The Inside and the Boy — 2018" decoding="async"></button>
+        <button><img src="/project/inside/inside_10.jpg" alt="The Inside and the Boy — 2018" decoding="async"></button>
       </div>
     </section>
 
@@ -664,8 +747,8 @@
         <h2>2017</h2>
       </div>
       <div class="image-grid">
-        <button><img src="/project/inside/inside_04.jpg" alt="The Inside and the Boy — 2017" decoding="async"></button>
         <button><img src="/project/inside/inside_03.jpg" alt="The Inside and the Boy — 2017" decoding="async"></button>
+        <button><img src="/project/inside/inside_04.jpg" alt="The Inside and the Boy — 2017" decoding="async"></button>
       </div>
     </section>
 
@@ -687,8 +770,8 @@
         <h2>2015</h2>
       </div>
       <div class="image-grid">
-        <button><img src="/project/inside/inside_01_02.jpg" alt="The Inside and the Boy — 2015" decoding="async"></button>
         <button><img src="/project/inside/inside_01.jpg" alt="The Inside and the Boy — 2015" decoding="async"></button>
+        <button><img src="/project/inside/inside_01_02.jpg" alt="The Inside and the Boy — 2015" decoding="async"></button>
       </div>
     </section>
   </div>
@@ -757,6 +840,8 @@
     return { p, b, pct };
   });
 
+  const carousels = [];
+
   /* ---------- Scroll: light up the timeline ---------- */
   const timeline = document.getElementById('timeline');
   const progress = timeline.querySelector('.timeline-progress');
@@ -794,6 +879,9 @@
     const here = stops[activeIdx].pct;
     const next = activeIdx < stops.length - 1 ? stops[activeIdx + 1].pct : here;
     fill.style.width = (here + (next - here) * f) + '%';
+
+    // only the chapter you are reading plays its carousel
+    carousels.forEach(c => c.setActive(c.period === periods[activeIdx]));
   }
 
   let ticking = false;
@@ -804,76 +892,238 @@
   }, { passive: true });
   window.addEventListener('resize', onScroll);
 
-  /* ---------- Reveal images as they enter ---------- */
-  const reveal = new IntersectionObserver(entries => {
-    entries.forEach(en => {
-      if (en.isIntersecting) { en.target.classList.add('in'); reveal.unobserve(en.target); }
-    });
-  }, { rootMargin: '0px 0px -8% 0px' });
+  /* ---------- Carousel per chapter ---------- */
+  const AUTOPLAY_MS = 5000;
+  document.documentElement.style.setProperty('--autoplay', AUTOPLAY_MS + 'ms');
+  let globalIndex = 0;
 
-  /* ---------- Justified gallery: same height per row ---------- */
-  const grids = periods.map(p => {
-    const g = p.querySelector('.image-grid');
-    return { g, btns: [...g.querySelectorAll('button')] };
-  });
-
-  const ratio = btn => {
-    const img = btn.querySelector('img');
-    return img.naturalWidth && img.naturalHeight ? img.naturalWidth / img.naturalHeight : 0.8;
-  };
-
-  const targetHeight = () => {
+  function slideSize(container) {
+    const W = container.clientWidth;
     const w = window.innerWidth;
-    if (w <= 600) return 210;
-    if (w <= 1024) return 280;
-    return 340;
-  };
-
-  function layout() {
-    const gap = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gap')) || 14;
-    const target = targetHeight();
-    grids.forEach(({ g, btns }) => {
-      const cs = getComputedStyle(g);
-      const W = g.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) - 1;
-      if (W <= 0) return;
-      const rows = [];
-      let row = [], sum = 0;
-      const flush = last => {
-        if (!row.length) return;
-        let h = (W - gap * (row.length - 1)) / sum;
-        if (last && h > target * 1.15) h = target;
-        const el = document.createElement('div');
-        el.className = 'row';
-        row.forEach((b, i) => {
-          b.style.height = h + 'px';
-          b.style.width = (ratio(b) * h) + 'px';
-          b.style.setProperty('--d', (i * 90) + 'ms');
-          el.appendChild(b);
-        });
-        rows.push(el);
-        row = []; sum = 0;
-      };
-      btns.forEach(b => {
-        row.push(b);
-        sum += ratio(b);
-        if (sum * target + gap * (row.length - 1) >= W) flush(false);
-      });
-      flush(true);
-      g.replaceChildren(...rows);
-    });
-    onScroll();
+    const width = w <= 768 ? W * 0.8 : W * 0.62;
+    const height = w <= 768 ? Math.min(window.innerHeight * 0.58, 460) : (w <= 1024 ? 440 : 560);
+    return { W, width, height };
   }
 
-  layout();
-  grids.forEach(({ btns }) => btns.forEach(b => reveal.observe(b)));
-  document.querySelectorAll('.image-grid img').forEach(img => {
-    if (!img.complete) img.addEventListener('load', layout, { once: true });
-  });
+  function makeCarousel(period) {
+    const grid = period.querySelector('.image-grid');
+    const originals = [...grid.querySelectorAll('button')];
+    const N = originals.length;
+    const base = globalIndex;
+    globalIndex += N;
+
+    originals.forEach((b, i) => {
+      b.classList.add('carousel-slide');
+      b.dataset.real = i;
+      b.querySelector('img').setAttribute('draggable', 'false');
+    });
+
+    // structure
+    const wrap = document.createElement('div');
+    wrap.className = 'carousel' + (N === 1 ? ' single' : '');
+    const viewport = document.createElement('div');
+    viewport.className = 'carousel-viewport';
+    viewport.tabIndex = 0;
+    viewport.setAttribute('aria-roledescription', 'carousel');
+    viewport.setAttribute('aria-label', label(period));
+    const track = document.createElement('div');
+    track.className = 'carousel-track';
+    viewport.appendChild(track);
+    wrap.appendChild(viewport);
+    grid.replaceChildren(wrap);
+    originals.forEach(b => track.appendChild(b));
+
+    // clones on both sides for an endless loop
+    if (N > 1) {
+      originals.forEach(el => {
+        const c = el.cloneNode(true);
+        c.setAttribute('aria-hidden', 'true');
+        c.tabIndex = -1;
+        track.appendChild(c);
+      });
+      for (let i = N - 1; i >= 0; i--) {
+        const c = originals[i].cloneNode(true);
+        c.setAttribute('aria-hidden', 'true');
+        c.tabIndex = -1;
+        track.insertBefore(c, track.firstChild);
+      }
+    }
+    const slides = [...track.children];
+
+    let dots = [], count = null, timerBar = null;
+    if (N > 1) {
+      const prev = document.createElement('button');
+      prev.className = 'carousel-btn prev';
+      prev.type = 'button';
+      prev.setAttribute('aria-label', 'Previous');
+      prev.innerHTML = '<i class="fas fa-chevron-left"></i>';
+      const next = document.createElement('button');
+      next.className = 'carousel-btn next';
+      next.type = 'button';
+      next.setAttribute('aria-label', 'Next');
+      next.innerHTML = '<i class="fas fa-chevron-right"></i>';
+      wrap.append(prev, next);
+      prev.addEventListener('click', () => { go(-1); restart(); });
+      next.addEventListener('click', () => { go(1); restart(); });
+
+      const foot = document.createElement('div');
+      foot.className = 'carousel-foot';
+      const dotsWrap = document.createElement('div');
+      dotsWrap.className = 'carousel-dots';
+      dots = originals.map((_, i) => {
+        const d = document.createElement('button');
+        d.type = 'button';
+        d.setAttribute('aria-label', 'Go to image ' + (i + 1));
+        d.addEventListener('click', () => { goTo(i); restart(); });
+        dotsWrap.appendChild(d);
+        return d;
+      });
+      count = document.createElement('span');
+      count.className = 'carousel-count';
+      timerBar = document.createElement('div');
+      timerBar.className = 'carousel-timer';
+      timerBar.innerHTML = '<span></span>';
+      foot.append(dotsWrap, count, timerBar);
+      wrap.appendChild(foot);
+    }
+
+    let index = N > 1 ? N : 0;
+    let busy = false, fallback = null, timer = null;
+    let active = false, hovered = false;
+    const realIndex = () => N > 1 ? ((index - N) % N + N) % N : 0;
+    const pad = n => String(n).padStart(2, '0');
+
+    function render(animate = true) {
+      const { W, width, height: maxH } = slideSize(viewport);
+      // height adapts to the tallest piece of this chapter, so landscape work doesn't leave empty bands
+      const inner = width - 20;
+      const height = Math.max(160, Math.min(maxH, Math.max(...originals.map(o => {
+        const im = o.querySelector('img');
+        const r = im.naturalWidth && im.naturalHeight ? im.naturalWidth / im.naturalHeight : 0.8;
+        return inner / r;
+      }))));
+      slides.forEach(s => { s.style.width = width + 'px'; s.style.height = height + 'px'; });
+      track.classList.toggle('no-anim', !animate);
+      track.style.transform = 'translateX(' + (-(index * width) + (W - width) / 2) + 'px)';
+      slides.forEach((s, i) => s.classList.toggle('is-active', i === index));
+      dots.forEach((d, i) => d.setAttribute('aria-current', i === realIndex() ? 'true' : 'false'));
+      if (count) count.textContent = pad(realIndex() + 1) + ' / ' + pad(N);
+      if (!animate) { void track.offsetWidth; track.classList.remove('no-anim'); }
+    }
+
+    function settle() {
+      clearTimeout(fallback);
+      if (index >= 2 * N) { index -= N; render(false); }
+      else if (index < N) { index += N; render(false); }
+      busy = false;
+    }
+
+    function go(dir) {
+      if (N < 2 || busy) return;
+      busy = true;
+      index += dir;
+      render(true);
+      fallback = setTimeout(settle, 750);
+    }
+
+    function goTo(i) {
+      if (N < 2 || busy) return;
+      const target = N + i;
+      if (target === index) return;
+      busy = true;
+      index = target;
+      render(true);
+      fallback = setTimeout(settle, 750);
+    }
+
+    track.addEventListener('transitionend', e => {
+      if (e.target === track && e.propertyName === 'transform') settle();
+    });
+
+    // click: centre slide opens the viewer, side slides move the carousel
+    let dragged = false;
+    slides.forEach((s, i) => s.addEventListener('click', () => {
+      if (dragged) return;
+      if (i === index) open(base + realIndex());
+      else if (N > 1) { go(i < index ? -1 : 1); restart(); }
+    }));
+
+    viewport.addEventListener('keydown', e => {
+      if (e.key === 'ArrowLeft') { go(-1); restart(); }
+      if (e.key === 'ArrowRight') { go(1); restart(); }
+    });
+
+    // swipe / drag
+    let sx = null, sy = null;
+    track.addEventListener('pointerdown', e => { sx = e.clientX; sy = e.clientY; dragged = false; });
+    window.addEventListener('pointerup', e => {
+      if (sx === null) return;
+      const dx = e.clientX - sx, dy = e.clientY - sy;
+      sx = null;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+        dragged = true;
+        go(dx < 0 ? 1 : -1);
+        restart();
+        setTimeout(() => { dragged = false; }, 50);
+      }
+    });
+
+    // autoplay, only for the chapter on screen
+    function shouldPlay() { return N > 1 && active && !hovered && !reduceMotion && !document.hidden; }
+    function stop() {
+      clearInterval(timer); timer = null;
+      if (timerBar) timerBar.classList.remove('run');
+    }
+    function kickBar() {
+      if (!timerBar) return;
+      timerBar.classList.remove('run');
+      void timerBar.offsetWidth;
+      timerBar.classList.add('run');
+    }
+    function start() {
+      if (timer || !shouldPlay()) return;
+      kickBar();
+      timer = setInterval(() => { go(1); kickBar(); }, AUTOPLAY_MS);
+    }
+    function restart() { stop(); start(); }
+
+    wrap.addEventListener('mouseenter', () => { hovered = true; stop(); });
+    wrap.addEventListener('mouseleave', () => { hovered = false; start(); });
+    viewport.addEventListener('focusin', () => { hovered = true; stop(); });
+    viewport.addEventListener('focusout', () => { hovered = false; start(); });
+    document.addEventListener('visibilitychange', () => document.hidden ? stop() : start());
+
+    render(false);
+    slides.forEach(s => {
+      const img = s.querySelector('img');
+      if (!img.complete) img.addEventListener('load', () => render(false), { once: true });
+    });
+
+    return {
+      period,
+      originals,
+      render: () => render(false),
+      setActive(on) {
+        if (on === active) return;
+        active = on;
+        on ? start() : stop();
+      },
+      pause: () => { hovered = true; stop(); },
+      resume: () => { hovered = false; start(); }
+    };
+  }
+
+  periods.forEach(p => carousels.push(makeCarousel(p)));
+
   let rt;
-  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(layout, 120); });
+  window.addEventListener('resize', () => {
+    clearTimeout(rt);
+    rt = setTimeout(() => { carousels.forEach(c => c.render()); onScroll(); }, 120);
+  });
+  onScroll();
 
   /* ---------- Lightbox ---------- */
-  const items = grids.flatMap(x => x.btns);
+  const items = carousels.flatMap(c => c.originals);
   const lb = document.getElementById('lightbox');
   const lbImg = lb.querySelector('img');
   const lbYear = lb.querySelector('.lb-year');
@@ -891,10 +1141,9 @@
     lbMeta.textContent = b.dataset.n + '  ·  ' + (current + 1) + ' / ' + items.length;
     lbBar.style.width = ((current + 1) / items.length * 100) + '%';
   }
-  function open(i) { show(i); lb.classList.add('open'); document.body.style.overflow = 'hidden'; }
-  function close() { lb.classList.remove('open'); document.body.style.overflow = ''; }
+  function open(i) { show(i); lb.classList.add('open'); document.body.style.overflow = 'hidden'; carousels.forEach(c => c.pause()); }
+  function close() { lb.classList.remove('open'); document.body.style.overflow = ''; carousels.forEach(c => c.resume()); }
 
-  items.forEach((b, i) => b.addEventListener('click', () => open(i)));
   lb.querySelector('.lb-close').addEventListener('click', close);
   lb.querySelector('.lb-prev').addEventListener('click', e => { e.stopPropagation(); show(current - 1); });
   lb.querySelector('.lb-next').addEventListener('click', e => { e.stopPropagation(); show(current + 1); });
