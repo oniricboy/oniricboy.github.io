@@ -215,8 +215,8 @@
 
     .period {
       display: grid;
-      grid-template-columns: 250px 1fr;
-      gap: 3rem;
+      grid-template-columns: 200px 1fr;
+      gap: 2rem;
       position: relative;
       padding-bottom: 7rem;
       scroll-margin-top: 6rem;
@@ -305,11 +305,7 @@
       position: relative;
       overflow: hidden;
       outline: none;
-      -webkit-mask-image: linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%);
-              mask-image: linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%);
     }
-
-    .carousel.single .carousel-viewport { -webkit-mask-image: none; mask-image: none; }
 
     .carousel-track {
       display: flex;
@@ -333,8 +329,7 @@
       justify-content: center;
       padding: 0 0.6rem;
       cursor: pointer;
-      opacity: .28;
-      transform: scale(.86);
+      opacity: .35;
       transition: opacity .65s ease, transform .65s cubic-bezier(.22, .61, .36, 1);
     }
 
@@ -400,31 +395,6 @@
     }
 
     .carousel-dots button[aria-current="true"] { width: 26px; background: var(--text); }
-
-    .carousel-count {
-      font-size: 0.72rem;
-      letter-spacing: .14em;
-      color: var(--muted);
-      font-variant-numeric: tabular-nums;
-    }
-
-    /* autoplay progress under the active slide */
-    .carousel-timer {
-      height: 2px;
-      width: 60px;
-      background: var(--line);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-
-    .carousel-timer span {
-      display: block;
-      height: 100%;
-      width: 0;
-      background: var(--text);
-    }
-
-    .carousel-timer.run span { width: 100%; transition: width var(--autoplay, 5s) linear; }
 
     /* ================= Lightbox ================= */
     .lightbox {
@@ -519,7 +489,7 @@
 
     /* ================= Responsive ================= */
     @media screen and (max-width: 1024px) {
-      .period { grid-template-columns: 190px 1fr; gap: 2rem; }
+      .period { grid-template-columns: 160px 1fr; gap: 1.5rem; }
       .period-head h2 { font-size: 3.2rem; }
     }
 
@@ -557,10 +527,6 @@
       .period-head h2 { font-size: 3rem; margin: 0; order: -1; width: 100%; }
       .period-head::before { top: 1.1rem; }
       .carousel { margin-left: 2.4rem; }
-      .carousel-viewport {
-        -webkit-mask-image: linear-gradient(to right, transparent 0, #000 4%, #000 96%, transparent 100%);
-                mask-image: linear-gradient(to right, transparent 0, #000 4%, #000 96%, transparent 100%);
-      }
       .carousel-btn { width: 36px; height: 36px; font-size: 0.75rem; }
       .carousel-btn.prev { left: 0.25rem; }
       .carousel-btn.next { right: 0.25rem; }
@@ -900,8 +866,8 @@
   function slideSize(container) {
     const W = container.clientWidth;
     const w = window.innerWidth;
-    const width = w <= 768 ? W * 0.8 : W * 0.62;
-    const height = w <= 768 ? Math.min(window.innerHeight * 0.58, 460) : (w <= 1024 ? 440 : 560);
+    const width = w <= 768 ? W * 0.88 : W * 0.78;
+    const height = w <= 768 ? Math.min(window.innerHeight * 0.65, 540) : (w <= 1024 ? 560 : Math.min(window.innerHeight * 0.78, 720));
     return { W, width, height };
   }
 
@@ -978,12 +944,7 @@
         dotsWrap.appendChild(d);
         return d;
       });
-      count = document.createElement('span');
-      count.className = 'carousel-count';
-      timerBar = document.createElement('div');
-      timerBar.className = 'carousel-timer';
-      timerBar.innerHTML = '<span></span>';
-      foot.append(dotsWrap, count, timerBar);
+      foot.append(dotsWrap);
       wrap.appendChild(foot);
     }
 
