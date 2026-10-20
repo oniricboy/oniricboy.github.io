@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>oniricboy – Portfolio</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
@@ -13,284 +13,672 @@
       background-color: #fff;
       color: #000;
     }
-    header {
+
+    /* ---------- HEADER ---------- */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1.5rem 2rem;
+      padding: 1.25rem 2rem;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: saturate(180%) blur(8px);
+      -webkit-backdrop-filter: saturate(180%) blur(8px);
       border-bottom: 1px solid #eee;
+      transition: padding 0.3s ease, box-shadow 0.3s ease;
+    }
+    .site-header.is-scrolled {
+      padding-top: 0.6rem;
+      padding-bottom: 0.6rem;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
     }
     .logo img {
       height: 60px;
+      display: block;
+      transition: height 0.3s ease;
     }
-    nav ul {
+    .site-header.is-scrolled .logo img {
+      height: 44px;
+    }
+
+    .nav-list {
       list-style: none;
       display: flex;
+      align-items: center;
       gap: 2rem;
       margin: 0;
       padding: 0;
+    }
+    .nav-list > li {
       position: relative;
     }
-    nav li {
+    .nav-list > li > a,
+    .dropdown-toggle {
       position: relative;
-    }
-    nav a {
-      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.4rem 0;
+      background: none;
+      border: none;
       color: #000;
-      font-weight: 600;
-      font-size: 0.9rem;
+      font: 600 0.9rem 'DM Sans', sans-serif;
+      text-decoration: none;
+      cursor: pointer;
     }
-    nav ul li:hover .dropdown {
-      display: block;
-    }
-    .dropdown {
-      display: none;
+    /* Subrayado animado */
+    .nav-list > li > a::after,
+    .dropdown-toggle::after {
+      content: '';
       position: absolute;
-      top: 100%;
       left: 0;
-      background: #fff;
-      border: 1px solid #ddd;
+      bottom: 0;
+      width: 100%;
+      height: 1px;
+      background: #000;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.25s ease;
+    }
+    .nav-list > li > a:hover::after,
+    .nav-list > li > a:focus-visible::after,
+    .nav-list > li > a[aria-current="page"]::after,
+    .dropdown-toggle:hover::after,
+    .dropdown-toggle:focus-visible::after,
+    .dropdown-toggle.is-current::after {
+      transform: scaleX(1);
+    }
+    .nav-list a:focus-visible,
+    .dropdown-toggle:focus-visible,
+    .socials a:focus-visible,
+    .menu-toggle:focus-visible {
+      outline: 2px solid #000;
+      outline-offset: 3px;
+    }
+    .caret {
+      font-size: 0.55rem;
+      transition: transform 0.25s ease;
+    }
+
+    .dropdown {
+      list-style: none;
+      position: absolute;
+      top: calc(100% + 0.5rem);
+      left: -1rem;
+      min-width: 180px;
+      margin: 0;
       padding: 0.5rem 0;
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-6px);
+      transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
       z-index: 10;
     }
-    .dropdown li {
-      padding: 0;
+    /* Puente invisible para que el hover no se corte */
+    .dropdown::before {
+      content: '';
+      position: absolute;
+      top: -0.6rem;
+      left: 0;
+      right: 0;
+      height: 0.6rem;
+    }
+    .has-dropdown.is-open .dropdown,
+    .has-dropdown:focus-within .dropdown {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .has-dropdown.is-open .caret,
+    .has-dropdown:focus-within .caret {
+      transform: rotate(180deg);
+    }
+    @media (hover: hover) {
+      .has-dropdown:hover .dropdown {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+      .has-dropdown:hover .caret {
+        transform: rotate(180deg);
+      }
     }
     .dropdown a {
       display: block;
-      padding: 0.5rem 1rem;
+      padding: 0.55rem 1rem;
+      color: #000;
+      font-size: 0.88rem;
+      text-decoration: none;
       white-space: nowrap;
+      transition: background 0.15s ease;
     }
-    .dropdown a:hover {
-      background-color: #f3f3f3;
+    .dropdown a:hover,
+    .dropdown a[aria-current="page"] {
+      background-color: #f5f5f5;
+    }
+
+    .socials {
+      display: flex;
+      align-items: center;
+      gap: 1.1rem;
     }
     .socials a {
       color: #000;
       font-size: 1.1rem;
-      margin-left: 1.2rem;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.2s ease, transform 0.2s ease;
     }
     .socials a:hover {
       opacity: 0.6;
+      transform: translateY(-2px);
     }
+
+    .menu-toggle {
+      display: none;
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      position: relative;
+    }
+    .menu-toggle span {
+      position: absolute;
+      left: 9px;
+      width: 22px;
+      height: 2px;
+      background: #000;
+      transition: transform 0.3s ease, opacity 0.2s ease, top 0.3s ease;
+    }
+    .menu-toggle span:nth-child(1) { top: 13px; }
+    .menu-toggle span:nth-child(2) { top: 19px; }
+    .menu-toggle span:nth-child(3) { top: 25px; }
+    .site-header.menu-open .menu-toggle span:nth-child(1) { top: 19px; transform: rotate(45deg); }
+    .site-header.menu-open .menu-toggle span:nth-child(2) { opacity: 0; }
+    .site-header.menu-open .menu-toggle span:nth-child(3) { top: 19px; transform: rotate(-45deg); }
+
+    /* ---------- CARRUSEL ---------- */
     .carousel-container {
       position: relative;
       overflow: hidden;
       width: 100%;
       background: #fff;
-      padding: 2rem 0;
+      padding: 2rem 0 1rem;
       z-index: 1;
+      outline: none;
     }
     .carousel-track {
       display: flex;
-      transition: transform 0.5s ease;
       align-items: center;
-      gap: 0;
+      transition: transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+      will-change: transform;
+      touch-action: pan-y;
+      user-select: none;
     }
     .carousel-slide {
-  flex: 0 0 auto;
-  width: 33vw; /* esto centra cada imagen en el viewport */
-  height: 600px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  background-color: #fff;
-  overflow: hidden;
+      flex: 0 0 33.333vw;
+      height: 600px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      overflow: hidden;
+      opacity: 0.35;
+      transform: scale(0.9);
+      transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+    .carousel-slide.is-active {
+      opacity: 1;
+      transform: scale(1);
     }
     .carousel-slide img {
       height: 100%;
       width: auto;
-      object-fit: cover;
+      max-width: 100%;
+      object-fit: contain;
       display: block;
-    }
-    .carousel-buttons {
-      position: absolute;
-      top: 50%;
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      transform: translateY(-50%);
       pointer-events: none;
     }
-    .carousel-buttons button {
-      background: rgba(255, 255, 255, 0.9);
-      border: none;
-      font-size: 2rem;
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-      pointer-events: all;
+    /* Desactiva animaciones durante el salto invisible del bucle */
+    .carousel-track.no-anim,
+    .carousel-track.no-anim .carousel-slide {
+      transition: none !important;
     }
+
+    .carousel-btn {
+      position: absolute;
+      top: calc(50% - 0.5rem);
+      transform: translateY(-50%);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px solid #e5e5e5;
+      background: rgba(255, 255, 255, 0.92);
+      color: #000;
+      font-size: 1.6rem;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 2;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+    .carousel-btn:hover {
+      background: #000;
+      color: #fff;
+    }
+    .carousel-btn:focus-visible {
+      outline: 2px solid #000;
+      outline-offset: 3px;
+    }
+    .carousel-btn.prev { left: 1.5rem; }
+    .carousel-btn.next { right: 1.5rem; }
+
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-top: 1.25rem;
+    }
+    .carousel-dots button {
+      width: 8px;
+      height: 8px;
+      padding: 0;
+      border: none;
+      border-radius: 999px;
+      background: #ccc;
+      cursor: pointer;
+      transition: width 0.3s ease, background 0.3s ease;
+    }
+    .carousel-dots button[aria-current="true"] {
+      width: 24px;
+      background: #000;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        transition: none !important;
+      }
+    }
+
     @media screen and (max-width: 768px) {
-  .carousel-slide {
-    width: 100%;
-  }
+      /* Header móvil: logo | redes + menú, y el menú se despliega abajo */
+      .site-header {
+        flex-wrap: wrap;
+        padding: 0.9rem 1rem;
+      }
+      .site-header.is-scrolled {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+      }
+      .logo img { height: 46px; }
+      .site-header.is-scrolled .logo img { height: 38px; }
 
-  .carousel-slide {
-  height: auto;
-  padding: 0;
-}
+      .socials {
+        order: 2;
+        margin-left: auto;
+        margin-right: 0.5rem;
+      }
+      .menu-toggle {
+        display: block;
+        order: 3;
+      }
+      .main-nav {
+        order: 4;
+        width: 100%;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.35s ease;
+      }
+      .site-header.menu-open .main-nav {
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+      .nav-list {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        padding-top: 0.75rem;
+      }
+      .nav-list > li {
+        border-top: 1px solid #f0f0f0;
+      }
+      .nav-list > li > a,
+      .dropdown-toggle {
+        width: 100%;
+        justify-content: space-between;
+        padding: 0.9rem 0;
+        font-size: 1rem;
+      }
+      .nav-list > li > a::after,
+      .dropdown-toggle::after {
+        display: none;
+      }
+      .nav-list > li > a[aria-current="page"],
+      .dropdown-toggle.is-current {
+        text-decoration: underline;
+        text-underline-offset: 4px;
+      }
 
-.carousel-slide img {
-  height: auto;
-  max-height: 55vh;
-  width: auto;
-  max-width: 100%;
-  object-fit: contain;
-}
+      .dropdown,
+      .has-dropdown:focus-within .dropdown {
+        position: static;
+        display: none;
+        min-width: 0;
+        margin: 0 0 0.6rem;
+        padding: 0 0 0 1rem;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+      }
+      .dropdown::before { display: none; }
+      .has-dropdown.is-open .dropdown { display: block; }
+      .has-dropdown:focus-within:not(.is-open) .caret { transform: none; }
+      .dropdown a {
+        padding: 0.6rem 0;
+        font-size: 0.95rem;
+        color: #444;
+      }
+      .dropdown a:hover,
+      .dropdown a[aria-current="page"] {
+        background: none;
+        color: #000;
+      }
 
-nav ul {
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-  header {
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .socials {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 0;
-    margin-bottom: 0;
-    gap: 0rem;
-  }
-
-.carousel-container {
-   margin-top: 0;
-   padding-top: 0;
-  }
-}
+      /* Carrusel móvil */
+      .carousel-container {
+        padding-top: 0;
+      }
+      .carousel-slide {
+        flex-basis: 100%;
+        height: auto;
+        padding: 0;
+      }
+      .carousel-slide img {
+        height: auto;
+        max-height: 55vh;
+        width: auto;
+        max-width: 100%;
+      }
+      .carousel-btn {
+        width: 38px;
+        height: 38px;
+        font-size: 1.3rem;
+      }
+      .carousel-btn.prev { left: 0.6rem; }
+      .carousel-btn.next { right: 0.6rem; }
+    }
   </style>
 </head>
 <body>
 
-<header>
+<header class="site-header" id="site-header">
   <div class="logo">
     <a href="/index.html"><img src="/img/logo.png" alt="oniricboy logo"></a>
   </div>
-<nav>
-      <ul>
-        <li><a href="/">Home</a></li>
-        <li>
-          <a href="#">Work ▾</a>
-          <ul class="dropdown">
+
+  <nav class="main-nav" id="main-nav" aria-label="Main">
+    <ul class="nav-list">
+      <li><a href="/">Home</a></li>
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" type="button" aria-expanded="false" aria-controls="dd-work">
+          Work <i class="fa-solid fa-chevron-down caret" aria-hidden="true"></i>
+        </button>
+        <ul class="dropdown" id="dd-work">
           <li><a href="/work/2023-2024/">2023–2024</a></li>
           <li><a href="/work/2019-2021/">2019–2021</a></li>
           <li><a href="/work/2017-2018/">2017–2018</a></li>
-          <li><a href="/work/2015-2016/">2015–2016</a></li>   
-          </ul>
-       <li>
-          <a href="#">Project ▾</a>
-          <ul class="dropdown">
-          <li><a href="/project/inside/">The Inside and the Boy</a></li>
-          </ul>
+          <li><a href="/work/2015-2016/">2015–2016</a></li>
+        </ul>
       </li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="shop.html">Shop</a></li>
-      </ul>
-    </nav>
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" type="button" aria-expanded="false" aria-controls="dd-project">
+          Project <i class="fa-solid fa-chevron-down caret" aria-hidden="true"></i>
+        </button>
+        <ul class="dropdown" id="dd-project">
+          <li><a href="/project/inside/">The Inside and the Boy</a></li>
+        </ul>
+      </li>
+      <li><a href="/about.html">About</a></li>
+      <li><a href="/contact.html">Contact</a></li>
+      <li><a href="/shop.html">Shop</a></li>
+    </ul>
+  </nav>
+
   <div class="socials">
-    <a href="https://instagram.com/oniricboy_" target="_blank"><i class="fab fa-instagram"></i></a>
-    <a href="https://twitter.com/oniricboy_" target="_blank"><i class="fab fa-twitter"></i></a>
+    <a href="https://instagram.com/oniricboy_" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+    <a href="https://x.com/oniricboy_" target="_blank" rel="noopener" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
   </div>
+
+  <button class="menu-toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="main-nav">
+    <span></span><span></span><span></span>
+  </button>
 </header>
 
-<section class="carousel-container">
+<section class="carousel-container" id="carousel-container" tabindex="0"
+         aria-roledescription="carousel" aria-label="Selected work">
   <div class="carousel-track" id="carousel">
-    <div class="carousel-slide"><img src="/work/2017-2018/art_01.png" alt="Art 1"></div>
-    <div class="carousel-slide"><img src="/work/2017-2018/art_02.png" alt="Art 2"></div>
-    <div class="carousel-slide"><img src="/work/2017-2018/art_03.png" alt="Art 3"></div>
-    <div class="carousel-slide"><img src="/work/2017-2018/art_04.png" alt="Art 4"></div>
-    <div class="carousel-slide"><img src="/work/2017-2018/art_05.png" alt="Art 5"></div>
-    <div class="carousel-slide"><img src="/work/2017-2018/art_06.png" alt="Art 5"></div>
-    <div class="carousel-slide"><img src="/work/2017-2018/art_07.png" alt="Art 5"></div>
-    <div class="carousel-slide"><img src="/work/2017-2018/art_08.png" alt="Art 5"></div>
-    <div class="carousel-slide"><img src="/work/2017-2018/art_09.png" alt="Art 5"></div>
-    <div class="carousel-slide"><img src="/work/2017-2018/art_10.png" alt="Art 5"></div>
+    <div class="carousel-slide"><img src="/work/2017-2018/art_01.png" alt="Art 1" draggable="false"></div>
+    <div class="carousel-slide"><img src="/work/2017-2018/art_02.png" alt="Art 2" draggable="false"></div>
+    <div class="carousel-slide"><img src="/work/2017-2018/art_03.png" alt="Art 3" draggable="false"></div>
+    <div class="carousel-slide"><img src="/work/2017-2018/art_04.png" alt="Art 4" draggable="false"></div>
+    <div class="carousel-slide"><img src="/work/2017-2018/art_05.png" alt="Art 5" draggable="false"></div>
+    <div class="carousel-slide"><img src="/work/2017-2018/art_06.png" alt="Art 6" draggable="false"></div>
+    <div class="carousel-slide"><img src="/work/2017-2018/art_07.png" alt="Art 7" draggable="false"></div>
+    <div class="carousel-slide"><img src="/work/2017-2018/art_08.png" alt="Art 8" draggable="false"></div>
+    <div class="carousel-slide"><img src="/work/2017-2018/art_09.png" alt="Art 9" draggable="false"></div>
+    <div class="carousel-slide"><img src="/work/2017-2018/art_10.png" alt="Art 10" draggable="false"></div>
   </div>
-  <div class="carousel-buttons">
-    <button onclick="moveCarousel(-1)">‹</button>
-    <button onclick="moveCarousel(1)">›</button>
-  </div>
+
+  <button class="carousel-btn prev" type="button" aria-label="Previous">‹</button>
+  <button class="carousel-btn next" type="button" aria-label="Next">›</button>
+
+  <div class="carousel-dots" id="carousel-dots"></div>
 </section>
 
 <script>
-  const track = document.getElementById('carousel');
-  let slides;
-  let slideWidth;
-  let isTransitioning = false;
-  let position = 0;
+/* ---------- HEADER ---------- */
+(() => {
+  const header = document.getElementById('site-header');
+  const menuBtn = header.querySelector('.menu-toggle');
+  const drops = Array.from(header.querySelectorAll('.has-dropdown'));
 
-  function updateSlideWidth() {
-    slides = track.querySelectorAll('.carousel-slide');
-    slideWidth = slides[0].offsetWidth;
+  // Header compacto al hacer scroll
+  const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 10);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Menú hamburguesa (móvil)
+  function setMenu(open) {
+    header.classList.toggle('menu-open', open);
+    menuBtn.setAttribute('aria-expanded', String(open));
+    if (!open) closeDrops();
+  }
+  menuBtn.addEventListener('click', () => setMenu(!header.classList.contains('menu-open')));
+
+  // Desplegables: funcionan con clic/tap y teclado, no solo con hover
+  function closeDrops(except) {
+    drops.forEach(li => {
+      if (li === except) return;
+      li.classList.remove('is-open');
+      li.querySelector('.dropdown-toggle').setAttribute('aria-expanded', 'false');
+    });
+  }
+  drops.forEach(li => {
+    const btn = li.querySelector('.dropdown-toggle');
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const open = !li.classList.contains('is-open');
+      closeDrops(li);
+      li.classList.toggle('is-open', open);
+      btn.setAttribute('aria-expanded', String(open));
+    });
+  });
+
+  document.addEventListener('click', e => {
+    if (!header.contains(e.target)) { closeDrops(); setMenu(false); }
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeDrops(); setMenu(false); }
+  });
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) setMenu(false);
+  });
+
+  // Marca la página actual
+  const clean = p => p.replace(/index\.html$/, '').replace(/\/?$/, '/');
+  const here = clean(location.pathname);
+  header.querySelectorAll('.nav-list a').forEach(a => {
+    if (clean(a.getAttribute('href')) === here) {
+      a.setAttribute('aria-current', 'page');
+      const parent = a.closest('.has-dropdown');
+      if (parent) parent.querySelector('.dropdown-toggle').classList.add('is-current');
+    }
+  });
+})();
+
+/* ---------- CARRUSEL ---------- */
+(() => {
+  const container = document.getElementById('carousel-container');
+  const track     = document.getElementById('carousel');
+  const dotsWrap  = document.getElementById('carousel-dots');
+  const AUTOPLAY_MS = 5000;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const originals = Array.from(track.children);
+  const N = originals.length;
+  if (!N) return;
+
+  // Clones a ambos lados para el bucle infinito
+  originals.forEach(el => {
+    const c = el.cloneNode(true);
+    c.setAttribute('aria-hidden', 'true');
+    track.appendChild(c);
+  });
+  for (let i = N - 1; i >= 0; i--) {
+    const c = originals[i].cloneNode(true);
+    c.setAttribute('aria-hidden', 'true');
+    track.insertBefore(c, track.firstChild);
+  }
+  const slides = Array.from(track.children);
+
+  // Puntos de navegación
+  const dots = originals.map((_, i) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.setAttribute('aria-label', `Go to image ${i + 1}`);
+    b.addEventListener('click', () => { goTo(i); restartAutoplay(); });
+    dotsWrap.appendChild(b);
+    return b;
+  });
+
+  let index = N;          // posición en la pista completa (empieza en el primer original)
+  let busy = false;
+  let fallback = null;
+  let timer = null;
+
+  const realIndex = () => ((index - N) % N + N) % N;
+
+  function offset() {
+    const w = slides[0].offsetWidth;
+    return -(index * w) + (container.clientWidth - w) / 2; // centra la imagen activa
   }
 
-  function cloneSlides() {
-    const originals = Array.from(track.children);
-    originals.forEach(el => track.appendChild(el.cloneNode(true)));
-    for (let i = originals.length - 1; i >= 0; i--) {
-      track.insertBefore(originals[i].cloneNode(true), track.firstChild);
+  function render(animate = true) {
+    track.classList.toggle('no-anim', !animate);
+    track.style.transform = `translateX(${offset()}px)`;
+    slides.forEach((s, i) => s.classList.toggle('is-active', i === index));
+    dots.forEach((d, i) => d.setAttribute('aria-current', i === realIndex() ? 'true' : 'false'));
+    if (!animate) {
+      void track.offsetWidth;            // fuerza reflow
+      track.classList.remove('no-anim');
     }
   }
 
-  function moveCarousel(dir) {
-    if (isTransitioning) return;
-    isTransitioning = true;
-
-    const totalSlides = slides.length / 3;
-    position += dir;
-
-    track.style.transition = 'transform 0.5s ease';
-    track.style.transform = `translateX(-${(slideWidth * (totalSlides + position))}px)`;
-
-    setTimeout(() => {
-      if (position <= -totalSlides || position >= totalSlides) {
-        position = 0;
-        track.style.transition = 'none';
-        track.style.transform = `translateX(-${slideWidth * totalSlides}px)`;
-      }
-      isTransitioning = false;
-    }, 510);
+  function settle() {
+    clearTimeout(fallback);
+    if (index >= 2 * N) { index -= N; render(false); }
+    else if (index < N) { index += N; render(false); }
+    busy = false;
   }
 
-  function initializeCarousel() {
-    cloneSlides();
-    const images = track.querySelectorAll('img');
-    let loaded = 0;
-    images.forEach(img => {
-      if (img.complete) {
-        loaded++;
-        if (loaded === images.length) finalizeInit();
-      } else {
-        img.onload = () => {
-          loaded++;
-          if (loaded === images.length) finalizeInit();
-        };
-      }
-    });
+  function go(dir) {
+    if (busy) return;
+    busy = true;
+    index += dir;
+    render(true);
+    fallback = setTimeout(settle, 700); // por si no llega transitionend
   }
 
-  function finalizeInit() {
-    updateSlideWidth();
-    const total = slides.length / 3;
-    track.style.transition = 'none';
-    track.style.transform = `translateX(-${slideWidth * total}px)`;
+  function goTo(i) {
+    if (busy) return;
+    const target = N + i;
+    if (target === index) return;
+    busy = true;
+    index = target;
+    render(true);
+    fallback = setTimeout(settle, 700);
   }
 
-  window.addEventListener('load', initializeCarousel);
-  window.addEventListener('resize', () => {
-    updateSlideWidth();
-    const total = slides.length / 3;
-    track.style.transition = 'none';
-    track.style.transform = `translateX(-${slideWidth * (total + position)}px)`;
+  track.addEventListener('transitionend', e => {
+    if (e.target === track && e.propertyName === 'transform') settle();
   });
+
+  // Botones
+  container.querySelector('.prev').addEventListener('click', () => { go(-1); restartAutoplay(); });
+  container.querySelector('.next').addEventListener('click', () => { go(1);  restartAutoplay(); });
+
+  // Teclado
+  container.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft')  { go(-1); restartAutoplay(); }
+    if (e.key === 'ArrowRight') { go(1);  restartAutoplay(); }
+  });
+
+  // Swipe táctil / arrastre con mouse
+  let startX = null, startY = null;
+  track.addEventListener('pointerdown', e => { startX = e.clientX; startY = e.clientY; });
+  window.addEventListener('pointerup', e => {
+    if (startX === null) return;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    startX = null;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+      go(dx < 0 ? 1 : -1);
+      restartAutoplay();
+    }
+  });
+
+  // Autoplay: se pausa al pasar el mouse, al enfocar o si la pestaña está oculta
+  function startAutoplay() {
+    if (reduceMotion || timer) return;
+    timer = setInterval(() => go(1), AUTOPLAY_MS);
+  }
+  function stopAutoplay() { clearInterval(timer); timer = null; }
+  function restartAutoplay() { stopAutoplay(); startAutoplay(); }
+
+  container.addEventListener('mouseenter', stopAutoplay);
+  container.addEventListener('mouseleave', startAutoplay);
+  container.addEventListener('focusin', stopAutoplay);
+  container.addEventListener('focusout', startAutoplay);
+  document.addEventListener('visibilitychange', () => document.hidden ? stopAutoplay() : startAutoplay());
+
+  window.addEventListener('resize', () => render(false));
+
+  render(false);
+  startAutoplay();
+})();
 </script>
 
 </body>
