@@ -197,7 +197,8 @@
     .rail-stop:focus-visible .rail-dot { box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--text); }
 
     /* ================= Timeline ================= */
-    .timeline { position: relative; }
+    /* room at the end so the last chapter can reach the reading line */
+    .timeline { position: relative; margin-bottom: 40vh; }
 
     /* vertical line that fills as you scroll */
     .timeline-line,
@@ -770,6 +771,11 @@
     // Find the active one: the last period whose top passed the middle line, in page order.
     let activeIdx = 0;
     periods.forEach((p, i) => { if (p.getBoundingClientRect().top <= mid) activeIdx = i; });
+    const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+    if (atBottom) {
+      activeIdx = periods.length - 1;
+      progress.style.height = tr.height + 'px';
+    }
 
     periods.forEach((p, i) => {
       p.classList.toggle('active', i === activeIdx);
@@ -784,7 +790,7 @@
     });
     // fill glides continuously between years as you move through a chapter
     const r = periods[activeIdx].getBoundingClientRect();
-    const f = Math.min(Math.max((mid - r.top) / Math.max(r.height, 1), 0), 1);
+    const f = atBottom ? 1 : Math.min(Math.max((mid - r.top) / Math.max(r.height, 1), 0), 1);
     const here = stops[activeIdx].pct;
     const next = activeIdx < stops.length - 1 ? stops[activeIdx + 1].pct : here;
     fill.style.width = (here + (next - here) * f) + '%';
