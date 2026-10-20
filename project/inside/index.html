@@ -6,7 +6,7 @@
   <title>The Inside and the Boy – oniricboy</title>
   <meta name="description" content="The Inside and the Boy — August, his cat Rumor and June — oniricboy's characters and their world, from 2015 to today.">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <style>
     :root {
       --text: #111;
@@ -174,34 +174,75 @@
     .year-nav a:hover,
     .year-nav a.active { background: var(--text); color: #fff; }
 
-    .period { margin-bottom: 4.5rem; scroll-margin-top: 5rem; }
+    .timeline { position: relative; }
+
+    .period {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 3rem;
+      position: relative;
+      padding-bottom: 6rem;
+      scroll-margin-top: 4.5rem;
+    }
+
+    /* vertical line + dot */
+    .period::before {
+      content: "";
+      position: absolute;
+      left: 5px;
+      top: 0.9rem;
+      bottom: 0;
+      width: 1px;
+      background: var(--line);
+    }
+
+    .timeline .period:last-child::before { bottom: auto; height: 0; }
 
     /* Hide periods with no images yet */
     .period:not(:has(img)) { display: none; }
     .year-nav a.empty { display: none; }
 
     .period-head {
-      display: flex;
-      align-items: baseline;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
+      position: sticky;
+      top: 5rem;
+      align-self: start;
+      padding-left: 2rem;
+    }
+
+    .period-head::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.55rem;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 1.5px solid var(--text);
+    }
+
+    .period-label,
+    .period-count {
+      display: block;
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
     }
 
     .period-head h2 {
-      margin: 0;
-      font-size: 2rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
+      margin: 0.35rem 0 0.5rem;
+      font-family: 'Instrument Serif', serif;
+      font-weight: 400;
+      font-size: 3rem;
+      line-height: 1;
       white-space: nowrap;
+      letter-spacing: -0.01em;
     }
 
-    .period-head::after {
-      content: "";
-      flex: 1;
-      height: 1px;
-      background: var(--line);
-      align-self: center;
-    }
+    .period .image-grid { column-count: initial; display: flex; gap: 1.25rem; align-items: flex-start; }
+    .period .image-grid .col { flex: 1; min-width: 0; }
+    .period .image-grid button { margin-bottom: 1.25rem; }
 
     /* ---------- Lightbox ---------- */
     .lightbox {
@@ -279,6 +320,12 @@
       .intro img.logo { max-width: 200px; }
 
       .lb-prev, .lb-next { display: none; } /* swipe on mobile */
+
+      .period { grid-template-columns: 1fr; gap: 1.25rem; padding-bottom: 3.5rem; }
+      .period-head { position: static; display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; }
+      .period-head h2 { font-size: 2.6rem; margin: 0; order: -1; }
+      .period-head::before { top: 1rem; }
+      .period .image-grid { padding-left: 2rem; }
     }
 
     @media screen and (max-width: 600px) {
@@ -335,78 +382,109 @@
 
   <nav class="year-nav" aria-label="Years">
     <a href="#y2026">2026</a>
-    <a href="#y2024">2024</a>
-    <a href="#y2023">2023</a>
+    <a href="#y2023">2023–2024</a>
+    <a href="#y2022">2022</a>
     <a href="#y2019">2019–2021</a>
     <a href="#y2018">2018</a>
     <a href="#y2015">2015–2017</a>
   </nav>
 
+  <div class="timeline">
   <!-- ===== 2026 ===== -->
   <section class="period" id="y2026">
-    <div class="period-head"><h2>2026</h2></div>
+    <div class="period-head">
+      <span class="period-label"></span>
+      <h2>2026</h2>
+      <span class="period-count"></span>
+    </div>
     <div class="image-grid">
-      <!-- Add images here, e.g. <button><img src="/project/inside/inside_23.jpg" alt="The Inside and the Boy — 2026" loading="lazy"></button> -->
+      <!-- Add images here, e.g. <button><img src="/project/inside/inside_29.jpg" alt="The Inside and the Boy — 2026" loading="lazy"></button> -->
     </div>
   </section>
 
-  <!-- ===== 2024 ===== -->
-  <section class="period" id="y2024">
-    <div class="period-head"><h2>2024</h2></div>
-    <div class="image-grid">
-      <!-- Add images here, e.g. <button><img src="/project/inside/inside_23.jpg" alt="The Inside and the Boy — 2024" loading="lazy"></button> -->
-    </div>
-  </section>
-
-  <!-- ===== 2023 ===== -->
+  <!-- ===== 2023–2024 ===== -->
   <section class="period" id="y2023">
-    <div class="period-head"><h2>2023</h2></div>
+    <div class="period-head">
+      <span class="period-label"></span>
+      <h2>2023–2024</h2>
+      <span class="period-count"></span>
+    </div>
     <div class="image-grid">
-      <button><img src="/project/inside/inside_16.jpg" alt="The Inside and the Boy — 2023" loading="lazy"></button>
-      <button><img src="/project/inside/inside_17.jpg" alt="The Inside and the Boy — 2023" loading="lazy"></button>
-      <button><img src="/project/inside/inside_18.jpg" alt="The Inside and the Boy — 2023" loading="lazy"></button>
-      <button><img src="/project/inside/inside_19.jpg" alt="The Inside and the Boy — 2023" loading="lazy"></button>
-      <button><img src="/project/inside/inside_20.jpg" alt="The Inside and the Boy — 2023" loading="lazy"></button>
-      <button><img src="/project/inside/inside_21.jpg" alt="The Inside and the Boy — 2023" loading="lazy"></button>
-      <button><img src="/project/inside/inside_22.jpg" alt="The Inside and the Boy — 2023" loading="lazy"></button>
+      <button><img src="/project/inside/inside_28.jpg" alt="The Inside and the Boy — 2023–2024" loading="lazy"></button>
+      <button><img src="/project/inside/inside_27.jpg" alt="The Inside and the Boy — 2023–2024" loading="lazy"></button>
+      <button><img src="/project/inside/inside_26.jpg" alt="The Inside and the Boy — 2023–2024" loading="lazy"></button>
+      <button><img src="/project/inside/inside_25.jpg" alt="The Inside and the Boy — 2023–2024" loading="lazy"></button>
+      <button><img src="/project/inside/inside_24.jpg" alt="The Inside and the Boy — 2023–2024" loading="lazy"></button>
+      <button><img src="/project/inside/inside_23.jpg" alt="The Inside and the Boy — 2023–2024" loading="lazy"></button>
+      <button><img src="/project/inside/inside_22.jpg" alt="The Inside and the Boy — 2023–2024" loading="lazy"></button>
+      <button><img src="/project/inside/inside_21.jpg" alt="The Inside and the Boy — 2023–2024" loading="lazy"></button>
+    </div>
+  </section>
+
+  <!-- ===== 2022 ===== -->
+  <section class="period" id="y2022">
+    <div class="period-head">
+      <span class="period-label"></span>
+      <h2>2022</h2>
+      <span class="period-count"></span>
+    </div>
+    <div class="image-grid">
+      <button><img src="/project/inside/inside_20.jpg" alt="The Inside and the Boy — 2022" loading="lazy"></button>
+      <button><img src="/project/inside/inside_19.jpg" alt="The Inside and the Boy — 2022" loading="lazy"></button>
+      <button><img src="/project/inside/inside_18.jpg" alt="The Inside and the Boy — 2022" loading="lazy"></button>
+      <button><img src="/project/inside/inside_17.jpg" alt="The Inside and the Boy — 2022" loading="lazy"></button>
     </div>
   </section>
 
   <!-- ===== 2019–2021 ===== -->
   <section class="period" id="y2019">
-    <div class="period-head"><h2>2019–2021</h2></div>
+    <div class="period-head">
+      <span class="period-label"></span>
+      <h2>2019–2021</h2>
+      <span class="period-count"></span>
+    </div>
     <div class="image-grid">
-      <button><img src="/project/inside/inside_11.jpg" alt="The Inside and the Boy — 2019–2021" loading="lazy"></button>
-      <button><img src="/project/inside/inside_12.jpg" alt="The Inside and the Boy — 2019–2021" loading="lazy"></button>
-      <button><img src="/project/inside/inside_13.jpg" alt="The Inside and the Boy — 2019–2021" loading="lazy"></button>
-      <button><img src="/project/inside/inside_14.jpg" alt="The Inside and the Boy — 2019–2021" loading="lazy"></button>
+      <button><img src="/project/inside/inside_16.jpg" alt="The Inside and the Boy — 2019–2021" loading="lazy"></button>
       <button><img src="/project/inside/inside_15.jpg" alt="The Inside and the Boy — 2019–2021" loading="lazy"></button>
+      <button><img src="/project/inside/inside_14.jpg" alt="The Inside and the Boy — 2019–2021" loading="lazy"></button>
+      <button><img src="/project/inside/inside_13.jpg" alt="The Inside and the Boy — 2019–2021" loading="lazy"></button>
+      <button><img src="/project/inside/inside_12.jpg" alt="The Inside and the Boy — 2019–2021" loading="lazy"></button>
+      <button><img src="/project/inside/inside_11.jpg" alt="The Inside and the Boy — 2019–2021" loading="lazy"></button>
     </div>
   </section>
 
   <!-- ===== 2018 ===== -->
   <section class="period" id="y2018">
-    <div class="period-head"><h2>2018</h2></div>
+    <div class="period-head">
+      <span class="period-label"></span>
+      <h2>2018</h2>
+      <span class="period-count"></span>
+    </div>
     <div class="image-grid">
-      <button><img src="/project/inside/inside_05.jpg" alt="The Inside and the Boy — 2018" loading="lazy"></button>
-      <button><img src="/project/inside/inside_06.jpg" alt="The Inside and the Boy — 2018" loading="lazy"></button>
-      <button><img src="/project/inside/inside_07.jpg" alt="The Inside and the Boy — 2018" loading="lazy"></button>
-      <button><img src="/project/inside/inside_08.jpg" alt="The Inside and the Boy — 2018" loading="lazy"></button>
-      <button><img src="/project/inside/inside_09.jpg" alt="The Inside and the Boy — 2018" loading="lazy"></button>
       <button><img src="/project/inside/inside_10.jpg" alt="The Inside and the Boy — 2018" loading="lazy"></button>
+      <button><img src="/project/inside/inside_09.jpg" alt="The Inside and the Boy — 2018" loading="lazy"></button>
+      <button><img src="/project/inside/inside_08.jpg" alt="The Inside and the Boy — 2018" loading="lazy"></button>
+      <button><img src="/project/inside/inside_07.jpg" alt="The Inside and the Boy — 2018" loading="lazy"></button>
+      <button><img src="/project/inside/inside_06.jpg" alt="The Inside and the Boy — 2018" loading="lazy"></button>
+      <button><img src="/project/inside/inside_05.jpg" alt="The Inside and the Boy — 2018" loading="lazy"></button>
     </div>
   </section>
 
   <!-- ===== 2015–2017 ===== -->
   <section class="period" id="y2015">
-    <div class="period-head"><h2>2015–2017</h2></div>
+    <div class="period-head">
+      <span class="period-label"></span>
+      <h2>2015–2017</h2>
+      <span class="period-count"></span>
+    </div>
     <div class="image-grid">
-      <button><img src="/project/inside/inside_01.jpg" alt="The Inside and the Boy — 2015–2017" loading="lazy"></button>
-      <button><img src="/project/inside/inside_02.jpg" alt="The Inside and the Boy — 2015–2017" loading="lazy"></button>
-      <button><img src="/project/inside/inside_03.jpg" alt="The Inside and the Boy — 2015–2017" loading="lazy"></button>
       <button><img src="/project/inside/inside_04.jpg" alt="The Inside and the Boy — 2015–2017" loading="lazy"></button>
+      <button><img src="/project/inside/inside_03.jpg" alt="The Inside and the Boy — 2015–2017" loading="lazy"></button>
+      <button><img src="/project/inside/inside_02.jpg" alt="The Inside and the Boy — 2015–2017" loading="lazy"></button>
+      <button><img src="/project/inside/inside_01.jpg" alt="The Inside and the Boy — 2015–2017" loading="lazy"></button>
     </div>
   </section>
+  </div>
 </main>
 
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
@@ -454,6 +532,15 @@
   }, { rootMargin: '-40% 0px -55% 0px' });
   document.querySelectorAll('.period').forEach(sec => observer.observe(sec));
 
+  // Chapter labels and piece counts
+  const visible = [...document.querySelectorAll('.period')].filter(p => p.querySelector('img'));
+  visible.forEach((p, i) => {
+    const n = visible.length - i;
+    const count = p.querySelectorAll('img').length;
+    p.querySelector('.period-label').textContent = 'Chapter ' + String(n).padStart(2, '0');
+    p.querySelector('.period-count').textContent = count + (count === 1 ? ' piece' : ' pieces');
+  });
+
   // Lightbox
   const items = [...document.querySelectorAll('.image-grid img')];
   const lb = document.getElementById('lightbox');
@@ -492,6 +579,28 @@
     if (Math.abs(dx) > 50) show(current + (dx < 0 ? 1 : -1));
     startX = null;
   });
+
+  // Masonry that keeps left-to-right order (highest number first)
+  const grids = [...document.querySelectorAll('.period .image-grid')].map(g => ({ g, btns: [...g.querySelectorAll('button')] }));
+  let lastCols = 0;
+  function layout() {
+    const cols = window.innerWidth <= 600 ? 1 : 2;
+    if (cols === lastCols) return;
+    lastCols = cols;
+    grids.forEach(({ g, btns }) => {
+      if (!btns.length) return;
+      g.innerHTML = '';
+      const columns = Array.from({ length: cols }, () => {
+        const c = document.createElement('div');
+        c.className = 'col';
+        g.appendChild(c);
+        return c;
+      });
+      btns.forEach((b, i) => columns[i % cols].appendChild(b));
+    });
+  }
+  layout();
+  window.addEventListener('resize', layout);
 </script>
 
 </body>
