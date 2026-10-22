@@ -1,0 +1,64 @@
+# Converts newly uploaded PNG/JPG images to lightweight WebP and updates
+# the pages that use them. Runs by itself every time you upload images or
+# edit a page on the main branch. Settings live in scripts/optimize_images.py.
+name: Optimize images
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "**.png"
+      - "**.PNG"
+      - "**.jpg"
+      - "**.JPG"
+      - "**.jpeg"
+      - "**.JPEG"
+      - "**.html"
+  workflow_dispatch: # also lets you run it by hand from the Actions tab
+
+permissions:
+  contents: write # commit the optimized images
+  pages: write    # republish the site afterwards
+
+concurrency:
+  group: optimize-images
+  cancel-in-progress: false
+
+jobs:
+  optimize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Pillow
+        run: pip install "Pillow>=10"
+
+      - name: Convert images and fix page references
+        run: python3 scripts/optimize_images.py .
+
+      - name: Commit changes
+        id: commit
+        run: |
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Nothing to optimize."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Optimize images (automatic)"
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      # Commits made by this workflow don't always trigger a new site build,
+      # so ask GitHub Pages to rebuild explicitly.
+      - name: Republish site
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds" || echo "Pages will rebuild on its own."
