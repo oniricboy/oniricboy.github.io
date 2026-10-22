@@ -5,85 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>oniricboy – Contact</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/header.css">
   <style>
     body {
       margin: 0;
       font-family: 'DM Sans', sans-serif;
       background-color: #fff;
       color: #000;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.5rem 2rem;
-      border-bottom: 1px solid #eee;
-    }
-
-    .logo img {
-      height: 60px;
-    }
-
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 2rem;
-      margin: 0;
-      padding: 0;
-      position: relative;
-    }
-
-    nav li {
-      position: relative;
-    }
-
-    nav a {
-      text-decoration: none;
-      color: #000;
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-
-    nav ul li:hover .dropdown {
-      display: block;
-    }
-
-    .dropdown {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background: #fff;
-      border: 1px solid #ddd;
-      padding: 0.5rem 0;
-      z-index: 10;
-    }
-
-    .dropdown li {
-      padding: 0;
-    }
-
-    .dropdown a {
-      display: block;
-      padding: 0.5rem 1rem;
-      white-space: nowrap;
-    }
-
-    .dropdown a:hover {
-      background-color: #f3f3f3;
-    }
-
-    .socials a {
-      color: #000;
-      font-size: 1.1rem;
-      margin-left: 1.2rem;
-      transition: opacity 0.3s ease;
-    }
-
-    .socials a:hover {
-      opacity: 0.6;
     }
 
     .contact-section {
@@ -118,6 +47,8 @@
       border-radius: 12px;
       background: #fff;
       font-size: 1rem;
+      font-family: inherit;
+      box-sizing: border-box;
     }
 
     .contact-section button {
@@ -153,33 +84,13 @@
     }
 
     @media screen and (max-width: 768px) {
-  nav ul {
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-  header {
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .socials {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 0;
-    margin-bottom: 0;
-    gap: 0rem;
-  }
        .contact-section {
     padding: 0 1.5rem;
     text-align: center;
   }
 
   .contact-section form {
-    align-items: center;
+    align-items: stretch;
   }
 
   .contact-section input,
@@ -198,69 +109,79 @@
 </head>
 <body>
   
-  <header>
-    <div class="logo">
-      <img src="img/logo.png" alt="oniricboy logo">
-    </div>
+  <header class="site-header" id="site-header">
+  <div class="logo">
+    <a href="/index.html"><img src="/img/logo.png" alt="oniricboy logo"></a>
+  </div>
 
-    <nav>
-      <ul>
-        <li><a href="/">Home</a></li>
-        <li>
-          <a href="#">Work ▾</a>
-          <ul class="dropdown">
-            <li><a href="/work/2023-2024/">2023–2024</a></li>
-            <li><a href="/work/2019-2021/">2019–2021</a></li>
-            <li><a href="/work/2017-2018/">2017–2018</a></li>
-            <li><a href="/work/2015-2016/">2015–2016</a></li>   
-          </ul>
-        </li>
-        <li>
-          <a href="#">Project ▾</a>
-          <ul class="dropdown">
-            <li><a href="/project/inside/">The Inside and the Boy</a></li>
-          </ul>
-        </li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="shop.html">Shop</a></li>
-      </ul>
-    </nav>
+  <nav class="main-nav" id="main-nav" aria-label="Main">
+    <ul class="nav-list">
+      <li><a href="/">Home</a></li>
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" type="button" aria-expanded="false" aria-controls="dd-work">
+          Work <i class="fa-solid fa-chevron-down caret" aria-hidden="true"></i>
+        </button>
+        <ul class="dropdown" id="dd-work">
+          <li><a href="/work/2023-2024/">2023–2024</a></li>
+          <li><a href="/work/2019-2021/">2019–2021</a></li>
+          <li><a href="/work/2017-2018/">2017–2018</a></li>
+          <li><a href="/work/2015-2016/">2015–2016</a></li>
+        </ul>
+      </li>
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" type="button" aria-expanded="false" aria-controls="dd-project">
+          Project <i class="fa-solid fa-chevron-down caret" aria-hidden="true"></i>
+        </button>
+        <ul class="dropdown" id="dd-project">
+          <li><a href="/project/inside/">The Inside and the Boy</a></li>
+        </ul>
+      </li>
+      <li><a href="/about.html">About</a></li>
+      <li><a href="/contact.html">Contact</a></li>
+      <li><a href="/shop.html">Shop</a></li>
+    </ul>
+  </nav>
 
-    <div class="socials">
-      <a href="https://instagram.com/oniricboy_" target="_blank"><i class="fab fa-instagram"></i></a>
-      <a href="https://twitter.com/oniricboy_" target="_blank"><i class="fab fa-twitter"></i></a>
-    </div>
-  </header>
+  <div class="socials">
+    <a href="https://instagram.com/oniricboy_" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+    <a href="https://x.com/oniricboy_" target="_blank" rel="noopener" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+  </div>
+
+  <button class="menu-toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="main-nav">
+    <span></span><span></span><span></span>
+  </button>
+</header>
 
   <section id="contact" class="contact-section">
     <h2>contact</h2>
     <form action="https://formsubmit.co/oniricboycontact@gmail.com" method="POST">
       <input type="hidden" name="_captcha" value="false">
+      <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
       <input type="hidden" name="_next" value="https://oniricboy.com/thanks.html">
 
       <div>
         <label for="name">Name</label>
-        <input type="text" name="name" required>
+        <input type="text" id="name" name="name" autocomplete="name" required>
       </div>
 
       <div>
         <label for="email">Email</label>
-        <input type="email" name="email" required>
+        <input type="email" id="email" name="email" autocomplete="email" required>
       </div>
 
       <div>
         <label for="message">Message</label>
-        <textarea name="message" rows="5" required></textarea>
+        <textarea id="message" name="message" rows="5" required></textarea>
       </div>
 
       <button type="submit">Send</button>
     </form>
 
     <div class="contact-links">
-      <a href="https://instagram.com/oniricboy_" target="_blank"><i class="fab fa-instagram"></i></a>
-      <a href="https://twitter.com/oniricboy_" target="_blank"><i class="fab fa-twitter"></i></a>
+      <a href="https://instagram.com/oniricboy_" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="https://x.com/oniricboy_" target="_blank" rel="noopener" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
     </div>
   </section>
+<script src="/js/header.js"></script>
 </body>
 </html>

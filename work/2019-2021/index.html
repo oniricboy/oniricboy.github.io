@@ -5,73 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>oniricboy – Portfolio</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/header.css">
   <style>
     body {
       margin: 0;
       font-family: 'DM Sans', sans-serif;
       background-color: #fff;
       color: #000;
-    }
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.5rem 2rem;
-      border-bottom: 1px solid #eee;
-    }
-    .logo img {
-      height: 60px;
-    }
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 2rem;
-      margin: 0;
-      padding: 0;
-      position: relative;
-    }
-    nav li {
-      position: relative;
-    }
-    nav a {
-      text-decoration: none;
-      color: #000;
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-    nav ul li:hover .dropdown {
-      display: block;
-    }
-    .dropdown {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background: #fff;
-      border: 1px solid #ddd;
-      padding: 0.5rem 0;
-      z-index: 10;
-    }
-    .dropdown li {
-      padding: 0;
-    }
-    .dropdown a {
-      display: block;
-      padding: 0.5rem 1rem;
-      white-space: nowrap;
-    }
-    .dropdown a:hover {
-      background-color: #f3f3f3;
-    }
-    .socials a {
-      color: #000;
-      font-size: 1.1rem;
-      margin-left: 1.2rem;
-      transition: opacity 0.3s ease;
-    }
-    .socials a:hover {
-      opacity: 0.6;
     }
 
     /* ---------- CARRUSEL ---------- */
@@ -181,24 +122,6 @@
     }
 
     @media screen and (max-width: 768px) {
-      header {
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-      }
-      nav ul {
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
-        gap: 0.6rem;
-      }
-      .socials {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 0;
-      }
-
       .carousel-container {
         padding-top: 0;
       }
@@ -225,37 +148,47 @@
 </head>
 <body>
 
-<header>
+<header class="site-header" id="site-header">
   <div class="logo">
     <a href="/index.html"><img src="/img/logo.png" alt="oniricboy logo"></a>
   </div>
-<nav>
-  <ul>
-    <li><a href="/">Home</a></li>
-    <li>
-      <a href="#">Work ▾</a>
-      <ul class="dropdown">
-        <li><a href="/work/2023-2024/">2023–2024</a></li>
-        <li><a href="/work/2019-2021/">2019–2021</a></li>
-        <li><a href="/work/2017-2018/">2017–2018</a></li>
-        <li><a href="/work/2015-2016/">2015–2016</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#">Project ▾</a>
-      <ul class="dropdown">
-        <li><a href="/project/inside/">The Inside and the Boy</a></li>
-      </ul>
-    </li>
-    <li><a href="/about.html">About</a></li>
-    <li><a href="/contact.html">Contact</a></li>
-    <li><a href="/shop.html">Shop</a></li>
-  </ul>
-</nav>
+
+  <nav class="main-nav" id="main-nav" aria-label="Main">
+    <ul class="nav-list">
+      <li><a href="/">Home</a></li>
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" type="button" aria-expanded="false" aria-controls="dd-work">
+          Work <i class="fa-solid fa-chevron-down caret" aria-hidden="true"></i>
+        </button>
+        <ul class="dropdown" id="dd-work">
+          <li><a href="/work/2023-2024/">2023–2024</a></li>
+          <li><a href="/work/2019-2021/">2019–2021</a></li>
+          <li><a href="/work/2017-2018/">2017–2018</a></li>
+          <li><a href="/work/2015-2016/">2015–2016</a></li>
+        </ul>
+      </li>
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" type="button" aria-expanded="false" aria-controls="dd-project">
+          Project <i class="fa-solid fa-chevron-down caret" aria-hidden="true"></i>
+        </button>
+        <ul class="dropdown" id="dd-project">
+          <li><a href="/project/inside/">The Inside and the Boy</a></li>
+        </ul>
+      </li>
+      <li><a href="/about.html">About</a></li>
+      <li><a href="/contact.html">Contact</a></li>
+      <li><a href="/shop.html">Shop</a></li>
+    </ul>
+  </nav>
+
   <div class="socials">
-    <a href="https://instagram.com/oniricboy_" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+    <a href="https://instagram.com/oniricboy_" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
     <a href="https://x.com/oniricboy_" target="_blank" rel="noopener" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
   </div>
+
+  <button class="menu-toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="main-nav">
+    <span></span><span></span><span></span>
+  </button>
 </header>
 
 <section class="carousel-container" id="carousel-container" tabindex="0"
@@ -406,5 +339,6 @@
 })();
 </script>
 
+<script src="/js/header.js"></script>
 </body>
 </html>
